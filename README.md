@@ -3,6 +3,8 @@ Example Voting App
 
 This is an example Docker app with multiple services. It is run with Docker Compose and uses Docker Networking to connect containers together.
 
+More info at https://blog.docker.com/2015/11/docker-toolbox-compose/
+
 
 Running
 -------
