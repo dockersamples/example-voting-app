@@ -4,6 +4,8 @@ voting-app:
     - ./voting-app:/app
   ports:
     - "5000:80"
+  links:
+    - redis
 
 redis:
   image: redis
@@ -11,6 +13,9 @@ redis:
 
 worker:
   build: ./worker
+  links:
+    - redis
+    - db
 
 db:
   image: postgres:9.4
@@ -23,3 +28,5 @@ result-app:
     - ./result-app:/app
   ports:
     - "5001:80"
+  links:
+    - db
