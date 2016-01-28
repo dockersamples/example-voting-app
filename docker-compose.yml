@@ -1,28 +1,17 @@
 version: "2"
+
 services:
   voting-app:
     build: ./voting-app/.
     volumes:
-      - ./voting-app:/app
+     - ./voting-app:/app
     ports:
       - "5000:80"
     links:
       - redis
-
-  redis:
-    image: redis
-    ports: ["6379"]
-
-  worker:
-    build: ./worker
-    links:
-      - db
-      - redis
-
-  db:
-    image: postgres:9.4
-    volumes:
-      - "myvolume:/var/lib/postgresql/data"
+    networks:
+      - front-tier
+      - back-tier
 
   result-app:
     build: ./result-app/.
@@ -32,5 +21,36 @@ services:
       - "5001:80"
     links:
       - db
+    networks:
+      - front-tier
+      - back-tier
+
+  worker:
+    build: ./worker
+    links:
+      - db
+      - redis
+    networks:
+      - back-tier
+
+  redis:
+    image: redis
+    ports: ["6379"]
+    networks:
+      - back-tier
+
+  db:
+    image: postgres:9.4
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    networks:
+      - back-tier
+
 volumes:
-  myvolume:
+  db-data:
+
+networks:
+  front-tier:
+  back-tier:
+
+
