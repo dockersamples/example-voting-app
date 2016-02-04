@@ -29,5 +29,5 @@ Docker Hub images
 Docker Hub images for services in this app are built automatically from master:
 
  - [docker/example-voting-app-voting-app](https://hub.docker.com/r/docker/example-voting-app-voting-app/)
- - [docker/example-voting-app-results-app](https://hub.docker.com/r/docker/example-voting-app-results-app/)
+ - [docker/example-voting-app-result-app](https://hub.docker.com/r/docker/example-voting-app-result-app/)
  - [docker/example-voting-app-worker](https://hub.docker.com/r/docker/example-voting-app-worker/)
