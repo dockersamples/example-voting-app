@@ -1,7 +1,7 @@
 Example Voting App
 ==================
 
-This is an example Docker app with multiple services. It is run with Docker Compose and uses Docker Networking to connect containers together.
+This is an example Docker app with multiple services. It is run with Docker Compose and uses Docker Networking to connect containers together. You will need Docker Compose 1.6 or later.
 
 More info at https://blog.docker.com/2015/11/docker-toolbox-compose/
 
@@ -17,10 +17,9 @@ Architecture
 Running
 -------
 
-Since this app makes use of Compose's experimental networking support, it must be started with:
+Run in this directory:
 
-    $ cd vote-apps/
-    $ docker-compose --x-networking up -d
+    $ docker-compose up -d
 
 The app will be running on port 5000 on your Docker host, and the results will be on port 5001.
 
