@@ -1,4 +1,4 @@
-Example Voting App
+Example Voting App!
 ==================
 
 This is an example Docker app with multiple services. It is run with Docker Compose and uses Docker Networking to connect containers together. You will need Docker Compose 1.6 or later.  A New Relic Node.js agent is installed in the results webapp.
