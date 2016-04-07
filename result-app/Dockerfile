@@ -9,6 +9,9 @@ RUN mv /app/node_modules /node_modules
 
 ADD . /app
 
+ADD nr-apm-node.sh nr-apm-node.sh
+RUN bash nr-apm-node.sh
+
 ENV PORT 80
 EXPOSE 80
 
