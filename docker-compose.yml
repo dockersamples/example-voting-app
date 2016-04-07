@@ -7,8 +7,8 @@ services:
      - ./voting-app:/app
     ports:
       - "5000:80"
-    links:
-      - redis
+    #links:
+    #  - redis
     networks:
       - front-tier
       - back-tier
@@ -19,17 +19,17 @@ services:
       - ./result-app:/app
     ports:
       - "5001:80"
-    links:
-      - db
+    #links:
+    #  - db
     networks:
       - front-tier
       - back-tier
 
   worker:
     build: ./worker
-    links:
-      - db
-      - redis
+    #links:
+    #  - db
+    #  - redis
     networks:
       - back-tier
 
