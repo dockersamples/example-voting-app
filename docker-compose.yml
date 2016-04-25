@@ -7,8 +7,6 @@ services:
      - ./voting-app:/app
     ports:
       - "5000:80"
-    links:
-      - redis
     networks:
       - front-tier
       - back-tier
@@ -19,28 +17,25 @@ services:
       - ./result-app:/app
     ports:
       - "5001:80"
-    links:
-      - db
     networks:
       - front-tier
       - back-tier
 
   worker:
     build: ./worker
-    links:
-      - db
-      - redis
     networks:
       - back-tier
 
   redis:
-    image: redis
+    image: redis:alpine
+    container_name: redis
     ports: ["6379"]
     networks:
       - back-tier
 
   db:
     image: postgres:9.4
+    container_name: db
     volumes:
       - "db-data:/var/lib/postgresql/data"
     networks:
@@ -52,5 +47,3 @@ volumes:
 networks:
   front-tier:
   back-tier:
-
-
