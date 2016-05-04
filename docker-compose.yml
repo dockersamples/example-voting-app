@@ -34,7 +34,7 @@ services:
       - back-tier
 
   redis:
-    image: redis
+    image: redis:alpine
     ports: ["6379"]
     networks:
       - back-tier
@@ -52,5 +52,3 @@ volumes:
 networks:
   front-tier:
   back-tier:
-
-
