@@ -45,15 +45,22 @@ function getVotes(client) {
     if (err) {
       console.error("Error performing query: " + err);
     } else {
-      var data = result.rows.reduce(function(obj, row) {
-        obj[row.vote] = row.count;
-        return obj;
-      }, {});
-      io.sockets.emit("scores", JSON.stringify(data));
+      var votes = collectVotesFromResult(result);
+      io.sockets.emit("scores", JSON.stringify(votes));
     }
 
     setTimeout(function() {getVotes(client) }, 1000);
   });
+}
+
+function collectVotesFromResult(result) {
+  var votes = {a: 0, b: 0};
+
+  result.rows.forEach(function (row) {
+    votes[row.vote] = parseInt(row.count);
+  });
+
+  return votes;
 }
 
 app.use(cookieParser());
