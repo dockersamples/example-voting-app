@@ -47,6 +47,7 @@ body{
   vertical-align:middle;
 }
 #result{
+  z-index: 3;
   position: absolute;
   bottom: 40px;
   right: 20px;
