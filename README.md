@@ -15,6 +15,8 @@ The app will be running at [http://localhost:5000](http://localhost:5000), and t
 Architecture
 -----
 
+![Architecture diagram](architecture.png)
+
 * A Python webapp which lets you vote between two options
 * A Redis queue which collects new votes
 * A Java worker which consumes votes and stores them in…
