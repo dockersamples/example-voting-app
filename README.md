@@ -1,9 +1,16 @@
-Example Voting App
-==================
+Instavote
+=========
 
-This is an example Docker app with multiple services. It is run with Docker Compose and uses Docker Networking to connect containers together. You will need Docker Compose 1.6 or later.
+Getting started
+---------------
 
-More info at https://blog.docker.com/2015/11/docker-toolbox-compose/
+Download [Docker for Mac or Windows](https://www.docker.com).
+
+Run in this directory:
+
+    $ docker-compose up
+
+The app will be running at [http://localhost:5000](http://localhost:5000), and the results will be at [http://localhost:5001](http://localhost:5001).
 
 Architecture
 -----
@@ -14,20 +21,3 @@ Architecture
 * A Postgres database backed by a Docker volume
 * A Node.js webapp which shows the results of the voting in real time
 
-Running
--------
-
-Run in this directory:
-
-    $ docker-compose up
-
-The app will be running on port 5000 on your Docker host, and the results will be on port 5001.
-
-Docker Hub images
------------------
-
-Docker Hub images for services in this app are built automatically from master:
-
- - [docker/example-voting-app-voting-app](https://hub.docker.com/r/docker/example-voting-app-voting-app/)
- - [docker/example-voting-app-result-app](https://hub.docker.com/r/docker/example-voting-app-result-app/)
- - [docker/example-voting-app-worker](https://hub.docker.com/r/docker/example-voting-app-worker/)
