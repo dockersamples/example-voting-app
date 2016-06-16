@@ -14,7 +14,7 @@ lb:
   autoredeploy: true
   image: 'dockercloud/haproxy:latest'
   links:
-    - web
+    - voting-app
   ports:
     - "80:80"
   roles:
