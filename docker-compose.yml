@@ -1,11 +1,11 @@
 version: "2"
 
 services:
-  voting-app:
-    build: ./voting-app
+  vote:
+    build: ./vote
     command: python app.py
     volumes:
-     - ./voting-app:/app
+     - ./vote:/app
     ports:
       - "5000:80"
 
@@ -19,11 +19,11 @@ services:
   db:
     image: postgres:9.4
 
-  result-app:
-    build: ./result-app
+  result:
+    build: ./result
     command: nodemon --debug server.js
     volumes:
-      - ./result-app:/app
+      - ./result:/app
     ports:
       - "5001:80"
       - "5858:5858"
