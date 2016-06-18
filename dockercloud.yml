@@ -6,7 +6,7 @@ redis:
   restart: always
 result:
   autoredeploy: true
-  image: 'instavote/result:latest'
+  image: 'docker/example-voting-app-result:latest'
   ports:
     - '80:80'
   restart: always
@@ -22,12 +22,12 @@ lb:
   restart: always
 vote:
   autoredeploy: true
-  image: 'instavote/vote:latest'
+  image: 'docker/example-voting-app-vote:latest'
   restart: always
   target_num_containers: 5
 
 worker:
   autoredeploy: true
-  image: 'instavote/worker:latest'
+  image: 'docker/example-voting-app-worker:latest'
   restart: always
   target_num_containers: 3
