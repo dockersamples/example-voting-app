@@ -40,17 +40,25 @@ namespace Worker
 
         private static NpgsqlConnection OpenDbConnection(string connectionString)
         {
-            var connection = new NpgsqlConnection(connectionString);
+            NpgsqlConnection connection;
+
             while (true)
             {
                 try
                 {
+                    connection = new NpgsqlConnection(connectionString);
                     connection.Open();
                     break;
+                }
+                catch (SocketException)
+                {
+                    Console.Error.WriteLine("Failed to connect to db - retrying");
+                    Thread.Sleep(1000);
                 }
                 catch (DbException)
                 {
                     Console.Error.WriteLine("Failed to connect to db - retrying");
+                    Thread.Sleep(1000);
                 }
             }
 
