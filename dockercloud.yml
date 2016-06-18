@@ -4,9 +4,9 @@ db:
 redis:
   image: 'redis:latest'
   restart: always
-result-app:
+result:
   autoredeploy: true
-  image: 'instavote/result-app:latest'
+  image: 'instavote/result:latest'
   ports:
     - '80:80'
   restart: always
@@ -14,15 +14,15 @@ lb:
   autoredeploy: true
   image: 'dockercloud/haproxy:latest'
   links:
-    - voting-app
+    - vote
   ports:
     - "80:80"
   roles:
     - global
   restart: always
-voting-app:
+vote:
   autoredeploy: true
-  image: 'instavote/voting-app:latest'
+  image: 'instavote/vote:latest'
   restart: always
   target_num_containers: 5
 

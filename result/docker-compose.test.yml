@@ -5,14 +5,14 @@ services:
   sut:
     build: ./tests/
     depends_on:
-      - voting-app
-      - result-app
+      - vote
+      - result
       - worker
     networks:
       - front-tier
 
-  voting-app:
-    build: ../voting-app/
+  vote:
+    build: ../vote/
     ports: ["80"]
     depends_on:
       - redis
@@ -21,7 +21,7 @@ services:
       - front-tier
       - back-tier
 
-  result-app:
+  result:
     build: .
     ports: ["80"]
     depends_on:
