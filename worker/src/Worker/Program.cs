@@ -52,15 +52,17 @@ namespace Worker
                 }
                 catch (SocketException)
                 {
-                    Console.Error.WriteLine("Failed to connect to db - retrying");
+                    Console.Error.WriteLine("Waiting for db");
                     Thread.Sleep(1000);
                 }
                 catch (DbException)
                 {
-                    Console.Error.WriteLine("Failed to connect to db - retrying");
+                    Console.Error.WriteLine("Waiting for db");
                     Thread.Sleep(1000);
                 }
             }
+
+            Console.Error.WriteLine("Connected to db");
 
             var command = connection.CreateCommand();
             command.CommandText = @"CREATE TABLE IF NOT EXISTS votes (
@@ -82,11 +84,12 @@ namespace Worker
             {
                 try
                 {
+                    Console.Error.WriteLine("Connected to redis");
                     return ConnectionMultiplexer.Connect(ipAddress);
                 }
                 catch (RedisConnectionException)
                 {
-                    Console.Error.WriteLine("Failed to connect to redis - retrying");
+                    Console.Error.WriteLine("Waiting for redis");
                     Thread.Sleep(1000);
                 }
             }
