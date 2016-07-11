@@ -3,6 +3,7 @@ version: "2"
 services:
   vote:
     build: ./vote
+    image: docker/example-voting-app-vote
     command: python app.py
     volumes:
      - ./vote:/app
@@ -15,12 +16,15 @@ services:
 
   worker:
     build: ./worker
+    image: docker/example-voting-app-worker
+
 
   db:
     image: postgres:9.4
 
   result:
     build: ./result
+    image: docker/example-voting-app-result
     command: nodemon --debug server.js
     volumes:
       - ./result:/app
