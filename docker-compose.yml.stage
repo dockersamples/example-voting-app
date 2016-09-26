@@ -1,0 +1,32 @@
+vote:
+  image: gochiba/vote
+  command: python app.py
+  ports:
+  - 8080:80
+  links:
+    - redis:redis
+
+redis:
+  image: redis:alpine
+  tty: true
+  stdin_open: true
+  #  ports: 
+  #  - 6379
+
+worker:
+  image: gochiba/worker
+  links:
+    - db:db
+    - redis:redis
+
+db:
+  image: postgres:9.4
+
+result:
+  image: gochiba/result
+  command: nodemon --debug server.js
+  ports:
+    - 8081:80
+    - 5858:5858
+  links:
+    - db:db
