@@ -1,4 +1,4 @@
-FROM microsoft/aspnet
+FROM microsoft/dotnet:1.0.0-preview1
 
 WORKDIR /app
 
