@@ -1,29 +1,45 @@
-version: "2"
+lb:
+  ports:
+  - 80:80
+  labels:
+    io.rancher.loadbalancer.target.result: result.voting.production-cattle.gochiba.net:80=80
+    io.rancher.loadbalancer.target.vote: vote.voting.production-cattle.gochiba.net:80=80
+  tty: true
+  image: rancher/load-balancer-service
+  links:
+    - vote:vote
+    - result:result
+  stdin_open: true
 
-services:
-  vote:
-    build: ./vote
-    command: python app.py
-    volumes:
-     - ./vote:/app
-    ports:
-      - "5000:80"
+vote:
+  image: gochiba/vote
+  command: python app.py
+#  ports:
+#    - 5000:80
+  links:
+    - redis:redis
 
-  redis:
-    image: redis:alpine
-    ports: ["6379"]
+redis:
+  image: redis:alpine
+  tty: true
+  stdin_open: true
+  #  ports: 
+  #  - 6379
 
-  worker:
-    build: ./worker
+worker:
+  image: gochiba/worker
+  links:
+    - db:db
+    - redis:redis
 
-  db:
-    image: postgres:9.4
+db:
+  image: postgres:9.4
 
-  result:
-    build: ./result
-    command: nodemon --debug server.js
-    volumes:
-      - ./result:/app
-    ports:
-      - "5001:80"
-      - "5858:5858"
+result:
+  image: gochiba/result
+  command: nodemon --debug server.js
+  ports:
+#    - 5001:80
+    - 5858:5858
+  links:
+    - db:db
