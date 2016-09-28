@@ -2,7 +2,7 @@
 while ! timeout 1 bash -c "echo > /dev/tcp/vote/80"; do sleep 1; done
 curl -sS -X POST --data "vote=b" http://vote > /dev/null
 sleep 10
-if { phantomjs render.js http://result | grep -q '1 vote'; } && { phantomjs render.js http://result | grep -q 'Linux'; }; then 
+if { phantomjs render.js http://result | grep -q '3 vote'; } && { phantomjs render.js http://result | grep -q 'Linux'; }; then 
   echo -e "\e[42m------------"
   echo -e "\e[92mTests passed"
   echo -e "\e[42m------------"
