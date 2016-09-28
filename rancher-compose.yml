@@ -1,0 +1,53 @@
+.catalog:
+  name: VotingApp
+  version: Latest
+  description: |
+    Example voting app
+  minimum_rancher_version: v0.56.0
+  maintainer: "Go Chiba <go.chiba@gmail.com>"
+  uuid: voting-1
+
+lb:
+  scale: 1
+  load_balancer_config:
+    name: lb config
+  health_check:
+    port: 80
+    interval: 2000
+    unhealthy_threshold: 3
+    healthy_threshold: 2
+    response_timeout: 2000
+
+vote:
+  scale: 1
+  retain_ip: true
+  health_check:
+    port: 80
+    interval: 30000
+    unhealthy_threshold: 3
+    strategy: recreate
+    response_timeout: 2000
+    healthy_threshold: 2
+
+redis:
+  scale: 1
+  retain_ip: true
+
+worker:
+  scale: 1
+  retain_ip: true
+
+db:
+  scale: 1
+  retain_ip: true
+
+result:
+  scale: 1
+  retain_ip: true
+  health_check:
+    port: 80
+    interval: 30000
+    unhealthy_threshold: 3
+    strategy: recreate
+    response_timeout: 2000
+    healthy_threshold: 2
