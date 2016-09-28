@@ -2,8 +2,8 @@ lb:
   ports:
   - 80:80
   labels:
-    io.rancher.loadbalancer.target.result: vote.gochiba.net:80=80
-    io.rancher.loadbalancer.target.vote: result.gochiba.net:80=80
+    io.rancher.loadbalancer.target.result: result.gochiba.net:80=80
+    io.rancher.loadbalancer.target.vote: vote.gochiba.net:80=80
   tty: true
   image: rancher/load-balancer-service
   links:
