@@ -107,11 +107,10 @@ button.b{
 }
 
 #choice button.a:focus{
-  background-color: #1488c6;
+  background-color: #06486d;
 }
-
 #choice button.b:focus{
-  background-color: #00a2a1;
+  background-color: #c13b3b;
 }
 
 #background-stats{
