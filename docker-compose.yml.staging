@@ -25,6 +25,5 @@ result:
   command: nodemon --debug server.js
   ports:
     - 80
-    - 5858:5858
   links:
     - db:db
