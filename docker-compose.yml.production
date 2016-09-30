@@ -14,8 +14,6 @@ lb:
 vote:
   image: gochiba/vote:latest
   command: python app.py
-#  ports:
-#    - 5000:80
   links:
     - redis:redis
 
@@ -23,8 +21,6 @@ redis:
   image: redis:alpine
   tty: true
   stdin_open: true
-  #  ports: 
-  #  - 6379
 
 worker:
   image: gochiba/worker:latest
@@ -38,8 +34,5 @@ db:
 result:
   image: gochiba/result:latest
   command: nodemon --debug server.js
-  ports:
-#    - 5001:80
-    - 5858:5858
   links:
     - db:db
