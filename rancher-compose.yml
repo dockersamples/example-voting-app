@@ -24,7 +24,7 @@ vote:
     start_first: true
   health_check:
     port: 80
-    interval: 30000
+    interval: 10000
     unhealthy_threshold: 3
     strategy: recreate
     response_timeout: 2000
@@ -49,7 +49,7 @@ result:
     start_first: true
   health_check:
     port: 80
-    interval: 30000
+    interval: 10000
     unhealthy_threshold: 3
     strategy: recreate
     response_timeout: 2000
