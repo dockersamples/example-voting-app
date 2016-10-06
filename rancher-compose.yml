@@ -11,6 +11,8 @@ lb:
   scale: 1
   load_balancer_config:
     name: lb config
+  upgrade_strategy:
+    start_first: false
   health_check:
     port: 80
     interval: 2000
@@ -21,6 +23,8 @@ lb:
 vote:
   scale: 1
   retain_ip: true
+  upgrade_strategy:
+    start_first: true
   health_check:
     port: 80
     interval: 30000
@@ -32,18 +36,26 @@ vote:
 redis:
   scale: 1
   retain_ip: true
+  upgrade_strategy:
+    start_first: true
 
 worker:
   scale: 1
   retain_ip: true
+  upgrade_strategy:
+    start_first: true
 
 db:
   scale: 1
   retain_ip: true
+  upgrade_strategy:
+    start_first: true
 
 result:
   scale: 1
   retain_ip: true
+  upgrade_strategy:
+    start_first: true
   health_check:
     port: 80
     interval: 30000
