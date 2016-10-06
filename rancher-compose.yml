@@ -12,7 +12,7 @@ lb:
   load_balancer_config:
     name: lb config
   upgrade_strategy:
-    start_first: false
+    start_first: true
   health_check:
     port: 80
     interval: 2000
