@@ -32,8 +32,7 @@ vote:
 
 redis:
   scale: 1
-  upgrade_strategy:
-    start_first: true
+  retain_ip: true
 
 worker:
   scale: 1
@@ -46,7 +45,8 @@ db:
 
 result:
   scale: 1
-  retain_ip: true
+  upgrade_strategy:
+    start_first: true
   health_check:
     port: 80
     interval: 30000
