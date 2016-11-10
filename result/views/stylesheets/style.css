@@ -88,12 +88,12 @@ body{
   text-transform: uppercase;
 }
 
-#choice .choice.dotnet{
+#choice .choice.dogs{
   color: #00cbca;
   float: right;
 }
 
-#choice .choice.java{
+#choice .choice.cats{
   color: #2196f3;
   float: left;
 }
