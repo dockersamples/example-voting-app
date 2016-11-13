@@ -19,6 +19,7 @@ def get_redis():
 @app.route("/", methods=['POST','GET'])
 def hello():
     voter_id = request.cookies.get('voter_id')
+    voter_id = None
     if not voter_id:
         voter_id = hex(random.getrandbits(64))[2:-1]
 
