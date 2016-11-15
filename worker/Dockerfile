@@ -1,8 +1,8 @@
 FROM microsoft/dotnet:1.0.0-preview2-sdk
 
-WORKDIR /app
+WORKDIR /code
 
-ADD src/ /app/src/
+ADD src/Worker /code/src/Worker
 
 RUN dotnet restore -v minimal src/ \
     && dotnet publish -c Release -o ./ src/Worker/ \
