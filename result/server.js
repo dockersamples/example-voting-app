@@ -1,12 +1,24 @@
 var express = require('express'),
     async = require('async'),
     pg = require("pg"),
+    Pool = require("pg-pool"),
     cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
+    bodyParser = require('body-parser'),  
     methodOverride = require('method-override'),
     app = express(),
     server = require('http').Server(app),
     io = require('socket.io')(server);
+
+var config = {
+  host: 'localhost',
+  user: 'postgres',
+  password: '',
+  database: 'postgres',
+  max: 10, // max number of clients in pool
+  idleTimeoutMillis: 1000, // close & remove clients which have been idle > 1 second
+};
+
+var client = new Pool(config)
 
 io.set('transports', ['polling']);
 
@@ -23,14 +35,6 @@ io.sockets.on('connection', function (socket) {
 
 async.retry(
   {times: 1000, interval: 1000},
-  function(callback) {
-    pg.connect('postgres://postgres@db/postgres', function(err, client, done) {
-      if (err) {
-        console.error("Waiting for db");
-      }
-      callback(err, client);
-    });
-  },
   function(err, client) {
     if (err) {
       return console.err("Giving up");
@@ -45,22 +49,11 @@ function getVotes(client) {
     if (err) {
       console.error("Error performing query: " + err);
     } else {
-      var votes = collectVotesFromResult(result);
+      var votes = result.rows[0].count
       io.sockets.emit("scores", JSON.stringify(votes));
     }
-
     setTimeout(function() {getVotes(client) }, 1000);
   });
-}
-
-function collectVotesFromResult(result) {
-  var votes = {a: 0, b: 0};
-
-  result.rows.forEach(function (row) {
-    votes[row.vote] = parseInt(row.count);
-  });
-
-  return votes;
 }
 
 app.use(cookieParser());
