@@ -1,7 +1,7 @@
 Instavote
 =========
 
-Getting started
+Getting started!
 ---------------
 
 Download [Docker for Mac or Windows](https://www.docker.com).
@@ -23,3 +23,4 @@ Architecture
 * A Postgres database backed by a Docker volume
 * A Node.js webapp which shows the results of the voting in real time
 
+minor change
