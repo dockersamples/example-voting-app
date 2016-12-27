@@ -15,7 +15,6 @@
     "method-override": "^2.3.5",
     "async": "^1.5.0",
     "pg": "^4.4.3",
-    "pg-pool": "1.6.0",
     "socket.io": "^1.3.7"
   }
 }
