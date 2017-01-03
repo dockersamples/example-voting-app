@@ -7,7 +7,7 @@ services:
     volumes:
      - ./vote:/app
     ports:
-      - "5000:80"
+      - "8080:80"
     networks:
       - front-tier
       - back-tier
@@ -25,7 +25,7 @@ services:
       - back-tier
 
   worker:
-    build: ./worker/Dockerfile.j
+    build: ./worker
     networks:
       - back-tier
 

@@ -2,7 +2,7 @@ version: "2"
 
 services:
   vote:
-    build: ./vote
+    build: ./vote/Dockerfile
     command: python app.py
     volumes:
      - ./vote:/app
@@ -11,9 +11,12 @@ services:
     networks:
       - front-tier
       - back-tier
+    environment:
+      - OPTION_A=Emacs
+      - OPTION_B=Vi
 
   result:
-    build: ./result
+    build: ./result/Dockerfile
     command: nodemon --debug server.js
     volumes:
       - ./result:/app

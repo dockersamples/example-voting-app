@@ -1,11 +1,13 @@
-FROM microsoft/dotnet:1.0.0-preview2-sdk
+FROM examplevotingapp_mvn:v0.1.0
 
 WORKDIR /code
 
-ADD src/Worker /code/src/Worker
+ADD pom.xml /code/pom.xml
+RUN ["mvn", "dependency:resolve"]
+RUN ["mvn", "verify"]
 
-RUN dotnet restore -v minimal src/ \
-    && dotnet publish -c Release -o ./ src/Worker/ \
-    && rm -rf src/ $HOME/.nuget/
+# Adding source, compile and package into a fat jar
+ADD src/main /code/src/main
+RUN ["mvn", "package"]
 
-CMD dotnet Worker.dll
+CMD ["java", "-jar", "target/worker-jar-with-dependencies.jar"]
