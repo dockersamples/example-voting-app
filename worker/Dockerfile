@@ -1,4 +1,4 @@
-FROM examplevotingapp_mvn:v0.1.0
+FROM schoolofdevops/voteapp-mvn:v0.1.0
 
 WORKDIR /code
 
