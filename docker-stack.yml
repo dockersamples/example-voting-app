@@ -67,6 +67,7 @@ services:
         delay: 10s
         max_attempts: 3
         window: 120s
+
   visualizer:
     image: manomarks/visualizer
     ports:
