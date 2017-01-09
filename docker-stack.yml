@@ -6,7 +6,7 @@ services:
     ports:
       - "6379"
     networks:
-      - front-tier
+      - frontend
     deploy:
       replicas: 2
       update_config:
@@ -19,7 +19,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
-      - back-tier
+      - backend
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -28,7 +28,7 @@ services:
     ports:
       - 5000:80
     networks:
-      - front-tier
+      - frontend
     depends_on:
       - redis
     deploy:
@@ -42,7 +42,7 @@ services:
     ports:
       - 5001:80
     networks:
-      - back-tier
+      - backend
     depends_on:
       - db
     deploy:
@@ -56,8 +56,8 @@ services:
   worker:
     image: dockersamples/examplevotingapp_worker
     networks:
-      - front-tier
-      - back-tier
+      - frontend
+      - backend
     deploy:
       mode: replicated
       replicas: 1
@@ -67,10 +67,17 @@ services:
         delay: 10s
         max_attempts: 3
         window: 120s
+  visualizer:
+    image: manomarks/visualizer
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
 networks:
-  front-tier:
-  back-tier:
+  frontend:
+  backend:
 
 volumes:
   db-data:
