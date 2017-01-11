@@ -69,7 +69,7 @@ services:
         window: 120s
 
   visualizer:
-    image: manomarks/visualizer
+    image: dockersamples/visualizer:stable
     ports:
       - "8080:8080"
     stop_grace_period: 1m30s
