@@ -1,5 +1,5 @@
-Instavote
-=========
+Voting App
+==========
 
 Getting started
 ---------------
