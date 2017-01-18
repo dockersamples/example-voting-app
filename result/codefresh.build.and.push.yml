@@ -5,7 +5,7 @@ steps:
   build_image:
     title: Building Voting Image
     type: build
-    #Important: rename this image to to a valid repository in your registry. For example: myUserName/vote
+    #Important: rename this image to to a valid repository in your registry. For example: myUserName/result
     image_name: containers101/result
     #The directory should be relative to git repository that is used for cloning
     working_directory: ./result/
