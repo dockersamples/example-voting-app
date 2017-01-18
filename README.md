@@ -28,6 +28,7 @@ Architecture
 
 Perquisites:
 Add your registry (Docker Hub, GCR etc.) credentials in the account admin. 
+If you don't want to set the credentials in the admin or want to use a different credentials see example push.with.credentials.yml in the vote folder.
 
 Let's add the 3 services:
 Fork this repository to your own GitHub account. 
