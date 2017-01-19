@@ -1,0 +1,50 @@
+version: '1.0'
+
+steps:
+
+  build_image:
+    title: Building Voting Image
+    type: build
+    #Important: rename this image to to a valid repository in your registry. For example: myUserName/vote
+    image_name: containers101/vote
+    #The directory should be relative to git repository that is used for cloning
+    working_directory: ./vote/
+    #Dockerfile location should be relative to the working directory
+    dockerfile: Dockerfile
+
+  push_to_registry:
+    title: Pushing to Docker Registry
+    type: push
+
+    #A candidate is the image that we want to push to registry
+    candidate: '${{build_image}}'
+
+    # You can push the image with whatever tag you want. In our example we use CF_BRANCH, which is a variable in
+    # the build process, accessible throughout the entire flow.
+    tag: '${{CF_BRANCH}}'
+
+
+    # This step will deploy to ECS when building branch master. It will push watever image you want from your registry.
+    # just replace the 'eu-west-1 vote-app vote-srv' that is written in the format of <aws-region> <ecs-cluster-name> <ecs-service-name>
+    # with the relevant information of your AWS service.
+  deploy_to_ecs:
+    title: Deploy Image to ECS
+
+    #codefresh image that handle the push. Don't change this. On information on how to use this please visit: https://github.com/codefresh-io/cf-deploy-ecs
+    image: codefresh/cf-deploy-ecs
+
+    # This will push to service 'vote-srv' in cluster 'vote-app' on region 'eu-west-1'. Replace this with <aws-region> <ecs-cluster-name> <ecs-service-name>
+    # Make sure that you got a cluster configured with registry credentials on the cluster.
+    # The image-name and image-tag are optional parameters. For more information go to: https://github.com/codefresh-io/cf-deploy-ecs
+    commands:
+      - cfecs-update --image-name containers101/vote --image-tag ${{CF_BRANCH}} eu-west-1 vote-app vote-srv
+
+    # configure these parameters on your pipeline (You can encrypt those). The cf-deploy-ecs step needs this in order to deploy to ECS
+    environment:
+      - AWS_ACCESS_KEY_ID=${{AWS_ACCESS_KEY_ID}}
+      - AWS_SECRET_ACCESS_KEY=${{AWS_SECRET_ACCESS_KEY}}
+    # Only deploy on pushing to master branch
+    when:
+      branch:
+        only:
+          - master

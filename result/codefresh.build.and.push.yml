@@ -1,0 +1,24 @@
+version: '1.0'
+
+steps:
+
+  build_image:
+    title: Building Voting Image
+    type: build
+    #Important: rename this image to to a valid repository in your registry. For example: myUserName/result
+    image_name: containers101/result
+    #The directory should be relative to git repository that is used for cloning
+    working_directory: ./result/
+    #Dockerfile location should be relative to the working directory
+    dockerfile: Dockerfile
+
+  push_to_registry:
+    title: Pushing to Docker Registry
+    type: push
+
+    #A candidate is the image that we want to push to registry
+    candidate: '${{build_image}}'
+
+    # You can push the image with whatever tag you want. In our example we use CF_BRANCH, which is a variable in
+    # the build process, accessible throughout the entire flow.
+    tag: '${{CF_BRANCH}}'
