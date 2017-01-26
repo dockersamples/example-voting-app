@@ -28,7 +28,7 @@ steps:
     when:
         condition:
             all:
-                promote_on_comment:'includes(lower("${{CF_COMMIT_MESSAGE}}"), "[promote]") == true'
+                promote: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "[promote]") == true'
 
 
 
