@@ -13,7 +13,7 @@ steps:
     dockerfile: Dockerfile
 
   push_to_registry:
-    title: Pushing to Docker Registry
+    title: Pushing to Docker Registry Test
     type: push
 
     #A candidate is the image that we want to push to registry
