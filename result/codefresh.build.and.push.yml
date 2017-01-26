@@ -26,9 +26,9 @@ steps:
     #push only if the commit message contains the word '[promote]'. This is just an example of a custom rule.
     #Check https://docs.codefresh.io/docs/conditional-execution-of-steps to see more examples of conditions
     when:
-      condition:
-        all:
-          promote_on_comment:'includes(lower("${{CF_COMMIT_MESSAGE}}"), "[promote]") == true'
+        condition:
+            all:
+                promote_on_comment:'includes(lower("${{CF_COMMIT_MESSAGE}}"), "[promote]") == true'
 
 
 
