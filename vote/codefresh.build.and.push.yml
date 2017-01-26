@@ -22,3 +22,10 @@ steps:
     # You can push the image with whatever tag you want. In our example we use CF_BRANCH, which is a variable in
     # the build process, accessible throughout the entire flow.
     tag: '${{CF_BRANCH}}'
+
+    #push only if the commit message contains the word '[promote]'. This is just an example of a custom rule.
+    #Check https://docs.codefresh.io/docs/conditional-execution-of-steps to see more examples of conditions
+    when:
+      condition:
+        all:
+          promote_on_comment:'includes(lower("${{CF_COMMIT_MESSAGE}}"), "[promote]") == true'
