@@ -16,7 +16,7 @@ services:
         condition: on-failure
 
   db:
-    image: postgres:9.5
+    image: gesellix/postgres:9.5-rpi
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
@@ -26,7 +26,7 @@ services:
         constraints: [node.role == manager]
 
   vote:
-    image: vote
+    image: gesellix/sample-vote
     ports:
       - 5000:80
     networks:
@@ -41,7 +41,7 @@ services:
         condition: on-failure
 
   result:
-    image: result
+    image: gesellix/sample-result
     ports:
       - 5001:80
     networks:
@@ -57,7 +57,7 @@ services:
         condition: on-failure
 
   worker:
-    image: worker
+    image: gesellix/sample-worker
     networks:
 #      - frontend
       - backend
