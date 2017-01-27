@@ -1,0 +1,4 @@
+FROM armhf/openjdk:8-jre
+WORKDIR /worker
+COPY ./worker-jar-with-dependencies.jar /worker/worker.jar
+CMD ["java", "-jar", "/worker/worker.jar"]
