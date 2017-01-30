@@ -2,7 +2,9 @@ version: "2"
 
 services:
   vote:
-    image: vote
+    build:
+      context: ./vote
+      dockerfile: Dockerfile.armhf
     ports:
       - "5000:80"
     networks:
@@ -10,7 +12,9 @@ services:
       - back-tier
 
   result:
-    image: result
+    build:
+      context: ./result
+      dockerfile: Dockerfile.armhf
     ports:
       - "5001:80"
       - "5858:5858"
@@ -19,7 +23,9 @@ services:
       - back-tier
 
   worker:
-    image: worker
+    build:
+      context: ./worker
+      dockerfile: Dockerfile.jdk.armhf
     networks:
       - back-tier
 
@@ -32,7 +38,9 @@ services:
       - back-tier
 
   db:
-    image: postgres:9.5
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile.armhf
     container_name: db
     volumes:
       - "db-data:/var/lib/postgresql/data"
