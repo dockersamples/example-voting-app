@@ -16,7 +16,7 @@ services:
         condition: on-failure
 
   db:
-    image: gesellix/postgres:9.5-rpi
+    image: gesellix/postgres:9.5-armhf
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
@@ -26,7 +26,7 @@ services:
         constraints: [node.role == manager]
 
   vote:
-    image: gesellix/sample-vote:rpi
+    image: gesellix/sample-vote:armhf
     ports:
       - 5000:80
     networks:
@@ -41,7 +41,7 @@ services:
         condition: on-failure
 
   result:
-    image: gesellix/sample-result:rpi
+    image: gesellix/sample-result:armhf
     ports:
       - 5001:80
     networks:
@@ -57,9 +57,9 @@ services:
         condition: on-failure
 
   worker:
-    image: gesellix/sample-worker
+    image: gesellix/sample-worker:armhf
     networks:
-#      - frontend
+      - frontend
       - backend
     deploy:
       mode: replicated
