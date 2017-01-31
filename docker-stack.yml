@@ -46,7 +46,7 @@ services:
     depends_on:
       - db
     deploy:
-      replicas: 2
+      replicas: 1
       update_config:
         parallelism: 2
         delay: 10s
