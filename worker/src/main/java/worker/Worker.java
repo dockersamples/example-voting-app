@@ -51,6 +51,7 @@ class Worker {
     while (true) {
       try {
         conn.keys("*");
+        System.err.println("Connected to redis");
         break;
       } catch (JedisConnectionException e) {
         System.err.println("Waiting for redis");
@@ -58,7 +59,7 @@ class Worker {
       }
     }
 
-    System.err.println("Connected to redis");
+    System.out.println("Redis cluster info:\n" + conn.clusterInfo());
     return conn;
   }
 
