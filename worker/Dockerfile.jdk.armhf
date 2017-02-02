@@ -4,8 +4,10 @@ WORKDIR /proj
 
 # cache dependencies
 COPY pom.xml /proj/pom.xml
-COPY src /proj/src
+RUN mvn dependency:resolve
+RUN mvn verify
 
+COPY src /proj/src
 RUN mvn package
 
 CMD ["java", "-jar", "target/worker-jar-with-dependencies.jar"]
