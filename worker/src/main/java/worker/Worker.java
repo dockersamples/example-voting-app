@@ -59,7 +59,7 @@ class Worker {
       }
     }
 
-    System.out.println("Redis cluster info:\n" + conn.clusterInfo());
+    System.out.println("Redis server info:\n" + conn.info());
     return conn;
   }
 
