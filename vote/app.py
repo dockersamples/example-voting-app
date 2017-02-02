@@ -4,6 +4,9 @@ import os
 import socket
 import random
 import json
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
@@ -13,7 +16,9 @@ app = Flask(__name__)
 
 def get_redis():
     if not hasattr(g, 'redis'):
+        logging.info('connecting to redis...')
         g.redis = Redis(host="redis", db=0, socket_timeout=5)
+        logging.info('connected to redis')
     return g.redis
 
 @app.route("/", methods=['POST','GET'])
@@ -26,9 +31,11 @@ def hello():
 
     if request.method == 'POST':
         redis = get_redis()
+        logging.info('writing to redis')
         vote = request.form['vote']
         data = json.dumps({'voter_id': voter_id, 'vote': vote})
         redis.rpush('votes', data)
+        logging.info('wrote to redis')
 
     resp = make_response(render_template(
         'index.html',
