@@ -1,0 +1,12 @@
+version: '1.0'
+
+steps:
+
+#build all the images
+  build_image_vote:
+    title: Building Voting Image
+    type: build
+    #Important: rename this image to to a valid repository in your registry. For example: myUserName/vote
+    image_name: containers101/vote
+    #Dockerfile location should be relative to the working directory
+    dockerfile: Dockerfile
