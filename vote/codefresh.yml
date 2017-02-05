@@ -8,5 +8,6 @@ steps:
     type: build
     #Important: rename this image to to a valid repository in your registry. For example: myUserName/vote
     image_name: containers101/vote
+    working_directory: ./vote/
     #Dockerfile location should be relative to the working directory
     dockerfile: Dockerfile
