@@ -3,6 +3,14 @@ Voting App
 
 this application is based on Docker's example [voting app](https://github.com/docker/example-voting-app). 
 
+ 
+# Badges for MicroServices status
+--- |--- | --- |
+** Vote ** |[![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=containers101&repoName=voting-app&branch=master&pipelineName=voting-app&accountName=codefresh-inc&type=cf-1)]( https://g.codefresh.io/repositories/containers101/voting-app/builds?filter=trigger:build;branch:master;service:58807b88009ed10100dfff8b~voting-app)
+Worker|[![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=containers101&repoName=voting-app&branch=master&pipelineName=worker&accountName=codefresh-inc&type=cf-1)]( https://g.codefresh.io/repositories/containers101/voting-app/builds?filter=trigger:build;branch:master;service:5898169fd6b6320100cea20c~worker)
+Result|[![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=containers101&repoName=voting-app&branch=master&pipelineName=result&accountName=codefresh-inc&type=cf-1)]( https://g.codefresh.io/repositories/containers101/voting-app/builds?filter=trigger:build;branch:master;service:589816cb21858e01002c8a04~result)
+
+
 Architecture
 ------------
 
