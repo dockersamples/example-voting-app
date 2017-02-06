@@ -1,0 +1,13 @@
+version: '1.0'
+
+steps:
+
+  build_image:
+    title: Building Voting Image
+    type: build
+    #Important: rename this image to to a valid repository in your registry. For example: myUserName/worker
+    image_name: containers101/worker
+    #The directory should be relative to git repository that is used for cloning
+    working_directory: ./worker/
+    #Dockerfile location should be relative to the working directory
+    dockerfile: Dockerfile
