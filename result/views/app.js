@@ -27,12 +27,17 @@ app.controller('statsCtrl', function($scope){
     });
   };
 
-  var init = function(){
+  var init = function(data){
     document.body.style.opacity=1;
+    $scope.option_a = data.options.a;
+    $scope.option_b = data.options.b;
+    $scope.$apply();
     updateScores();
   };
   socket.on('message',function(data){
-    init();
+    console.log(JSON.stringify(data));
+    init(data);
+
   });
 });
 
