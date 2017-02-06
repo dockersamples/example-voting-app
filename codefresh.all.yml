@@ -1,5 +1,5 @@
 version: '1.0'
-
+#build all 
 steps:
 
 #build all the images
