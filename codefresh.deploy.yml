@@ -11,4 +11,4 @@ steps:
     when:
       branch:
         only:
-          - master
+          - update-build
