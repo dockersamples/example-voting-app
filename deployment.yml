@@ -1,0 +1,27 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: voting-demo
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: voting
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+      - name: result
+        image: containers101/result:master
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+      - name: vote
+        image: containers101/vote:master
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+      - name: worker
+        image: containers101/worker:master
+        imagePullPolicy: Always

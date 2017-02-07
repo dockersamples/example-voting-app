@@ -1,0 +1,33 @@
+version: '2'
+services:
+  result:
+    image: 'containers101/result:$BRANCH'
+    #command: node  server.js
+    ports:
+      - "1111:80"
+    links:
+      - "db:db"
+    environment:
+      - OPTION_A=$VOTING_OPTION_A
+      - OPTION_B=$VOTING_OPTION_B
+  worker:
+    image: 'containers101/worker:$BRANCH'
+    links:
+      - "db:db"
+      - "redis:redis"
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - "6379"
+  vote:
+    image: 'containers101/vote:$BRANCH'
+    command: python app.py
+    ports:
+      - "80"
+    links:
+      - "redis:redis"
+    environment:
+      - OPTION_A=$VOTING_OPTION_A
+      - OPTION_B=$VOTING_OPTION_B
+  db:
+    image: 'postgres:9.4'

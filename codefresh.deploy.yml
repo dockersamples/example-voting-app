@@ -1,0 +1,14 @@
+version: '1.0'
+#build all
+steps:
+
+ launch_composition_step:
+    title: "Launch full composition with latest images"
+    type: launch-composition
+    composition: ./docker-compose-demo.yml
+    environment_name: "voting-demo"
+    fail_fast: false
+    when:
+      branch:
+        only:
+          - master

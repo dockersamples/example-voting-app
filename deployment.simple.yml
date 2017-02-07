@@ -1,0 +1,21 @@
+---
+#https://kubernetes.io/docs/user-guide/kubectl-cheatsheet/
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: simple-demo
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: simple
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+      - name: express
+        image: node:latest
+        command: ["/bin/bash -c 'touch test.file"]
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Always
