@@ -2,7 +2,7 @@ version: '2'
 services:
   result:
     image: 'containers101/result:update-build'
-    build: ./result
+    #build: ./result
     #command: node  server.js
     ports:
       - "1111:80"
@@ -12,7 +12,7 @@ services:
       - OPTION_A=$VOTING_OPTION_A
       - OPTION_B=$VOTING_OPTION_B
   worker:
-    build: ./worker
+    #build: ./worker
     image: 'containers101/worker:update-build'
     links:
       - "db:db"
@@ -22,7 +22,7 @@ services:
     ports:
       - "6379"
   vote:
-    build: ./vote
+    #build: ./vote
     image: 'containers101/vote:update-build'
     command: python app.py
     ports:
