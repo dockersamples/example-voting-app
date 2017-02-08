@@ -23,7 +23,7 @@ services:
       - "6379"
   vote:
     build: ./vote
-    image: 'containers101/vote:$BRANCH'
+    image: 'containers101/vote:${{BRANCH}}'
     command: python app.py
     ports:
       - "80"
