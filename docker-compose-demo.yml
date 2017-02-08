@@ -1,7 +1,7 @@
 version: '2'
 services:
   result:
-    image: 'containers101/result:$BRANCH'
+    image: 'containers101/result:${{BRANCH}}'
     build: ./result
     #command: node  server.js
     ports:
@@ -13,7 +13,7 @@ services:
       - OPTION_B=$VOTING_OPTION_B
   worker:
     build: ./worker
-    image: 'containers101/worker:$BRANCH'
+    image: 'containers101/worker:${{BRANCH}}'
     links:
       - "db:db"
       - "redis:redis"
