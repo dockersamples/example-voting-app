@@ -4,8 +4,6 @@ services:
   vote:
     build: ./vote
     command: python app.py
-    volumes:
-     - ./vote:/app
     ports:
       - "80"
     networks:
@@ -15,8 +13,6 @@ services:
   result:
     build: ./result
     command: nodemon --debug server.js
-    volumes:
-      - ./result:/app
     ports:
       - "5001"
       - "5858"
@@ -39,13 +35,9 @@ services:
   db:
     image: postgres:9.4
     container_name: db
-    volumes:
-      - "db-data:/var/lib/postgresql/data"
     networks:
       - back-tier
 
-volumes:
-  db-data:
 
 networks:
   front-tier:
