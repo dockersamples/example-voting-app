@@ -1,4 +1,4 @@
-Voting App -> Demo of Codefresh we expect to run builds.
+Voting App -> Demo of Codefresh to StormRunner we expect to run builds.
 ==========
 
 this application is based on Docker's example [voting app](https://github.com/docker/example-voting-app). 
