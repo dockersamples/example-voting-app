@@ -10,7 +10,7 @@ RUN pip install -r requirements.txt
 
 # Copy our code from the current folder to /app inside the container
 ADD . /app
-USER verchol
+#USER verchol
 # Make port 80 available for links and/or publish
 EXPOSE 80
 RUN ls ./
