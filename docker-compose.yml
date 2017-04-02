@@ -15,6 +15,12 @@ services:
   result:
     build: ./result
     command: nodemon --debug server.js
+    deploy:
+      mode: replicated
+      replicas: 2
+      labels: [APP=VOTING]
+      placement:
+        constraints: [node.role == worker]
     volumes:
       - ./result:/app
     ports:
