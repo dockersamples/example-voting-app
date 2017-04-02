@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: express-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: express-demo
+    spec:
+      containers:
+      - name: express
+        image: express:test
+        ports:
+        - containerPort: 3000
+      containers:
+      - name: mongos
+        image: mongo
+        ports:
+         - containerPort: 27017
+      volumes:
+      - name: git-volume
+        gitRepo:
+          repository: "https://github.com/codefreshdemo/demochat.git"
+          #revision: "22f1d8406d464b0c08740  75539c1f2e96c253775

@@ -1,0 +1,5 @@
+pipeline:
+  publish:
+    image: plugins/docker
+    repo: containers101/vote
+    tags: [ latest, 1, 1.0, 1.0.0 ]
