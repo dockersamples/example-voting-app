@@ -1,0 +1,8 @@
+ce4bbda5ac2ae0c1e83e1cea911e382ddba56a58e5df31ecb30ededeb8433d86
+docker-machine create -d digitalocean --digitalocean-access-token=$DTOKEN  --swarm --swarm-master \
+
+  --swarm-discovery="consul://$(docker-machine ip kvstore):8500" \
+
+  --engine-opt="cluster-store=consul://$(docker-machine ip swarm-master):8500" \ 
+
+  --engine-opt="cluster-advertise=eth0:2376" swarm-master
