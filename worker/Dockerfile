@@ -1,11 +1,10 @@
-FROM microsoft/dotnet:1.0.0-preview2-sdk
+FROM microsoft/dotnet:1.1.1-sdk
 
 WORKDIR /code
 
 ADD src/Worker /code/src/Worker
 
-RUN dotnet restore -v minimal src/ \
-    && dotnet publish -c Release -o ./ src/Worker/ \
-    && rm -rf src/ $HOME/.nuget/
+RUN dotnet restore -v minimal src/Worker \
+    && dotnet publish -c Release -o "./" "src/Worker/" 
 
-CMD dotnet Worker.dll
+CMD dotnet src/Worker/Worker.dll
