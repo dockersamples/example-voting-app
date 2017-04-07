@@ -25,7 +25,8 @@ services:
       - back-tier
 
   worker:
-    build: ./worker
+    build:
+      context: ./worker
     networks:
       - back-tier
 
