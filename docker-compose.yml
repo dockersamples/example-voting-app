@@ -5,7 +5,6 @@ services:
     build:
       context: ./vote
       dockerfile: Dockerfile
-    image: vote:oleg
     ports:
       - "80"
     networks:
@@ -15,7 +14,6 @@ services:
   result:
     build:
       context: ./result
-    command: nodemon --debug server.js
     #volumes:
     #  - ./result:/app
     ports:
