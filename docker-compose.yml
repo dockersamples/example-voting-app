@@ -6,11 +6,8 @@ services:
       context: ./vote
       dockerfile: Dockerfile
     image: vote:oleg
-    #command:  /bin/sh -c "sleep 10000"
-    #volumes:
-    # - ./vote:/app
     ports:
-      - "5000:80"
+      - "80"
     networks:
       - front-tier
       - back-tier
@@ -22,8 +19,8 @@ services:
     #volumes:
     #  - ./result:/app
     ports:
-      - "5001:80"
-      - "5858:5858"
+      - "80"
+      - "5858"
     networks:
       - front-tier
       - back-tier
