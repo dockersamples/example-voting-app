@@ -1,0 +1,14 @@
+FROM armhf/alpine:3.4
+
+ENV LANG en_US.utf8
+ENV PGDATA /var/lib/postgresql/data
+
+RUN apk add -U --no-cache postgresql bash su-exec ca-certificates curl \
+    && curl -sSL -o /docker-entrypoint.sh "https://raw.githubusercontent.com/docker-library/postgres/master/9.5/alpine/docker-entrypoint.sh" \
+    && apk del --purge -r ca-certificates curl \
+    && mkdir -p /docker-entrypoint-initdb.d /run/postgresql \
+    && chmod a+x /docker-entrypoint.sh
+
+EXPOSE 5432
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
+CMD [ "postgres", "-c", "listen_addresses=0.0.0.0" ]

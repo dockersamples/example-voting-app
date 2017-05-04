@@ -1,0 +1,55 @@
+version: "2"
+
+services:
+  vote:
+    build:
+      context: ./vote
+      dockerfile: Dockerfile.armhf
+    ports:
+      - "5000:80"
+    networks:
+      - front-tier
+      - back-tier
+
+  result:
+    build:
+      context: ./result
+      dockerfile: Dockerfile.armhf
+    ports:
+      - "5001:80"
+      - "5858:5858"
+    networks:
+      - front-tier
+      - back-tier
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile.jdk.armhf
+    networks:
+      - back-tier
+
+  redis:
+    image: armhf/redis:latest
+    container_name: redis
+    ports:
+      - "6379"
+    networks:
+      - back-tier
+
+  db:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile.armhf
+    container_name: db
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    networks:
+      - back-tier
+
+volumes:
+  db-data:
+
+networks:
+  front-tier:
+  back-tier:
