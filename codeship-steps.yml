@@ -1,0 +1,3 @@
+- name: tests
+  service: sut
+  command: "/app/tests.sh"

@@ -1,0 +1,29 @@
+services:
+  sut:
+    build: ./result/tests/
+    links:
+      - vote
+      - result
+      - worker
+  vote:
+    build: ./vote/
+    ports: ["80"]
+    links:
+      - redis
+      - db
+  result:
+    build: ./result/
+    ports: ["80"]
+    links:
+      - redis
+      - db
+  worker:
+    build: ./worker/
+    links:
+      - redis
+      - db
+  redis:
+    image: redis:alpine
+    ports: ["6379"]
+  db:
+    image: postgres:9.4
