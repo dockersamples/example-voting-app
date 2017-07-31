@@ -1,5 +1,5 @@
-FROM node:6.11.0
+FROM node:7.10
 RUN npm install -g phantomjs
-ADD . /app
+COPY . /app
 WORKDIR /app
 CMD ["/app/tests.sh"]
