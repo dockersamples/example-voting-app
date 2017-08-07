@@ -1,0 +1,35 @@
+services:
+  sut:
+    build: ./result/tests/
+    links:
+      - vote
+      - result
+      - worker
+  vote:
+    build: ./vote/
+    ports: ["80"]
+    links:
+      - redis
+      - db
+  result:
+    build: ./result/
+    ports: ["80"]
+    links:
+      - redis
+      - db
+  worker:
+    build: ./worker/
+    links:
+      - redis
+      - db
+  redis:
+    image: redis:alpine
+    ports: ["6379"]
+  db:
+    image: postgres:9.4
+  codeship_googlecloud_deploy:
+    image: codeship/google-cloud-deployment
+    encrypted_env_file: ./ci/google-credentials.encrypted
+    add_docker: true
+    volumes:
+      - ./:/deploy

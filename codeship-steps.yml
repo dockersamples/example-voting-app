@@ -1,0 +1,6 @@
+- name: tests
+  service: sut
+  command: "/app/tests.sh"
+- name: google-cloud-deployment
+  service: codeship_googlecloud_deploy
+  command: ./deploy/ci/google-deploy
