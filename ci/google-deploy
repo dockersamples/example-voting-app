@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Authenticate with the Google Services
+codeship_google authenticate
+
+# switch to the directory containing your app.yml (or similar) configuration file
+# note that your repository is mounted as a volume to the /deploy directory
+cd /deploy/
+
+# copy the application files
+gcloud compute scp [!.]* kelly@swarm-mgr-1:./ --quiet --recurse --zone us-east4-c
+
+# deploy the application
+gcloud compute ssh kelly@swarm-mgr-1 --zone us-east4-c --command "sudo docker stack deploy --compose-file docker-stack.yml vote"

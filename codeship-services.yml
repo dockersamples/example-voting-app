@@ -27,3 +27,9 @@ services:
     ports: ["6379"]
   db:
     image: postgres:9.4
+  codeship_googlecloud_deploy:
+    image: codeship/google-cloud-deployment
+    encrypted_env_file: ./ci/google-credentials.encrypted
+    add_docker: true
+    volumes:
+      - ./:/deploy
