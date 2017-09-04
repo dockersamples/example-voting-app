@@ -35,7 +35,7 @@ def hello():
         option_a=option_a,
         option_b=option_b,
         hostname=hostname,
-        common_domain=request.host.split('.', 1)[-1]
+        common_domain=request.host.split('.', 1)[-1],
         vote=vote,
     ))
     resp.set_cookie('voter_id', voter_id)
