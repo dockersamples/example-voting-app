@@ -13,7 +13,7 @@
   <body>
     <div id="content-container">
       <div id="content-container-center">
-        <h4>Tjejer Kodar @ Svenska Spel</h4>
+     
         <h3>{{option_a}} vs {{option_b}}!</h3>
         <form id="choice" name='form' method="POST" action="/">
           <button id="a" type="submit" name="vote" class="a" value="a">{{option_a}}</button>
@@ -21,6 +21,9 @@
         </form>
         <div id="tip">
           (Tip: you can change your vote)
+        </div>
+        <div id="results-link-container">
+          <a href="result.{{common_domain}}">View Results</a>
         </div>
         <div id="hostname">
           Processed by container ID {{hostname}}
