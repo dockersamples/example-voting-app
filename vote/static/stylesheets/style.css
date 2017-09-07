@@ -28,7 +28,7 @@ button i{
 }
 
 button.a{
-  background-color: #1aaaf8;
+   background: #00ff00 url("https://i.redditmedia.com/bOrC7LsgIQk1qqDgLkiGoPHNAr8K3ASr1ZgKEocOdpo.jpg?w=564&s=a6593c88d98764c0573cfc7d71d7bedc") no-repeat fixed center;
 }
 
 button.b{
@@ -41,6 +41,15 @@ button.b{
   font-size: 14px;
 }
 
+#results-link-container a{
+  background-color: coral;
+    padding: 10px;
+    text-decoration: none;
+    color: white;
+    font-family: impact;
+    border-radius: 30px; 
+}
+  
 #hostname{
   position: absolute;
   bottom: 100px;
@@ -84,7 +93,7 @@ button.b{
 }
 
 #choice button{
-  display: block;
+  display: inline-block;
   height: 80px;
   width: 330px;
   border: none;
