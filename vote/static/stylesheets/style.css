@@ -6,7 +6,7 @@
 html,body{
   margin: 0;
   padding: 0;
-  background-image: #F7F8F9 url("https://cdn1.svenskaspel.net/images/app/product-start-page/lordagsgodis-rgb.svg");
+  background-image: #F7F8F9 url("https://cdn1.svenskaspel.net/images/app/product-start-page/lordagsgodis-rgb.svg")  repeat fixed center;
   height: 100vh;
   font-family: 'Open Sans';
 }
@@ -28,7 +28,7 @@ button i{
 }
 
 button.a{
-  background-color: #1aaaf8;
+   background: #00ff00 url("https://i.redditmedia.com/bOrC7LsgIQk1qqDgLkiGoPHNAr8K3ASr1ZgKEocOdpo.jpg?w=564&s=a6593c88d98764c0573cfc7d71d7bedc") no-repeat fixed center;
 }
 
 button.b{
