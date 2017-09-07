@@ -1,6 +1,11 @@
 Example Voting App
 =========
 
+TjejerKodar
+-----------
+
+**Vänligen notera att instruktionerna nedan gäller inte för kvällens labb.**
+
 Getting started
 ---------------
 
