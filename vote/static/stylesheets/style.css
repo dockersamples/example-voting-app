@@ -6,7 +6,7 @@
 html,body{
   margin: 0;
   padding: 0;
-  background-image: #F7F8F9 url("https://cdn1.svenskaspel.net/images/app/product-start-page/lordagsgodis-rgb.svg")  repeat fixed center;
+  background-color: #99cccc;
   height: 100vh;
   font-family: 'Open Sans';
 }
