@@ -84,7 +84,7 @@ button.b{
 }
 
 #choice button{
-  display: block;
+  display: inline-block;
   height: 80px;
   width: 330px;
   border: none;
