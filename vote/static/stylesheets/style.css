@@ -6,7 +6,7 @@
 html,body{
   margin: 0;
   padding: 0;
-  background-color: -webkit-gradient(linear ,0% 0% 25% 100%,from (#ff2c2c),to(#7a5e91));
+  background-color: #521515;
   height: 100vh;
   font-family: 'Open Sans';
 }
