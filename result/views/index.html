@@ -20,12 +20,14 @@
       <div id="content-container-center">
         <div id="choice">
           <div class="choice cats">
-            <div class="label">Cats</div>
+            <div class="label">Mjau</div>
+             <div class="img"> <img src="http://gingerparrot.co.uk/wp/wp-content/uploads/2015/09/Ginger-kittens.jpg"></div>
             <div class="stat">{{aPercent | number:1}}%</div>
           </div>
           <div class="divider"></div>
           <div class="choice dogs">
-            <div class="label">Dogs</div>
+            <div class="label">Voff voff</div>
+           <div class="img"> <img src="https://static.esea.net/global/images/users/802608.1420113419_t.jpg"></div>
             <div class="stat">{{bPercent | number:1}}%</div>
           </div>
         </div>
@@ -39,5 +41,13 @@
     <script src="socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     <script src="app.js"></script>
+    
+    <button onclick="goBack()">Go Back</button>
+
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
   </body>
 </html>

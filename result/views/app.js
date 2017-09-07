@@ -21,6 +21,8 @@ app.controller('statsCtrl', function($scope){
 
        $scope.$apply(function () {
          $scope.aPercent = percentages.a;
+          $scope.atotal = total.a; 
+          $scope.btotal = total.a; 
          $scope.bPercent = percentages.b;
          $scope.total = a + b;
        });
