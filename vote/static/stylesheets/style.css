@@ -41,6 +41,15 @@ button.b{
   font-size: 14px;
 }
 
+#results-link-container a{
+  background-color: coral;
+    padding: 10px;
+    text-decoration: none;
+    color: white;
+    font-family: impact;
+    border-radius: 30px; 
+}
+  
 #hostname{
   position: absolute;
   bottom: 100px;
