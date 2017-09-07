@@ -19,9 +19,10 @@
     <div id="content-container">
       <div id="content-container-center">
         <div id="choice">
+          <img src="http://gingerparrot.co.uk/wp/wp-content/uploads/2015/09/Ginger-kittens.jpg" style="width:230px;height:200px;">
           <div class="choice cats">
             <div class="label">Mjau</div>
-            <div class="img">https://i.pinimg.com/736x/27/df/cc/27dfcc17a8cefe56c99277d63be0d815--funny-cats-funny-animals.jpg"</a>
+             <div class="img"> <img src="http://gingerparrot.co.uk/wp/wp-content/uploads/2015/09/Ginger-kittens.jpg"></div>
             <div class="stat">{{aPercent | number:1}}%</div>
           </div>
           <div class="divider"></div>
@@ -41,5 +42,13 @@
     <script src="socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     <script src="app.js"></script>
+    
+    <button onclick="goBack()">Go Back</button>
+
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
   </body>
 </html>
