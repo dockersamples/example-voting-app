@@ -5,8 +5,8 @@ import socket
 import random
 import json
 
-option_a = os.getenv('OPTION_A', "Cats")
-option_b = os.getenv('OPTION_B', "Dogs")
+option_a = os.getenv('OPTION_A', "Katter!")
+option_b = os.getenv('OPTION_B', "Hundar!")
 hostname = socket.gethostname()
 
 app = Flask(__name__)
@@ -35,6 +35,7 @@ def hello():
         option_a=option_a,
         option_b=option_b,
         hostname=hostname,
+        common_domain=request.host.split('.', 1)[-1],
         vote=vote,
     ))
     resp.set_cookie('voter_id', voter_id)
