@@ -27,6 +27,8 @@ services:
   worker:
     build:
       context: ./worker
+    depends_on:
+      - "redis"
     networks:
       - back-tier
 
