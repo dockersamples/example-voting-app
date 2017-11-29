@@ -9,8 +9,7 @@
             "address": "localhost",
             "restart": true,
             "sourceMaps": false,
-            "outDir": null,
-            "localRoot": "${workspaceRoot}",
+            "localRoot": "${workspaceRoot}/result/",
             "remoteRoot": "/app",
             "timeout": 10000
         }
