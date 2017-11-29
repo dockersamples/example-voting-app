@@ -14,7 +14,7 @@ services:
 
   result:
     build: ./result
-    command: nodemon --debug server.js
+    command: nodemon server.js
     volumes:
       - ./result:/app
     ports:
