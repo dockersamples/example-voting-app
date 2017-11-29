@@ -34,7 +34,8 @@ namespace Worker
                     // Reconnect redis if down
                     if (redisConn == null || !redisConn.IsConnected) {
                         Console.WriteLine("Reconnecting Redis");
-                        redis = OpenRedisConnection("redis").GetDatabase();
+                        redisConn = OpenRedisConnection("redis");
+                        redis = redisConn.GetDatabase();
                     }
                     string json = redis.ListLeftPopAsync("votes").Result;
                     if (json != null)
