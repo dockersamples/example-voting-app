@@ -1,6 +1,9 @@
 # Using official python runtime base image
 FROM python:2.7-alpine
 
+# add apache utils for ab tool
+RUN apk update && apk add --no-cache apache2-utils
+
 # Set the application directory
 WORKDIR /app
 
