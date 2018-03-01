@@ -26,7 +26,7 @@ services:
   vote:
     image: dockersamples/examplevotingapp_vote:before
     ports:
-      - 5000:80
+      - 80:80
     networks:
       - frontend
     depends_on:
@@ -40,7 +40,7 @@ services:
   result:
     image: dockersamples/examplevotingapp_result:before
     ports:
-      - 5001:80
+      - 81:80
     networks:
       - backend
     depends_on:
