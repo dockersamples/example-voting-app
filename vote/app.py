@@ -8,7 +8,7 @@ import json
 option_a = os.getenv('OPTION_A', "Swarm")
 option_b = os.getenv('OPTION_B', "Kubernetes")
 hostname = socket.gethostname()
-version = 'v2'
+version = 'v3'
 
 app = Flask(__name__)
 
