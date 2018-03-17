@@ -1,6 +1,7 @@
 var express = require('express'),
     async = require('async'),
     pg = require("pg"),
+    path = require("path"),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
@@ -33,7 +34,7 @@ async.retry(
   },
   function(err, client) {
     if (err) {
-      return console.err("Giving up");
+      return console.error("Giving up");
     }
     console.log("Connected to db");
     getVotes(client);
