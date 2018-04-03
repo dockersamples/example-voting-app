@@ -1,0 +1,64 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    # The "heritage" label is used to track which tool deployed a given chart.
+    # It is useful for admins who want to see what releases a particular tool
+    # is responsible for.
+    heritage: {{ .Release.Service | quote }}
+    # This makes it easy to search for all components of a release using kubectl.
+    release: {{ .Release.Name | quote }}
+    # This makes it easy to audit chart usage.
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+        release: {{.Release.Name | quote }}
+    spec:
+      containers:
+      - name: postgres
+        image: "{{.Values.image}}"
+        imagePullPolicy: {{default "Always" .Values.pullPolicy}}
+        volumeMounts:
+          - mountPath: /var/lib/postgresql
+            name: data
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -h
+            - localhost
+            - -U
+            - postgres
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -h
+            - localhost
+            - -U
+            - postgres
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        env:
+        {{- range $key, $value := .Values.env_vars }}
+          - name: {{ $key }}
+            value: {{ $value  | quote }}
+        {{- end }}
+        ports:
+          - name: postgres
+            containerPort: 5432
+      volumes:
+      - name: data
+        {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: postgres
+        {{ else }}
+        emptyDir: {}
+        {{- end }}

@@ -1,0 +1,3 @@
+description: A Helm chart for postgres db for Docker example-voting-app
+name: postgres
+version: 9.5.4

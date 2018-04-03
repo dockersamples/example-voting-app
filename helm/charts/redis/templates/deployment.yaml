@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    # The "heritage" label is used to track which tool deployed a given chart.
+    # It is useful for admins who want to see what releases a particular tool
+    # is responsible for.
+    heritage: {{ .Release.Service | quote }}
+    # This makes it easy to search for all components of a release using kubectl.
+    release: {{ .Release.Name | quote }}
+    # This makes it easy to audit chart usage.
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+        release: {{.Release.Name | quote }}
+    spec:
+      containers:
+      - name: redis
+        image: redis:3-alpine
+        imagePullPolicy: {{default "IfNotPresent" .Values.pullPolicy}}
+        ports:
+        - containerPort: 6379
+          name: cache
+        resources:
+          limits:
+            cpu: "{{.Values.cpu_limit}}"
+            memory: "{{.Values.mem_limit}}"
+          requests:
+            memory: "{{.Values.mem_request}}"
+

@@ -1,0 +1,24 @@
+# This is a service gateway to the replica set created by the deployment.
+# Take a look at the deployment.yaml for general notes about this chart.
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+spec:
+  {{ if .Values.nodePort -}}
+  type: NodePort
+  {{ end -}}
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
+    {{ if .Values.nodePort -}}
+    nodePort: {{ .Values.nodePort }}
+    {{ end }}
+  selector:
+    app: vote
