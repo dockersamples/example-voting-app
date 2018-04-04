@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: result
-        image: {{ .Values.image }}:{{ .Values.imageTag }}
+        image: {{ .Values.image }}:{{ .Values.tag }}
         imagePullPolicy: {{default "IfNotPresent" .Values.pullPolicy}}
         ports:
         - containerPort: 80
