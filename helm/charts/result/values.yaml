@@ -2,6 +2,6 @@
 # This is a YAML-formatted file.
 # Declare name/value pairs to be passed into your templates.
 # name: value
-image: codefresh/example-voting-app-result
+image: r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-result
 imageTag: latest
 
