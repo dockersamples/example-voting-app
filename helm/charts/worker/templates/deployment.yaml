@@ -21,5 +21,5 @@ spec:
     spec:
       containers:
       - name: worker
-        image: {{ .Values.image }}
+        image: {{ .Values.image }}:{{ .Values.tag }}
         imagePullPolicy: {{default "IfNotPresent" .Values.pullPolicy}}
