@@ -19,7 +19,9 @@ spec:
         app: worker
         release: {{.Release.Name | quote }}
     spec:
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret }}
       containers:
-      - name: worker
-        image: {{ .Values.image }}:{{ .Values.tag }}
-        imagePullPolicy: {{default "IfNotPresent" .Values.pullPolicy}}
+        - name: worker
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{default "IfNotPresent" .Values.pullPolicy}}

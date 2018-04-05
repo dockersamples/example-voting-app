@@ -19,10 +19,12 @@ spec:
         app: vote
         release: {{.Release.Name | quote }}
     spec:
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret }}
       containers:
-      - name: vote
-        image: {{ .Values.image }}:{{ .Values.tag }}
-        imagePullPolicy: {{default "IfNotPresent" .Values.pullPolicy}}
-        ports:
-        - containerPort: 80
-          name: http
+        - name: vote
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{default "IfNotPresent" .Values.pullPolicy}}
+          ports:
+            - containerPort: 80
+              name: http
