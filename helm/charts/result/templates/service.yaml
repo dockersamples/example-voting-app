@@ -13,12 +13,12 @@ spec:
   type: NodePort
   {{ end -}}
   ports:
-  - port: 80
-    targetPort: http
-    protocol: TCP
-    name: http
-    {{ if .Values.nodePort -}}
-    nodePort: {{ .Values.nodePort }}
-    {{ end }}
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{ if .Values.nodePort -}}
+      nodePort: {{ .Values.nodePort }}
+      {{ end }}
   selector:
     app: result
