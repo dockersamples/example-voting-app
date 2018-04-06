@@ -9,16 +9,8 @@ metadata:
     release: {{ .Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
 spec:
-  {{ if .Values.nodePort -}}
-  type: NodePort
-  {{ end -}}
+  type: LoadBalancer
   ports:
-    - port: 80
-      targetPort: http
-      protocol: TCP
-      name: http
-      {{ if .Values.nodePort -}}
-      nodePort: {{ .Values.nodePort }}
-      {{ end }}
+    - targetPort: 80
   selector:
     app: vote
