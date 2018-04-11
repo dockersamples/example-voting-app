@@ -7,3 +7,5 @@ pullPolicy: IfNotPresent
 
 persistence:
   enabled: false
+
+replicaCount: 1

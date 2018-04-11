@@ -6,3 +6,5 @@ image:
   repository: r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-worker
   tag: latest
   pullSecret: cfcr
+
+replicaCount: 1
