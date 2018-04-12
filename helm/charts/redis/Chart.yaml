@@ -1,3 +1,0 @@
-description: A Helm chart for redis queue for Docker example-voting-app
-name: redis
-version: 0.1.0
