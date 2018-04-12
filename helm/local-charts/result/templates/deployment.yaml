@@ -13,8 +13,11 @@ spec:
   template:
     metadata:
       labels:
-        app: result
-        release: {{.Release.Name | quote }}
+        app: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+        release: {{ .Release.Name  | quote }}
+        heritage: {{ .Release.Service  | quote }}
+        version: {{ .Values.imageTag | quote }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret }}
