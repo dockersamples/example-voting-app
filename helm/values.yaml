@@ -6,6 +6,7 @@
 # Enabling postgres service, by default
 postgres:
   enabled: true
+  postgresPassword: nil
   persistence:
     enabled: false
 
