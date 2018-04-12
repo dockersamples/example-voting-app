@@ -6,11 +6,11 @@
 # Enabling postgres service, by default
 postgres:
   enabled: true
-postgresPassword: postgres
-persistence:
+  postgresPassword: postgres
+  persistence:
     enabled: false
 
 # Enabling redis service, by default
 redis:
   enabled: true
-usePassword: false
+  usePassword: false
