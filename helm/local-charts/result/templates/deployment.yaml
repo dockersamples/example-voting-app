@@ -24,7 +24,7 @@ spec:
       containers:
         - name: result
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          imagePullPolicy: {{default "IfNotPresent" .Values.image.pullPolicy}}
+          imagePullPolicy: {{default "Always" .Values.image.pullPolicy}}
           ports:
             - containerPort: 80
               name: http

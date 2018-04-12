@@ -22,6 +22,6 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret }}
       containers:
-        - name: worker
+        - name: {{ template "fullname" . }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          imagePullPolicy: {{default "IfNotPresent" .Values.pullPolicy}}
+          imagePullPolicy: {{default "Always" .Values.pullPolicy}}
