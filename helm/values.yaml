@@ -4,7 +4,7 @@
 # name: value
 
 # Enabling postgres service, by default
-postgres:
+postgresql:
   enabled: true
   postgresPassword: postgres
   persistence:
