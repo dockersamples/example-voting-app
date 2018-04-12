@@ -9,7 +9,7 @@ class Worker {
   public static void main(String[] args) {
     try {
       Jedis redis = connectToRedis("redis");
-      Connection dbConn = connectToDB("db");
+      Connection dbConn = connectToDB("postgresql");
 
       System.err.println("Watching vote queue");
 
