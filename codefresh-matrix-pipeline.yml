@@ -1,0 +1,22 @@
+version: '1.0'
+steps:
+  BuildMicroServices:
+    title: Check Build Concurrency
+    image: 'codefresh/cli:latest'
+    commands: 
+      - apk add bash
+      - codefresh auth create-context --api-key ${{API_KEY}}
+      - bash -c 'IFS=" " read -a pipelineidsarray <<< "${{PARALLEL_PIPELINES_IDS}}" && for id in "${pipelineidsarray[@]}"; do buildids="$buildids $(codefresh run $id -b=${{CF_BRANCH}} -d)"; done && codefresh wait $buildids'
+  HelmUpgrade:
+    title: Helm Upgrade
+    image: codefresh/plugin-helm:2.8.0
+    working_directory: ./
+    environment:
+      - CHART_NAME=./helm/
+      - RELEASE_NAME=example-voting-app
+      - KUBE_CONTEXT=perfect-pipeline@FirstKubernetes
+      - NAMESPACE=staging
+      - DEBUG_CHART=true
+      - custom_result_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}
+      - custom_vote_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}
+      - custom_worker_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}
