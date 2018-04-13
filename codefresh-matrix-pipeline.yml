@@ -1,3 +1,16 @@
+# NOTES
+# You will need 4 concurrent pipelines to allow this to run as fast as possible
+# Please generate an API Key Codefresh CLI https://g.codefresh.io/account/tokens and store in API_KEY variable
+# You need to configure Docker Registry access in Codefresh and set push build step for (3) micro-services to push to that registry by friendly name
+# You need to configure Kubernetes with a Pull Secret for the Registry and update variable KUBE_PULL_SECRET with the name you gave the secret
+# Pull Secrets explained: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+# You can use your integrated Codefresh Registry for above just follow steps documented here: https://codefresh.io/docs/docs/docker-registries/codefresh-registry/
+# Update the _repository values below with that value ex. r.cfcr.io/CF_ACCOUNT/CF_REPOSITORY/PIPELINE_NAME or r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-worker
+# Please make sure to update each pipeline yaml file under result, vote and worker with your correct friendly Docker Registry name See comment inline on those files
+# Pipeline IDs for the pipelines for 3 microservices (Shown in curl webhook command on pipeline page in Configuration > General Settings)
+# Create KUBE_CONTEXT variables with Codefresh friendly name given to your Kubernetes Cluster
+# Create KUBE_NAMESPACE variable with Kubernetes namespace for Release
+# TODO Turn into README
 version: '1.0'
 steps:
   BuildMicroServices:
@@ -9,14 +22,20 @@ steps:
       - bash -c 'IFS=" " read -a pipelineidsarray <<< "${{PARALLEL_PIPELINES_IDS}}" && for id in "${pipelineidsarray[@]}"; do buildids="$buildids $(codefresh run $id -b=${{CF_BRANCH}} -d)"; done && codefresh wait $buildids'
   HelmUpgrade:
     title: Helm Upgrade
-    image: codefresh/plugin-helm:2.8.0
+    image: codefresh/plugin-helm:2.8.0 # You need to make sure you've set this to the correct version of Tiller installed on your helm init
     working_directory: ./
     environment:
       - CHART_NAME=./helm/
       - RELEASE_NAME=example-voting-app
-      - KUBE_CONTEXT=perfect-pipeline@FirstKubernetes
-      - NAMESPACE=staging
+      - KUBE_CONTEXT=${{KUBE_CONTEXT}}
+      - NAMESPACE=${{KUBE_NAMESPACE}}
       - DEBUG_CHART=true
-      - custom_result_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}
-      - custom_vote_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}
-      - custom_worker_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}
+      - custom_result_image_repository=r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-result
+      - custom_result_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+      - custom_result_image_pullSecret=${{KUBE_PULL_SECRET}}
+      - custom_vote_image_repository=r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-vote
+      - custom_vote_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+      - custom_vote_image_pullSecret=${{KUBE_PULL_SECRET}}
+      - custom_worker_image_repository=r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-worker
+      - custom_worker_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+      - custom_worker_image_pullSecret=${{KUBE_PULL_SECRET}}
