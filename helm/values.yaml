@@ -1,0 +1,16 @@
+# Default values for example-voting-app.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+
+# Enabling postgres service, by default
+postgresql:
+  enabled: true
+  postgresPassword: postgres
+  persistence:
+    enabled: false
+
+# Enabling redis service, by default
+redis:
+  enabled: true
+  usePassword: false
