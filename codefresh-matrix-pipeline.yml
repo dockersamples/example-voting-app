@@ -6,6 +6,7 @@
 # Pull Secrets explained: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 # You can use your integrated Codefresh Registry for above just follow steps documented here: https://codefresh.io/docs/docs/docker-registries/codefresh-registry/
 # Add variable DOCKER_REGISTRY to point to your Docker Repository ex. r.cfcr.io/CF_ACCOUNT/CF_REPOSITORY or r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-worker
+# Please make sure to update each pipeline yaml file under result, vote and worker with your correct friendly Docker Registry name See comment inline on those files
 # Pipeline IDs for the pipelines for 3 microservices (Shown in curl webhook command on pipeline page in Configuration > General Settings)
 # Create KUBE_CONTEXT variables with Codefresh friendly name given to your Kubernetes Cluster
 # Create KUBE_NAMESPACE variable with Kubernetes namespace for Release
@@ -30,11 +31,11 @@ steps:
       - NAMESPACE=${{KUBE_NAMESPACE}}
       - DEBUG_CHART=true
       - custom_result_image_repository=${{DOCKER_REGISTRY}}
-      - custom_result_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{SHORT_REVISION}}
+      - custom_result_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       - custom_result_image_pullSecret=${{KUBE_PULL_SECRET}}
       - custom_vote_image_tag=${{DOCKER_REGISTRY}}
-      - custom_vote_image_repository=${{CF_BRANCH_TAG_NORMALIZED}}-${{SHORT_REVISION}}
+      - custom_vote_image_repository=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       - custom_vote_image_pullSecret=${{KUBE_PULL_SECRET}}
       - custom_worker_image_repository=${{DOCKER_REGISTRY}}
-      - custom_worker_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{SHORT_REVISION}}
+      - custom_worker_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       - custom_worker_image_pullSecret=${{KUBE_PULL_SECRET}}
