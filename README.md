@@ -133,9 +133,7 @@ Record your Pipeline IDs
 
 1. Open your `example-voting-app` Codefresh pipeline.
 1. Add the following environment variable.
-
 `PARALLEL_PIPELINES_IDS` with space delimited Codefresh Pipeline IDs.
-
 1. Click ADD VARIABLE link below variable listing.
 1. Click SAVE button at bottom of page.
 
