@@ -1,5 +1,6 @@
 Setting up Example Voting App in Codefresh
 =========
+[![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=codefresh-io&repoName=example-voting-app&branch=master&pipelineName=example-voting-app-matrix&accountName=perfect_pipeline&type=cf-1)]( https://g.codefresh.io/repositories/codefresh-io/example-voting-app/builds?filter=trigger:build;branch:master;service:5a84d1002b8eaa0001568329~example-voting-app-matrix)
 
 What are we doing?
 
@@ -140,6 +141,8 @@ Record your Pipeline IDs
 Now you can run your example-voting-app pipeline to produce a Helm Release.
 
 When the build is finished you will see a new Helm Release for [example-voting-app](https://g.codefresh.io/helm/releases/releases/?filter=search:example-voting-app)
+
+[![Codefresh Helm Release Status]( https://g.codefresh.io/api/badges/release?type=cf-1&key=eyJhbGciOiJIUzI1NiJ9.NWE4NGNiNzQ1ODhjZjQwMDAxNDA0YzU2.ThdF7iizUJnusHWxZpbwLApHZDvr5uD_eZvem_fB3ho&selector=perfect-pipeline@FirstKubernetes&name=example-voting-app&tillerNamespace=kube-system)]( https://g.codefresh.io/helm/releases/perfect-pipeline@FirstKubernetes/default/example-voting-app/services)
 
 Hopefully this has given you a somewhat overall picture of setting up Codefresh to run a Kubernetes deployment utilizing Helm.
 
