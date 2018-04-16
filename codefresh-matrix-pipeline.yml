@@ -18,7 +18,7 @@ steps:
     image: 'codefresh/cli:latest'
     commands: 
       - apk add bash
-      - codefresh auth create-context --api-key ${{API_KEY}}
+      - codefresh auth create-context --api-key ${{CODEFRESH_CLI_KEY}}
       - bash -c 'IFS=" " read -a pipelineidsarray <<< "${{PARALLEL_PIPELINES_IDS}}" && for id in "${pipelineidsarray[@]}"; do buildids="$buildids $(codefresh run $id -b=${{CF_BRANCH}} -d)"; done && codefresh wait $buildids'
   HelmUpgrade:
     title: Helm Upgrade
@@ -30,12 +30,12 @@ steps:
       - KUBE_CONTEXT=${{KUBE_CONTEXT}}
       - NAMESPACE=${{KUBE_NAMESPACE}}
       - DEBUG_CHART=true
-      - custom_result_image_repository=r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-result
+      - custom_result_image_repository=r.cfcr.io/${{CODEFRESH_ACCOUNT}}/codefresh/example-voting-app-result
       - custom_result_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       - custom_result_image_pullSecret=${{KUBE_PULL_SECRET}}
-      - custom_vote_image_repository=r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-vote
+      - custom_vote_image_repository=r.cfcr.io/${{CODEFRESH_ACCOUNT}}/codefresh/example-voting-app-vote
       - custom_vote_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       - custom_vote_image_pullSecret=${{KUBE_PULL_SECRET}}
-      - custom_worker_image_repository=r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-worker
+      - custom_worker_image_repository=r.cfcr.io/${{CODEFRESH_ACCOUNT}}/codefresh/example-voting-app-worker
       - custom_worker_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       - custom_worker_image_pullSecret=${{KUBE_PULL_SECRET}}
