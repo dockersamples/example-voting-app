@@ -7,8 +7,6 @@
 postgresql:
   enabled: true
   postgresPassword: postgres
-  persistence:
-    enabled: false
 
 # Enabling redis service, by default
 redis:
