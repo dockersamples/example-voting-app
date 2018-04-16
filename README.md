@@ -19,11 +19,11 @@ Creating Codefresh pipelines
 --------------
 
 PreReqs:
------
-* [Codefresh Account](https://g.codefresh.io/signup)
-* [Kubenetes cluster](https://kubernetes.io/)
 
-Some popular options
+* [Codefresh Account](https://g.codefresh.io/signup)
+* [Kubernetes cluster](https://kubernetes.io/)
+
+Some popular Kubernetes options
 
 * [Amazon KOPs](https://github.com/kubernetes/kops) [Tutorial](https://codefresh.io/kubernetes-tutorial/tutorial-deploying-kubernetes-to-aws-using-kops/)
 * [Amazon EKS (Preview)](https://aws.amazon.com/eks/)
@@ -40,7 +40,9 @@ Either [Fork](https://help.github.com/articles/fork-a-repo/) or copy this reposi
 [Attach Kubernetes Cluster to Codefresh](https://codefresh.io/docs/docs/deploy-to-kubernetes/adding-non-gke-kubernetes-cluster/)
 ----
 
-Setup Registry Pull Secret in Kubernetes
+You'll need to configure your Kubernetes cluster in Codefresh.  See link above.
+
+Setup Docker Registry Pull Secret in Kubernetes
 ----
 
 If you'd like to add your own Docker Registry
@@ -117,22 +119,23 @@ From Pipelines page of `example-voting-app` repository.
 Now we need to get your Codefresh Pipeline IDs to setup parallel builds.
 
 Two options:
-1. CLI - Run `codefresh get pipelines`
+* CLI
+1. `codefresh get pipelines`
 
-1. UI - Click on each pipeline
-1. Expand General Settings
-1. Tempoary toggle on Webhook
+* UI
+1. Open Repository.
+1. Click on each pipeline.
+1. Expand General Settings.
+1. Tempoary toggle on Webhook.
 1. Capture ID from the curl command shown.
 
 Record your Pipeline IDs
 
 1. Open your `example-voting-app` Codefresh pipeline.
-2. Add the following environment variable.
-
+1. Add the following environment variable.
 `PARALLEL_PIPELINES_IDS` with space delimited Codefresh Pipeline IDs.
-
-3. Click ADD VARIABLE link below variable listing.
-4. Click SAVE button at bottom of page.
+1. Click ADD VARIABLE link below variable listing.
+1. Click SAVE button at bottom of page.
 
 Now you can run your example-voting-app pipeline to produce a Helm Release.
 
