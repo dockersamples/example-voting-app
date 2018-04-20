@@ -155,7 +155,7 @@ We'll be adding a Blog Post and additional followups to this example. Ex. Unit T
 
 If you'd like to schedule a demo of Codefresh to get help adding your own CI/CD steps to your Codefresh Pipelines [Click Here](https://codefresh.io/request-a-demo/)
 
-ORIGINAL CONTENT BELOW, PLEASE NOTE DOCKER COMPOSE DOES NOT WORK AT THIS TIME.
+ORIGINAL CONTENT BELOW, PLEASE NOTE DOCKER SWARM DOES NOT WORK AT THIS TIME.
 
 Example Voting App
 =========
