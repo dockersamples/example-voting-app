@@ -30,8 +30,8 @@ spec:
               name: http
           env:
           - name: POSTGRES_SERVER
-            value: {{ .Values.postgres.server | default (printf "%s-postgresql" ( .Release.Name )) | quote }}
+            value: {{ .Values.postgresql.server | default (printf "%s-postgresql" ( .Release.Name )) | quote }}
           - name: POSTGRES_USERNAME
-            value: {{ default "postgres" .Values.postgres.username | quote }}
+            value: {{ default "postgres" .Values.postgresql.postgresUser | quote }}
           - name: POSTGRES_PASSWORD
-            value: {{ default "postgres" .Values.postgres.password | quote }}
+            value: {{ default "postgres" .Values.postgresql.postgresPassword | quote }}
