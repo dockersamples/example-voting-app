@@ -27,10 +27,10 @@ spec:
           imagePullPolicy: {{default "Always" .Values.pullPolicy}}
           env:
           - name: POSTGRES_SERVER
-            value: {{ default {{- printf "%s-%s" .Release.Name -postgresql -}} .Values.postgres.server | quote }}
+            value: {{ default "{{- printf "%s-%s" .Release.Name postgresql -}}" .Values.postgres.server | quote }}
           - name: POSTGRES_USERNAME
             value: {{ default "postgres" .Values.postgres.username | quote }}
           - name: POSTGRES_PASSWORD
             value: {{ default "postgres" .Values.postgres.password | quote }}
           - name: REDIS_HOST
-            value: {{ default {{- printf "%s-%s" .Release.Name -redis -}} .Values.redis.host | quote }}
+            value: {{ default "{{- printf "%s-%s" .Release.Name redis -}}" .Values.redis.host | quote }}
