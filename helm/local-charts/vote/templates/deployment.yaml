@@ -30,4 +30,4 @@ spec:
               name: http
                     env:
           - name: REDIS_HOST
-            value: {{ default template "redis" . .Values.redis.host | quote }}
+            value: {{ .Values.redis.host | default (template "redis" .) | quote }}
