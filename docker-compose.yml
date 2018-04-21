@@ -11,8 +11,8 @@ services:
     networks:
       - front-tier
       - back-tier
-    links:
-      - redis:example-voting-app-redis
+    environment:
+      - REDIS_HOST=redis
 
   result:
     build: ./result
