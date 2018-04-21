@@ -28,6 +28,6 @@ spec:
           ports:
             - containerPort: 80
               name: http
-                    env:
+          env:
           - name: REDIS_HOST
             value: {{ .Values.redis.host | default (printf "%s-redis" ( .Release.Name )) | quote }}

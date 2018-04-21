@@ -7,4 +7,11 @@ image:
   tag: latest
   pullSecret: cfcr
 
+postgresql:
+  postgresUser: postgres
+  postgresPassword: postgres
+
+redis:
+  usePassword: false
+
 replicaCount: 1
