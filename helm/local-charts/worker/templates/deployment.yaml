@@ -25,3 +25,12 @@ spec:
         - name: {{ template "fullname" . }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{default "Always" .Values.pullPolicy}}
+          env:
+          - name: POSTGRES_SERVER
+            value: "{{ default "{{ .Release.Name }}-postgresql" .Values.postgres.server | quote }}"
+          - name: POSTGRES_USERNAME
+            value: {{ default "postgres" .Values.postgres.username | quote }}
+          - name: POSTGRES_PASSWORD
+            value: {{ default "postgres" .Values.postgres.password | quote }}
+          - name: REDIS_HOST
+            value: {{ default "{{ .Release.Name }}-redis" .Values.redis.host | quote }}
