@@ -12,17 +12,17 @@ dependencies:
   tags:
   - queue
 - name: result
-  version: 0.1.0
+  version: 0.1.1
   repository: file://local-charts/result
   tags:
   - node
 - name: vote
-  version: 0.1.0
+  version: 0.1.1
   repository: file://local-charts/vote
   tags:
   - python
 - name: worker
-  version: 0.1.0
+  version: 0.1.1
   repository: file://local-charts/worker
   tags:
   - dotnet

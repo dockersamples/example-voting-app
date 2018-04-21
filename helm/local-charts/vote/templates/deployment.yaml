@@ -28,3 +28,6 @@ spec:
           ports:
             - containerPort: 80
               name: http
+                    env:
+          - name: REDIS_HOST
+            value: "{{ default "{{ .Release.Name }}-redis" .Values.redis.host | quote }}"

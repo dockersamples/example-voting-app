@@ -11,8 +11,8 @@ services:
     networks:
       - front-tier
       - back-tier
-    links:
-      - redis:example-voting-app-redis
+    environment:
+      - REDIS_HOST=redis
 
   result:
     build: ./result
@@ -25,8 +25,10 @@ services:
     networks:
       - front-tier
       - back-tier
-    links:
-      - db:example-voting-app-postgresql
+    environment:
+      - POSTGRES_SERVER=db
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
 
   worker:
     build:
@@ -35,9 +37,11 @@ services:
       - "redis"
     networks:
       - back-tier
-    links:
-      - redis:example-voting-app-redis
-      - db:example-voting-app-postgresql
+    environment:
+      - POSTGRES_SERVER=db
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+      - REDIS_HOST=redis
 
   redis:
     image: redis:alpine

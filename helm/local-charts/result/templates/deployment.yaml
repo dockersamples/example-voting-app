@@ -28,3 +28,10 @@ spec:
           ports:
             - containerPort: 80
               name: http
+          env:
+          - name: POSTGRES_SERVER
+            value: "{{ default "{{ .Release.Name }}-postgresql" .Values.postgres.server | quote }}"
+          - name: POSTGRES_USERNAME
+            value: {{ default "postgres" .Values.postgres.username | quote }}
+          - name: POSTGRES_PASSWORD
+            value: {{ default "postgres" .Values.postgres.password | quote }}
