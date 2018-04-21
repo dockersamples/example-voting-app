@@ -22,10 +22,14 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
+var postgresServer = process.env.POSTGRES_SERVER
+var postgresUsername = process.env.POSTGRES_USERNAME
+var postgresPassword = process.env.POSTGRES_PASSWORD
+
 async.retry(
   {times: 1000, interval: 1000},
   function(callback) {
-    pg.connect('postgres://postgres:postgres@example-voting-app-postgresql/postgres', function(err, client, done) {
+    pg.connect(`postgres://${postgresUsername}:${postgresPassword}@${postgresServer}/postgres`, function(err, client, done) {
       if (err) {
         console.error("Waiting for db");
       }
