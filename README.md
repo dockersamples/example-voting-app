@@ -8,6 +8,8 @@ We are deploying the Docker example voting app as a Helm Release using Codefresh
 
 (3) - result, vote and worker micro-services
 
+Now working with customized release names!
+
 We will show you how to:
 * Add a repository to Codefresh.
 * Create a matrix pipeline to build (3) micro-services in parallel.
