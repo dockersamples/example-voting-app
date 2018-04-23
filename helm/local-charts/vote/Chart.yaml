@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Helm chart for vote service of Docker example-voting-app
+name: vote
+version: 0.1.1
