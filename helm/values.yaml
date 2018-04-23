@@ -10,12 +10,8 @@ postgresql:
   # postgresServer: postgres_host_fqdn
   postgresUser: postgres
   postgresPassword: postgres
-  persistence:
-    enabled: true
 
 # Enabling redis service, by default
 redis:
   enabled: true
   usePassword: false
-  persistence:
-    enabled: true
