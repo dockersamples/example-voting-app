@@ -11,6 +11,8 @@ services:
     networks:
       - front-tier
       - back-tier
+    environment:
+      - REDIS_HOST=redis
 
   result:
     build: ./result
@@ -23,6 +25,10 @@ services:
     networks:
       - front-tier
       - back-tier
+    environment:
+      - POSTGRES_SERVER=db
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
 
   worker:
     build:
@@ -31,6 +37,11 @@ services:
       - "redis"
     networks:
       - back-tier
+    environment:
+      - POSTGRES_SERVER=db
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+      - REDIS_HOST=redis
 
   redis:
     image: redis:alpine
@@ -42,6 +53,9 @@ services:
   db:
     image: postgres:9.4
     container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     volumes:
       - "db-data:/var/lib/postgresql/data"
     networks:
