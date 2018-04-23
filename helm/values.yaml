@@ -6,6 +6,9 @@
 # Enabling postgres service, by default
 postgresql:
   enabled: true
+  # Uncomment line below and set to postgres host fqdn is using postgres outside release
+  # postgresServer: postgres_host_fqdn
+  postgresUser: postgres
   postgresPassword: postgres
 
 # Enabling redis service, by default
