@@ -54,6 +54,7 @@ class Worker {
         conn.keys("*");
         break;
       } catch (JedisConnectionException e) {
+        e.printStackTrace();
         System.err.println("Waiting for redis");
         sleep(1000);
       }
@@ -75,6 +76,7 @@ class Worker {
         try {
           conn = DriverManager.getConnection(url, "postgres", "");
         } catch (SQLException e) {
+          e.printStackTrace();
           System.err.println("Waiting for db");
           sleep(1000);
         }
