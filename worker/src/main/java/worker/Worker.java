@@ -47,6 +47,7 @@ class Worker {
 
   static Jedis connectToRedis(String host) {
     Jedis conn = new Jedis(host);
+    conn.auth("redis_password")
 
     while (true) {
       try {
@@ -68,7 +69,7 @@ class Worker {
     try {
 
       Class.forName("org.postgresql.Driver");
-      String url = "jdbc:postgresql://" + host + "/postgres";
+      String url = "jdbc:postgresql://" + host + "/postgres?user=postgres_user&password=postgres_password";
 
       while (conn == null) {
         try {
