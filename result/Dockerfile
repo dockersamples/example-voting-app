@@ -1,5 +1,7 @@
 FROM node:8.9-alpine
 
+RUN apk update && apk add --no-cache curl
+
 RUN mkdir -p /app
 WORKDIR /app
 

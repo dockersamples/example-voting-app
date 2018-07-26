@@ -2,7 +2,7 @@
 FROM python:2.7-alpine
 
 # add apache utils for ab tool
-RUN apk update && apk add --no-cache apache2-utils
+RUN apk update && apk add --no-cache apache2-utils curl
 
 # Set the application directory
 WORKDIR /app
