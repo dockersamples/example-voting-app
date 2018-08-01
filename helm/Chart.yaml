@@ -1,0 +1,13 @@
+apiVersion: v1
+description: Helm Chart for Docker example-voting-app
+name: example-voting-app
+keywords:
+- codefresh
+- kubernetes
+- example-voting-app
+version: 0.1.0
+sources:
+- https://github.com/codefresh-io/example-voting-app
+maintainers:
+- name: Dustin Van Buskirk
+  email: dustinvb@codefresh.io

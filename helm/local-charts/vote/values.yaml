@@ -1,0 +1,10 @@
+# Default values for vote.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+image: 
+  repository: r.cfcr.io/perfect_pipeline/codefresh/example-voting-app-vote
+  tag: latest
+  pullSecret: cfcr
+
+replicaCount: 1
