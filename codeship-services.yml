@@ -8,6 +8,7 @@ services:
      - ./vote:/app
     depends_on:
       - db
+    cached: true
 
   result:
     build: ./result
@@ -16,18 +17,21 @@ services:
       - ./result:/app
     depends_on:
       - db
+    cached: true
 
   worker:
     build: ./worker
     depends_on:
       - redis
+    cached: true
 
   redis:
     image: redis:alpine
     container_name: redis
 
   db:
-    image: healthcheck/postgres:alpine
+    #image: healthcheck/postgres:alpine
+    image: postgres:9.6
     container_name: db
     volumes:
       - "db-data:/var/lib/postgresql/data"
