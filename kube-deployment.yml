@@ -129,7 +129,7 @@ spec:
     spec:
       containers:
       - name: result
-        image: dockersamples/examplevotingapp_result:before
+        image: rheinwein/examplevotingapp-result 
         ports:
         - containerPort: 80
           name: result
@@ -166,7 +166,7 @@ spec:
     spec:
       containers:
         - name: vote
-          image: dockersamples/examplevotingapp_vote:before
+          image: rheinwein/examplevotingapp-vote 
           ports:
             - 
               containerPort: 80
@@ -199,5 +199,5 @@ spec:
     spec: 
       containers: 
         - 
-          image: dockersamples/examplevotingapp_worker
+          image: rheinwein/examplevotingapp-worker
           name: worker
