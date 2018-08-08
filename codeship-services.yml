@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  vote:
+    build: ./vote
+    command: python app.py
+    volumes:
+     - ./vote:/app
+    depends_on:
+      - db
+
+  result:
+    build: ./result
+    command: nodemon server.js
+    volumes:
+      - ./result:/app
+    depends_on:
+      - db
+
+  worker:
+    build: ./worker
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+
+  db:
+    image: healthcheck/postgres:alpine
+    container_name: db
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+
+  kubernetes-deployment:
+    encrypted_env_file: k8s-env.encrypted
+    image: codeship/kubectl
+
+volumes:
+  db-data:
+
+

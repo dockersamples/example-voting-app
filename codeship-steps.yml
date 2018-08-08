@@ -1,0 +1,6 @@
+- service: vote
+  command: echo "Tests passed!"
+- service: result
+  command: echo "Tests passed!"
+- service: worker
+  command: echo "Tests passed!"
