@@ -1,5 +1,5 @@
 - type: parallel
-  tag: master
+  name: unit_tests
   steps:
   - service: vote
     name: vote_tests
@@ -10,24 +10,26 @@
   - service: worker
     name: worker_tests
     command: echo "Tests passed!"
-
-- type: push
-  service: vote
-  name: push_vote_image
-  image_name: rheinwein/examplevotingapp-vote
+- type: parallel
+  name: push_images
+  tag: master
   encrypted_dockercfg_path: dockercfg.encrypted
-
-- type: push
-  service: result
-  name: push_result_image
-  image_name: rheinwein/examplevotingapp-result
-  encrypted_dockercfg_path: dockercfg.encrypted
-
-- type: push
-  service: worker
-  name: push_worker_image
-  image_name: rheinwein/examplevotingapp-worker
-  encrypted_dockercfg_path: dockercfg.encrypted
+  steps:
+    - type: push
+      service: vote
+      name: push_vote_image
+      image_name: rheinwein/examplevotingapp-vote
+      #encrypted_dockercfg_path: dockercfg.encrypted
+    - type: push
+      service: result
+      name: push_result_image
+      image_name: rheinwein/examplevotingapp-result
+      #encrypted_dockercfg_path: dockercfg.encrypted
+    - type: push
+      service: worker
+      name: push_worker_image
+      image_name: rheinwein/examplevotingapp-worker
+      #encrypted_dockercfg_path: dockercfg.encrypted
 
 - name: codeship-list-clusters
   service: codeship-eks-deployment
