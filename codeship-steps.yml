@@ -1,4 +1,5 @@
 - type: parallel
+  tag: master
   steps:
   - service: vote
     name: vote_tests
@@ -28,8 +29,11 @@
   image_name: rheinwein/examplevotingapp-worker
   encrypted_dockercfg_path: dockercfg.encrypted
 
-- name: deploy
-  service: kubernetes-deployment
-  #tag: master
+- name: codeship-list-clusters
+  service: codeship-eks-deployment
   command: aws eks list-clusters 
+
+- name: kubeconfig_kubectl_image
+  service: kubectl
+  command: kubectl get nodes
 

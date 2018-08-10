@@ -36,12 +36,21 @@ services:
     volumes:
       - "db-data:/var/lib/postgresql/data"
 
-  kubernetes-deployment:
+  #eks-deployment:
+  #  build: ./deploy
+  #  #image: codeship/aws-deployment
+  #  encrypted_env_file: aws-k8s-env.encrypted
+  #  environment:
+  #    - AWS_DEFAULT_REGION=us-east-1
+  #  volumes:
+  #    - ./deploy:/deploy
+
+  codeship-eks-deployment:
     image: codeship/aws-deployment
-    encrypted_env_file: aws.encrypted
-    #encrypted_env_file: k8s-env.encrypted
+    encrypted_env_file: aws-k8s-env.encrypted
     environment:
       - AWS_DEFAULT_REGION=us-east-1
-    volumes:
-      - ./deploy:/deploy
 
+  kubectl:
+    image: rheinwein/kubectl
+    encrypted_env_file: aws-k8s-env.encrypted
