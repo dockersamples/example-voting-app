@@ -12,7 +12,7 @@
     command: echo "Tests passed!"
 - type: parallel
   name: push_images
-  tag: master
+  #tag: master
   encrypted_dockercfg_path: dockercfg.encrypted
   steps:
     - type: push
