@@ -1,6 +1,7 @@
 codeship.aes
 dockercfg
 credentials.env
+aws.env
 *.pyc
 project.lock.json
 bin/
