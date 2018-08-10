@@ -6,8 +6,8 @@ services:
     command: python app.py
     volumes:
      - ./vote:/app
-    depends_on:
-      - db
+    #depends_on:
+    #  - db
     cached: true
 
   result:
@@ -15,14 +15,14 @@ services:
     command: nodemon server.js
     volumes:
       - ./result:/app
-    depends_on:
-      - db
+    #depends_on:
+    #  - db
     cached: true
 
   worker:
     build: ./worker
-    depends_on:
-      - redis
+    #depends_on:
+    #  - redis
     cached: true
 
   redis:
@@ -37,10 +37,11 @@ services:
       - "db-data:/var/lib/postgresql/data"
 
   kubernetes-deployment:
-    encrypted_env_file: k8s-env.encrypted
-    image: codeship/kubectl
-
-volumes:
-  db-data:
-
+    image: codeship/aws-deployment
+    encrypted_env_file: aws.encrypted
+    #encrypted_env_file: k8s-env.encrypted
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - ./deploy:/deploy
 
