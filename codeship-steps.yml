@@ -35,7 +35,7 @@
 #  service: codeship-eks-deployment
 #  command: aws eks list-clusters 
 
-- name: kubeconfig_kubectl_image
+- name: eks_deployment
   service: kubectl
   #tag: master
   command: kubectl apply -f deploy/kube-deployment.yml
