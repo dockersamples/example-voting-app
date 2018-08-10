@@ -38,5 +38,6 @@
 - name: eks_deployment
   service: kubectl
   #tag: master
-  command: kubectl apply -f deploy/kube-deployment.yml
+  #command: kubectl apply -f deploy/kube-deployment.yml
+  command: ./deploy/eks-deployment.sh
 

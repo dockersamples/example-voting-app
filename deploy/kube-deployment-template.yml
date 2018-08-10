@@ -129,7 +129,7 @@ spec:
     spec:
       containers:
       - name: result
-        image: rheinwein/examplevotingapp-result 
+        image: rheinwein/examplevotingapp-result:COMMIT_ID_TAG 
         ports:
         - containerPort: 80
           name: result
@@ -166,7 +166,7 @@ spec:
     spec:
       containers:
         - name: vote
-          image: rheinwein/examplevotingapp-vote 
+          image: rheinwein/examplevotingapp-vote:COMMIT_ID_TAG 
           ports:
             - 
               containerPort: 80
@@ -199,5 +199,5 @@ spec:
     spec: 
       containers: 
         - 
-          image: rheinwein/examplevotingapp-worker
+          image: rheinwein/examplevotingapp-worker:COMMIT_ID_TAG
           name: worker
