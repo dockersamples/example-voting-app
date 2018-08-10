@@ -31,11 +31,12 @@
       image_name: rheinwein/examplevotingapp-worker
       #encrypted_dockercfg_path: dockercfg.encrypted
 
-- name: codeship-list-clusters
-  service: codeship-eks-deployment
-  command: aws eks list-clusters 
+#- name: codeship-list-clusters
+#  service: codeship-eks-deployment
+#  command: aws eks list-clusters 
 
 - name: kubeconfig_kubectl_image
   service: kubectl
-  command: kubectl get nodes
+  #tag: master
+  command: kubectl apply -f deploy/kube-deployment.yml
 
