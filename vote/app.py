@@ -5,10 +5,10 @@ import socket
 import random
 import json
 
-option_a = os.getenv('OPTION_A', "Amazon Echo")
-option_b = os.getenv('OPTION_B', "Google Home")
+option_a = os.getenv('OPTION_A', "Emacs")
+option_b = os.getenv('OPTION_B', "Vi")
 hostname = socket.gethostname()
-version = 'v5'
+version = 'v1'
 
 app = Flask(__name__)
 
