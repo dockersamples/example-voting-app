@@ -1,0 +1,203 @@
+--- 
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: redis
+  name: redis
+spec: 
+  clusterIP: None
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: 6379
+  selector: 
+    app: redis
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        ports:
+        - containerPort: 6379
+          name: redis
+
+--- 
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: db
+  name: db
+spec: 
+  clusterIP: None
+  ports: 
+    - 
+      name: db
+      port: 5432
+      targetPort: 5432
+  selector: 
+    app: db
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: db
+  # labels:
+  #   app: db
+spec:
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - 
+          name: db
+          image: postgres:9.4
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+              name: db
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: result
+  labels:
+    app: result
+spec:
+  type: LoadBalancer
+  ports:
+    - 
+      port: 5001
+      targetPort: 80
+      name: result
+  selector:
+    app: result
+  # clusterIP: None
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: result
+  labels:
+    app: result
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: result
+    spec:
+      containers:
+      - name: result
+        image: dockersamples/examplevotingapp_result:before
+        ports:
+        - containerPort: 80
+          name: result
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote
+  labels:
+    apps: vote
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5000
+      targetPort: 80
+      name: vote
+  selector:
+    app: vote
+  # clusterIP: None
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: vote
+  labels:
+    app: vote
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: vote
+    spec:
+      containers:
+        - name: vote
+          image: dockersamples/examplevotingapp_vote:before
+          ports:
+            - 
+              containerPort: 80
+              name: vote
+              
+--- 
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    apps: worker
+  name: worker
+spec: 
+  clusterIP: None
+  selector: 
+    app: worker
+--- 
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata: 
+  labels: 
+    app: worker
+  name: worker
+spec: 
+  replicas: 1
+  template: 
+    metadata: 
+      labels: 
+        app: worker
+    spec: 
+      containers: 
+        - 
+          image: dockersamples/examplevotingapp_worker
+          name: worker
