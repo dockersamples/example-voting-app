@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  vote:
+    build: ./vote
+    command: python app.py
+    volumes:
+     - ./vote:/app
+    #depends_on:
+    #  - db
+    cached: true
+
+  result:
+    build: ./result
+    command: nodemon server.js
+    volumes:
+      - ./result:/app
+    #depends_on:
+    #  - db
+    cached: true
+
+  worker:
+    build: ./worker
+    #depends_on:
+    #  - redis
+    cached: true
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+
+  db:
+    #image: healthcheck/postgres:alpine
+    image: postgres:9.6
+    container_name: db
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+
+  kubectl:
+    image: rheinwein/kubectl
+    encrypted_env_file: aws-k8s-env.encrypted
+    volumes:
+      - ./deploy:/deploy

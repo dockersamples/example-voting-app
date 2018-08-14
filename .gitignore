@@ -1,4 +1,11 @@
+codeship.aes
+dockercfg
+credentials.env
+aws.env
+k8s-env
+kubeconfigdata
 *.pyc
 project.lock.json
 bin/
 obj/
+db-data/
