@@ -12,7 +12,7 @@
     command: echo "Tests passed!"
 - type: parallel
   name: push_images
-  #tag: master
+  tag: master
   encrypted_dockercfg_path: dockercfg.encrypted
   steps:
     - type: push
@@ -31,13 +31,8 @@
       image_name: rheinwein/examplevotingapp-worker
       image_tag: "{{.CommitID}}"
 
-#- name: codeship-list-clusters
-#  service: codeship-eks-deployment
-#  command: aws eks list-clusters 
-
 - name: eks_deployment
   service: kubectl
-  #tag: master
-  #command: kubectl apply -f deploy/kube-deployment.yml
+  tag: master
   command: ./deploy/eks-deployment.sh
 
