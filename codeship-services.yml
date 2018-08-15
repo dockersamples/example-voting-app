@@ -46,7 +46,7 @@ services:
       - "db-data:/var/lib/postgresql/data"
 
   kubectl:
-    image: rheinwein/kubectl
+    image: codeship/eks-kubectl
     encrypted_env_file: aws-k8s-env.encrypted
     volumes:
       - ./deploy:/deploy
