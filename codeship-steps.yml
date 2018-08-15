@@ -31,8 +31,10 @@
       image_name: rheinwein/examplevotingapp-worker
       image_tag: "{{.CommitID}}"
 
-- name: eks_deployment
-  service: kubectl
+- type: manual
   tag: master
-  command: ./deploy/eks-deployment.sh
+  steps:
+    - name: eks_deployment
+      service: kubectl
+      command: ./deploy/eks-deployment.sh
 
