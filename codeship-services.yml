@@ -2,7 +2,10 @@ version: "3"
 
 services:
   vote:
-    build: ./vote
+    build: 
+      context: ./vote
+      dockerfile: Dockerfile
+      image: rheinwein/examplevotingapp-vote
     command: python app.py
     volumes:
      - ./vote:/app
@@ -11,7 +14,10 @@ services:
     cached: true
 
   result:
-    build: ./result
+    build:
+      context: ./result
+      dockerfile: Dockerfile
+      image: rheinwein/examplevotingapp-result
     command: nodemon server.js
     volumes:
       - ./result:/app
@@ -20,7 +26,10 @@ services:
     cached: true
 
   worker:
-    build: ./worker
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+      image: rheinwein/examplevotingapp-worker
     #depends_on:
     #  - redis
     cached: true
