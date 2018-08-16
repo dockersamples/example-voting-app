@@ -1,31 +1,54 @@
-node {
-    def resultImage
-    def voteImage
-    def workerImage
-    docker.withRegistry("https://index.docker.io/v1/", "dockersamples" ) { 
-      stage('Clone repo') {
-        checkout scm
+pipeline {
+  agent {
+    node {
+      label 'ubuntu-1604-aufs-stable'
+    }
+  }
+  stages {
+    stage('Build result') {
+      steps {
+        sh 'docker build -t dockersamples/result ./result'
       }
-      stage('Build result') {
-        resultImage = docker.build("dockersamples/result", "./result")
-      } 
-      stage('Build vote') {
-        voteImage = docker.build("dockersamples/vote", "./vote")
-      }
-      stage('Build worker dotnet') {
-        workerImage = docker.build("dockersamples/worker", "./worker")
-      }
-      stage('Push result image') {
-          resultImage.push("${env.BUILD_NUMBER}")
-          resultImage.push()
-      }
-      stage('Push vote image') {
-          voteImage.push("${env.BUILD_NUMBER}")
-          voteImage.push()
-      }
-      stage('Push worker image') {
-          workerImage.push("${env.BUILD_NUMBER}")
-          workerImage.push()
+    } 
+    stage('Build vote') {
+      steps {
+        sh 'docker build -t dockersamples/vote ./vote'
       }
     }
+    stage('Build worker') {
+      steps {
+        sh 'docker build -t dockersamples/worker ./worker'
+      }
+    }
+    stage('Push result image') {
+      when {
+        branch 'master'
+      }
+      steps {
+        withDockerRegistry(credentialsId: 'dockerbuildbot-index.docker.io', url:'') {
+          sh 'docker push dockersamples/result'
+        }
+      }
+    }
+    stage('Push vote image') {
+      when {
+        branch 'master'
+      }
+      steps {
+        withDockerRegistry(credentialsId: 'dockerbuildbot-index.docker.io', url:'') {
+          sh 'docker push dockersamples/vote'
+        }
+      }
+    }
+    stage('Push worker image') {
+      when {
+        branch 'master'
+      }
+      steps {
+        withDockerRegistry(credentialsId: 'dockerbuildbot-index.docker.io', url:'') {
+          sh 'docker push dockersamples/worker'
+        }
+      }
+    }
+  }
 }
