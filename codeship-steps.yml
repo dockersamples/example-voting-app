@@ -32,7 +32,7 @@
       image_tag: "{{.CommitID}}"
 
 - type: serial
-  #tag: master
+  tag: master
   steps:
     - name: deployment
       service: google-cloud-deployment 
