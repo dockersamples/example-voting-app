@@ -31,10 +31,9 @@
       image_name: rheinwein/examplevotingapp-worker
       image_tag: "{{.CommitID}}"
 
-- type: manual
-  tag: master
+- type: serial
+  #tag: master
   steps:
-    - name: eks_deployment
-      service: kubectl
-      command: ./deploy/eks-deployment.sh
-
+    - name: deployment
+      service: google-cloud-deployment 
+      command: ./deploy/gke-deployment.sh 
