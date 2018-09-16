@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  web:
+    image: ubuntu:18.04
+    entrypoint: "/bin/bash"
+    stdin_open: true
+    tty: true
