@@ -1,0 +1,39 @@
+- type: parallel
+  name: unit_tests
+  steps:
+  - service: vote
+    name: vote_tests
+    command: echo "Tests passed!"
+  - service: result
+    name: result_tests
+    command: echo "Tests passed!"
+  - service: worker
+    name: worker_tests
+    command: echo "Tests passed!"
+- type: parallel
+  name: push_images
+  tag: master
+  encrypted_dockercfg_path: dockercfg.encrypted
+  steps:
+    - type: push
+      service: vote
+      name: push_vote_image
+      image_name: rheinwein/examplevotingapp-vote
+      image_tag: "{{.CommitID}}"
+    - type: push
+      service: result
+      name: push_result_image
+      image_name: rheinwein/examplevotingapp-result
+      image_tag: "{{.CommitID}}"
+    - type: push
+      service: worker
+      name: push_worker_image
+      image_name: rheinwein/examplevotingapp-worker
+      image_tag: "{{.CommitID}}"
+
+- type: serial
+  tag: master
+  steps:
+    - name: deployment
+      service: google-cloud-deployment 
+      command: ./deploy/gke-deployment.sh 

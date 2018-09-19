@@ -1,4 +1,14 @@
+codeship.aes
+dockercfg
+credentials.env
+aws.env
+k8s-env
+gke.env
+kubeconfigdata
 *.pyc
 project.lock.json
 bin/
 obj/
+db-data/
+aws-auth-cm.yaml
+devops-world-demos-a680bb691025.json
