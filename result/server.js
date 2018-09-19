@@ -63,7 +63,7 @@ function collectVotesFromResult(result) {
 
   // return votes;
   // doggos!
-  votes = {a: 0, b: 100};
+  // votes = {a: 0, b: 100};
 
   return votes;
 }
