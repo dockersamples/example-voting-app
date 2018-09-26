@@ -18,8 +18,8 @@ connection.on("UpdateResults", function (results) {
 
     var bg1 = document.getElementById('background-stats-1');
     var bg2 = document.getElementById('background-stats-2');
-    bg1.style.width = percentages.a + "%";
-    bg2.style.width = percentages.b + "%";
+    bg1.style.width = (percentages.a-0.2) + "%";
+    bg2.style.width = (percentages.b-0.2) + "%";
 });
 
 connection.start().catch(function (err) {

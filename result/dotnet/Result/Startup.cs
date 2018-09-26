@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Result.Data;
 using Result.Hubs;
 using Result.Timers;
 
@@ -21,7 +22,9 @@ namespace Result
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSignalR();
-            services.AddSingleton<PublishResultsTimer>();
+
+            services.AddTransient<IResultData, MySqlResultData>()
+                    .AddSingleton<PublishResultsTimer>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
