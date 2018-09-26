@@ -26,11 +26,11 @@ namespace Result.Data
                 var results = connection.Query("SELECT vote, COUNT(id) AS count FROM votes GROUP BY vote ORDER BY vote");
                 if (results.Any(x => x.vote == "a"))
                 {
-                    model.OptionA = results.First(x => x.vote == "a").count;
+                    model.OptionA = (int) results.First(x => x.vote == "a").count;
                 }
                 if (results.Any(x => x.vote == "b"))
                 {
-                    model.OptionB = results.First(x => x.vote == "b").count;
+                    model.OptionB = (int) results.First(x => x.vote == "b").count;
                 }
                 model.VoteCount = model.OptionA + model.OptionB;
             }

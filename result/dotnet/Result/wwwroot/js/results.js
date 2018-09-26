@@ -11,10 +11,11 @@ connection.on("UpdateResults", function (results) {
 
     document.getElementById("optionA").innerText = percentages.a + "%";
     document.getElementById("optionB").innerText = percentages.b + "%";
+    var totalVotes = 'No votes yet';
     if (results.voteCount > 0) {
-        var totalVotes = results.voteCount + (results.voteCount > 1 ? " votes" : " vote");
-        document.getElementById("totalVotes").innerText = totalVotes;
+        totalVotes = results.voteCount + (results.voteCount > 1 ? " votes" : " vote");        
     }
+    document.getElementById("totalVotes").innerText = totalVotes;
 
     var bg1 = document.getElementById('background-stats-1');
     var bg2 = document.getElementById('background-stats-2');
