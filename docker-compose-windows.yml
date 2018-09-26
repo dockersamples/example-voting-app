@@ -2,6 +2,7 @@ version: "3.2"
 
 services:
   vote:
+    image: dockersamples/examplevotingapp_vote:dotnet-nanoserver-sac2016
     build: 
       context: ./vote/dotnet
     ports:
@@ -10,20 +11,22 @@ services:
       - message-queue
 
   result:
+    image: dockersamples/examplevotingapp_result:dotnet-nanoserver-sac2016
     build: 
       context: ./result/dotnet
     ports:
       - "5001:80"
     environment:      
-      - "Data:ConnectionString=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
+      - "ConnectionStrings:ResultData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
     depends_on:
       - db
 
   worker:
+    image: dockersamples/examplevotingapp_worker:dotnet-nanoserver-sac2016
     build:
       context: ./worker/dotnet
     environment:      
-      - "Data:ConnectionString=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
+      - "ConnectionStrings:VoteData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
     depends_on:
       - message-queue
       - db
