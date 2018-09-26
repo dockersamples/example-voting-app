@@ -16,6 +16,7 @@ namespace Worker
         {
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
                 .Build();
 
             var loggerFactory = new LoggerFactory()
