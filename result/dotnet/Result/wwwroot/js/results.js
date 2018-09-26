@@ -3,14 +3,23 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/resultsHub").build();
 
 connection.on("UpdateResults", function (results) {
-    data = JSON.parse(json);
+    document.body.style.opacity=1;
 
-    var a = parseInt(data.optionA || 0);
-    var b = parseInt(data.optionB || 0);
+    var a = parseInt(results.optionA || 0);
+    var b = parseInt(results.optionB || 0);
     var percentages = getPercentages(a, b);
 
     document.getElementById("optionA").innerText = percentages.a + "%";
     document.getElementById("optionB").innerText = percentages.b + "%";
+    if (results.voteCount > 0) {
+        var totalVotes = results.voteCount + (results.voteCount > 1 ? " votes" : " vote");
+        document.getElementById("totalVotes").innerText = totalVotes;
+    }
+
+    var bg1 = document.getElementById('background-stats-1');
+    var bg2 = document.getElementById('background-stats-2');
+    bg1.style.width = percentages.a + "%";
+    bg2.style.width = percentages.b + "%";
 });
 
 connection.start().catch(function (err) {

@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Result.Hubs;
+using Result.Timers;
 
 namespace Result
 {
@@ -26,6 +21,7 @@ namespace Result
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSignalR();
+            services.AddSingleton<PublishResultsTimer>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -45,6 +41,9 @@ namespace Result
                 routes.MapHub<ResultsHub>("/resultsHub");
             });
             app.UseMvc();
+
+            var timer = app.ApplicationServices.GetService<PublishResultsTimer>();
+            timer.Start();
         }
     }
 }
