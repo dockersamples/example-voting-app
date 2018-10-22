@@ -1,0 +1,49 @@
+version: "3.2"
+
+services:
+  vote:
+    image: dockersamples/examplevotingapp_vote:dotnet-nanoserver-1809
+    ports:
+      - "5000:80"
+    deploy:
+      mode: replicated
+      replicas: 4
+    networks:
+      - frontend
+      - backend
+
+  result:
+    image: dockersamples/examplevotingapp_result:dotnet-nanoserver-1809
+    environment:      
+      - "ConnectionStrings:ResultData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
+    ports:
+      - "5001:80"
+    networks:
+      - frontend
+      - backend
+
+  worker:
+    image: dockersamples/examplevotingapp_worker:dotnet-nanoserver-1809
+    environment:      
+      - "ConnectionStrings:VoteData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
+    deploy:
+      mode: replicated
+      replicas: 3
+    networks:
+      - backend
+
+  message-queue:
+    image: dockersamples/nats:nanoserver-1809
+    networks:
+      - backend
+
+  db:
+    image: dockersamples/tidb:nanoserver-1809
+    ports:
+      - "3306:4000"
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
