@@ -60,7 +60,7 @@ First create the vote namespace
 
 ```
 $ kubectl create namespace vote
-``
+```
 
 Run the following command to create the deployments and services objects:
 ```
