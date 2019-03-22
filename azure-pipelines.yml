@@ -10,7 +10,6 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  imageName: 'your-container-image-name:$(build.buildId)'
   acrId: acrtestmumshad
   acrPswd: LRoyTf/oFUZMdHEOXb7bNidtC=lJUlUN
 
