@@ -11,6 +11,8 @@ pool:
 
 variables:
   imageName: 'your-container-image-name:$(build.buildId)'
+  acrId: acrtestmumshad
+  acrPswd: LRoyTf/oFUZMdHEOXb7bNidtC=lJUlUN
 
 steps:
 - script: |
@@ -24,7 +26,7 @@ steps:
   displayName: 'Build worker'
 
 - script: |
-    docker login -u $(acrId) -p $(acr_pswd) $(acrId).azurecr.io
+    docker login -u $(acrId) -p $(acrPswd) $(acrId).azurecr.io
     docker push $(acrId).azurecr.io/result:$(build.buildId)
     docker push $(acrId).azurecr.io/vote:$(build.buildId)
     docker push $(acrId).azurecr.io/worker:$(build.buildId)
