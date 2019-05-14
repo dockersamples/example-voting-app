@@ -1,0 +1,17 @@
+name: vote
+
+profiles:
+  stable:
+    endpoint: /vote/
+    max_memory: 0.5G
+    max_cpu: 0.5
+  canary:
+    endpoint: /vote/
+    weight: 10 # percentage of traffic to route to this class of deployment
+    max_memory: 0.25G
+    max_cpu: 0.25
+  default:
+    name: {{branch.replace('/', '-')}}
+    endpoint: /preview/vote/{{branch}}/
+    max_memory: 0.25G
+    max_cpu: 0.25

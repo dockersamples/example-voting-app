@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{build.name}}
+  {%- if "endpoint" in build.profile %}
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: {{build.name}}-mapping
+      prefix: {{build.profile.endpoint}}
+      service: {{build.name}}
+      {%- if "weight" in build.profile %}
+      weight: {{build.profile.weight}}
+      {%- endif %}
+  {%- endif %}
+spec:
+  selector:
+    app: {{build.name}}
+  ports:
+    - port: 80
+      targetPort: http-api
+  type: ClusterIP
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{build.name}}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{build.name}}
+    spec:
+      containers:
+      - name: {{build.name}}
+        image: {{build.images["Dockerfile"]}}
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: 0.1G
+            cpu: 0.1
+          limits:
+            memory: {{build.profile.max_memory}}
+            cpu: {{build.profile.max_cpu}}
+        ports:
+        - name: http-api
+          containerPort: 8080
