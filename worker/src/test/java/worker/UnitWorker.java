@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Test;
  
-class WorkerUnitTest {
+class UnitWorker {
  
     @Test
     void sample1() {
