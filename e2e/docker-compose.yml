@@ -25,7 +25,7 @@ services:
 
   result:
     image: ${RESULT_IMAGE}
-    ports: ["80"]
+    ports: ["4000"]
     depends_on:
       - redis
       - db
