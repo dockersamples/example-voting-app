@@ -58,6 +58,9 @@ services:
     networks:
       - frontend
       - backend
+    depends_on:
+      - db
+      - redis
     deploy:
       mode: replicated
       replicas: 1

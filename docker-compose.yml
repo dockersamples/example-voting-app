@@ -29,6 +29,7 @@ services:
       context: ./worker
     depends_on:
       - "redis"
+      - "db"
     networks:
       - back-tier
 
