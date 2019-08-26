@@ -1,3 +1,4 @@
+# redis
 --- 
 apiVersion: v1
 kind: Service
@@ -8,23 +9,23 @@ metadata:
 spec: 
   clusterIP: None
   ports:
-    - name: redis
-      port: 6379
-      targetPort: 6379
+  - name: redis-service
+    port: 6379
+    targetPort: 6379
   selector: 
     app: redis
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
   labels:
     app: redis
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: redis
-  replicas: 1
   template:
     metadata:
       labels:
@@ -37,6 +38,7 @@ spec:
         - containerPort: 6379
           name: redis
 
+# db
 --- 
 apiVersion: v1
 kind: Service
@@ -47,43 +49,44 @@ metadata:
 spec: 
   clusterIP: None
   ports: 
-    - 
-      name: db
-      port: 5432
-      targetPort: 5432
+  - name: db
+    port: 5432
+    targetPort: 5432
   selector: 
     app: db
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: db
-  # labels:
-  #   app: db
+  labels:
+    app: db
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
   template:
     metadata:
       labels:
         app: db
     spec:
       containers:
-        - 
+      - name: db
+        image: postgres:9.4
+        env:
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        ports:
+        - containerPort: 5432
           name: db
-          image: postgres:9.4
-          env:
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
-          ports:
-            - containerPort: 5432
-              name: db
-          volumeMounts:
-            - name: db-data
-              mountPath: /var/lib/postgresql/data
-      volumes:
+        volumeMounts:
         - name: db-data
-          persistentVolumeClaim:
-            claimName: postgres-pv-claim
-
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -96,6 +99,7 @@ spec:
     requests:
       storage: 1Gi
 
+# result
 ---
 apiVersion: v1
 kind: Service
@@ -106,15 +110,13 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - 
-      port: 5001
-      targetPort: 80
-      name: result
+  - port: 5001
+    targetPort: 80
+    name: result-service
   selector:
     app: result
-  # clusterIP: None
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: result
@@ -122,6 +124,9 @@ metadata:
     app: result
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: result
   template:
     metadata:
       labels:
@@ -134,6 +139,7 @@ spec:
         - containerPort: 80
           name: result
 
+# vote
 ---
 apiVersion: v1
 kind: Service
@@ -146,12 +152,11 @@ spec:
   ports:
     - port: 5000
       targetPort: 80
-      name: vote
+      name: vote-service
   selector:
     app: vote
-  # clusterIP: None
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vote
@@ -159,19 +164,22 @@ metadata:
     app: vote
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      app: vote
   template:
     metadata:
       labels:
         app: vote
     spec:
       containers:
-        - name: vote
-          image: dockersamples/examplevotingapp_vote:before
-          ports:
-            - 
-              containerPort: 80
-              name: vote
-              
+      - name: vote
+        image: dockersamples/examplevotingapp_vote:before
+        ports:
+        - containerPort: 80
+          name: vote
+
+# worker
 --- 
 apiVersion: v1
 kind: Service
@@ -184,7 +192,7 @@ spec:
   selector: 
     app: worker
 --- 
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata: 
   labels: 
@@ -192,12 +200,14 @@ metadata:
   name: worker
 spec: 
   replicas: 1
+  selector:
+    matchLabels:
+      app: worker
   template: 
     metadata: 
       labels: 
         app: worker
     spec: 
       containers: 
-        - 
-          image: dockersamples/examplevotingapp_worker
-          name: worker
+      - image: dockersamples/examplevotingapp_worker
+        name: worker
