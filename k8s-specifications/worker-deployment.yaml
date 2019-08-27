@@ -1,10 +1,15 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: worker
   name: worker
   namespace: vote
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: db
   template:
     metadata:
       labels:

@@ -1,10 +1,15 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: redis
   name: redis
   namespace: vote
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: redis
   template:
     metadata:
       labels:
@@ -13,6 +18,9 @@ spec:
       containers:
       - image: redis:alpine
         name: redis
+        ports:
+        - containerPort: 6379
+          name: redis
         volumeMounts:
         - mountPath: /data
           name: redis-data
