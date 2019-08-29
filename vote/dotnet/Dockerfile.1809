@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1-sdk-nanoserver-1809 as builder
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1 as builder
 
 WORKDIR /Vote
 COPY Vote/Vote.csproj .
@@ -8,7 +8,7 @@ COPY /Vote .
 RUN dotnet publish -c Release -o /out Vote.csproj
 
 # app image
-FROM microsoft/dotnet:2.1-aspnetcore-runtime-nanoserver-1809
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.1
 
 WORKDIR /app
 ENTRYPOINT ["dotnet", "Vote.dll"]
