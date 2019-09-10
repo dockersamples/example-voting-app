@@ -9,7 +9,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: db
+      app: worker
   template:
     metadata:
       labels:
