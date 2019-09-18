@@ -118,7 +118,7 @@ spec:
     spec:
       containers:
       - name: result
-        image: dockersamples/examplevotingapp_result:before
+        image: CONTAINER_IMAGE_RES 
         ports:
         - containerPort: 80
           name: result
@@ -159,7 +159,7 @@ spec:
     spec:
       containers:
         - name: vote
-          image: CONTAINER_IMAGE 
+          image: CONTAINER_IMAGE_VOTE 
           ports:
             - 
               containerPort: 80
