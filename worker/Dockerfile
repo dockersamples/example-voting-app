@@ -1,10 +1,19 @@
-FROM microsoft/dotnet:2.0.0-sdk
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1 AS build
 
 WORKDIR /code
 
-ADD src/Worker /code/src/Worker
+# copy csproj and restore as distinct layers
+COPY src/Worker/*.csproj ./
+RUN dotnet restore
 
-RUN dotnet restore -v minimal src/Worker \
-    && dotnet publish -c Release -o "./" "src/Worker/" 
+# copy everything else and build app
+COPY src/Worker/. ./
+RUN dotnet publish -c Release -o out
 
-CMD dotnet src/Worker/Worker.dll
+FROM mcr.microsoft.com/dotnet/core/runtime:2.1
+
+WORKDIR /app
+
+COPY --from=build /code/out ./
+
+ENTRYPOINT ["dotnet", "Worker.dll"]
