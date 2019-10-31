@@ -7,8 +7,6 @@ services:
     command: 
     - python 
     - app.py
-    volumes:
-     - ./vote:/app
     ports:
       - "5000:80"
     networks:
@@ -21,8 +19,6 @@ services:
     command: 
     - nodemon 
     - server.js
-    volumes:
-      - ./result:/app
     ports:
       - "5001:80"
       - "5858:5858"
