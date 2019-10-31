@@ -2,7 +2,7 @@ version: "3"
 
 services:
   vote:
-    image: docker.giffin.org/tmcclung/example-voting-app-vote
+    image: docker.giffin.org/davidgiffin/example-voting-app-vote
     build: ./vote
     command: 
     - python 
@@ -16,7 +16,7 @@ services:
       - back-tier
 
   result:
-    image: docker.giffin.org/tmcclung/example-voting-app-result
+    image: docker.giffin.org/davidgiffin/example-voting-app-result
     build: ./result
     command: 
     - nodemon 
@@ -31,7 +31,7 @@ services:
       - back-tier
 
   worker:
-    image: docker.giffin.org/tmcclung/example-voting-app-worker
+    image: docker.giffin.org/davidgiffin/example-voting-app-worker
     build:
       context: ./worker
     depends_on:
@@ -50,6 +50,7 @@ services:
   db:
     image: postgres:9.4
     container_name: db
+    ports: ["5432"]
     volumes:
       - "db-data:/var/lib/postgresql/data"
     networks:
