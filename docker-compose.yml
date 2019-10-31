@@ -50,6 +50,7 @@ services:
   db:
     image: postgres:9.4
     container_name: db
+    ports: ["5432"]
     volumes:
       - "db-data:/var/lib/postgresql/data"
     networks:
