@@ -8,7 +8,7 @@ services:
     - python 
     - app.py
     ports:
-      - "5000:80"
+      - "80:5000"
     networks:
       - front-tier
       - back-tier
@@ -20,7 +20,7 @@ services:
     - nodemon 
     - server.js
     ports:
-      - "5001:80"
+      - "80:5001"
       - "5858:5858"
     networks:
       - front-tier
