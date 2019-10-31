@@ -2,8 +2,11 @@ version: "3"
 
 services:
   vote:
+    image: docker.giffin.org/tmcclung/example-voting-app-vote
     build: ./vote
-    command: python app.py
+    command: 
+    - python 
+    - app.py
     volumes:
      - ./vote:/app
     ports:
@@ -13,8 +16,11 @@ services:
       - back-tier
 
   result:
+    image: docker.giffin.org/tmcclung/example-voting-app-result
     build: ./result
-    command: nodemon server.js
+    command: 
+    - nodemon 
+    - server.js
     volumes:
       - ./result:/app
     ports:
@@ -25,6 +31,7 @@ services:
       - back-tier
 
   worker:
+    image: docker.giffin.org/tmcclung/example-voting-app-worker
     build:
       context: ./worker
     depends_on:
