@@ -2,7 +2,7 @@ version: "3"
 
 services:
   vote:
-    image: docker.giffin.org/davidgiffin/example-voting-app/vote
+    image: docker.giffin.org/dustyspace/example-voting-app/vote
     build: ./vote
     command: python app.py
     volumes:
@@ -14,7 +14,7 @@ services:
       - back-tier
 
   result:
-    image: docker.giffin.org/davidgiffin/example-voting-app/result
+    image: docker.giffin.org/dustyspace/example-voting-app/result
     build: ./result
     command: nodemon server.js
     volumes:
@@ -27,7 +27,7 @@ services:
       - back-tier
 
   worker:
-    image: docker.giffin.org/davidgiffin/example-voting-app/worker
+    image: docker.giffin.org/dustyspace/example-voting-app/worker
     build:
       context: ./worker
     depends_on:
