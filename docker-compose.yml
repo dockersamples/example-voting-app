@@ -17,7 +17,6 @@ services:
       - back-tier
 
   result:
-    image: docker.giffin.org/dustyspace/example-voting-app/result
     build: ./result
     command: nodemon server.js
     volumes:
@@ -33,7 +32,6 @@ services:
       - back-tier
 
   worker:
-    image: docker.giffin.org/dustyspace/example-voting-app/worker
     build:
       context: ./worker
     depends_on:
