@@ -5,8 +5,8 @@ import socket
 import random
 import json
 
-option_a = os.getenv('OPTION_A', "Doug")
-option_b = os.getenv('OPTION_B', "Kevin")
+option_a = os.getenv('OPTION_A', "Mixpanel")
+option_b = os.getenv('OPTION_B', "GA")
 hostname = socket.gethostname()
 
 app = Flask(__name__)
