@@ -10,8 +10,7 @@ services:
     ports:
       - "5000:80"
     depends_on:
-      - "redis"
-      - "db"
+      - "worker"
     networks:
       - front-tier
       - back-tier
@@ -26,8 +25,7 @@ services:
       - "5001:80"
       - "5858:5858"
     depends_on:
-      - "redis"
-      - "db"
+      - "worker"
     networks:
       - front-tier
       - back-tier
