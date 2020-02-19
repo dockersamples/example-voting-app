@@ -7,6 +7,9 @@ services:
       - "6379:6379"
   db:
     image: postgres:9.4
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
     ports:
       - "5432:5432"
   vote:
