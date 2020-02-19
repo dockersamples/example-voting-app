@@ -15,7 +15,7 @@ services:
       restart_policy:
         condition: on-failure
   db:
-    image: postgres:9.4
+    image: postgres:9.4.24
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:

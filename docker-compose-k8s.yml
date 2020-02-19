@@ -6,7 +6,7 @@ services:
     ports:
       - "6379:6379"
   db:
-    image: postgres:9.4
+    image: postgres:9.4.24
     ports:
       - "5432:5432"
   vote:
