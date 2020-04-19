@@ -27,7 +27,7 @@ services:
       placement:
         constraints: [node.role == manager]
   vote:
-    image: dockersamples/examplevotingapp_vote:before
+    image: ashok25/example-voting-app_vote
     ports:
       - 5000:80
     networks:
@@ -41,7 +41,7 @@ services:
       restart_policy:
         condition: on-failure
   result:
-    image: dockersamples/examplevotingapp_result:before
+    image: ashok25/example-voting-app_result
     ports:
       - 5001:80
     networks:
@@ -57,7 +57,7 @@ services:
         condition: on-failure
 
   worker:
-    image: dockersamples/examplevotingapp_worker
+    image: ashok25/example-voting-app_worker
     networks:
       - frontend
       - backend
