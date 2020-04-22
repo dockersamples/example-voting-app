@@ -6,6 +6,7 @@ import java.sql.*;
 import org.json.JSONObject;
 
 class Worker {
+
   public static void main(String[] args) {
     try {
       Jedis redis = connectToRedis("redis");
@@ -19,7 +20,7 @@ class Worker {
         String voterID = voteData.getString("voter_id");
         String vote = voteData.getString("vote");
 
-        System.err.printf("Processing vote for '%s' by '%s'\n", vote, voterID);
+        System.err.printf(" Processing vote for '%s' by '%s'\n", vote, voterID);
         updateVote(dbConn, voterID, vote);
       }
     } catch (SQLException e) {
