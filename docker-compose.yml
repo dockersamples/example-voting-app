@@ -40,6 +40,10 @@ services:
   db:
     image: postgres:9.4
     container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST_AUTH_METHOD= trust
     volumes:
       - "db-data:/var/lib/postgresql/data"
     networks:

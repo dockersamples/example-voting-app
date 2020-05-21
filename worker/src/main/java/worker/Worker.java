@@ -47,14 +47,12 @@ class Worker {
 
   static Jedis connectToRedis(String host) {
     Jedis conn = new Jedis(host);
-    conn.auth("redis_password");
 
     while (true) {
       try {
         conn.keys("*");
         break;
       } catch (JedisConnectionException e) {
-        e.printStackTrace();
         System.err.println("Waiting for redis");
         sleep(1000);
       }
@@ -70,13 +68,12 @@ class Worker {
     try {
 
       Class.forName("org.postgresql.Driver");
-      String url = "jdbc:postgresql://" + host + "/postgres?user=postgres_user&password=postgres_password";
+      String url = "jdbc:postgresql://" + host + "/postgres";
 
       while (conn == null) {
         try {
-          conn = DriverManager.getConnection(url, "postgres", "");
+          conn = DriverManager.getConnection(url, "postgres", "postgres");
         } catch (SQLException e) {
-          e.printStackTrace();
           System.err.println("Waiting for db");
           sleep(1000);
         }
