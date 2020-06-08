@@ -2,7 +2,6 @@ version: "3"
 
 services:
   vote:
-    image: docker.giffin.org/dustyspace/example-voting-app/vote
     build: ./vote
     command: python app.py
     volumes:
@@ -16,7 +15,6 @@ services:
       - back-tier
 
   result:
-    image: docker.giffin.org/dustyspace/example-voting-app/result
     build: ./result
     command: nodemon server.js
     volumes:
@@ -38,6 +36,11 @@ services:
       - "db"
     networks:
       - back-tier
+
+  uploader:
+    image: mayth/simple-upload-server
+    ports:
+      - "3000:3000"
 
   redis:
     image: redis:alpine
