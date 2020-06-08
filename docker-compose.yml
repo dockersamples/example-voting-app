@@ -41,6 +41,15 @@ services:
     image: mayth/simple-upload-server
     ports:
       - "3000:3000"
+    command:
+      - "/usr/local/bin/app"
+      - "-port"
+      - '3000'
+      - "-upload_limit"
+      - '10485760'
+      - "-token"
+      - f9403fc5f537b4ab332d
+      - "/tmp"
 
   redis:
     image: redis:alpine
