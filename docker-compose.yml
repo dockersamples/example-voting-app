@@ -59,9 +59,15 @@ services:
       - back-tier
 
   db:
-    image: postgres:9.4
+    image: postgres:9.6.1
     container_name: db
     ports: ["5432"]
+    environment:
+      - POSTGRES_DB=database
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
     volumes:
       - "db-data:/var/lib/postgresql/data"
     networks:
