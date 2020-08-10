@@ -114,7 +114,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 5001
+  - port: 8001
     targetPort: 80
     name: result-service
   selector:
@@ -138,7 +138,8 @@ spec:
     spec:
       containers:
       - name: result
-        image: dockersamples/examplevotingapp_result:before
+        image: nishantnepal/examplevotingapp_result
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
           name: result
@@ -154,7 +155,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 5000
+    - port: 8000
       targetPort: 80
       name: vote-service
   selector:
@@ -213,5 +214,6 @@ spec:
         app: worker
     spec: 
       containers: 
-      - image: dockersamples/examplevotingapp_worker
+      - image: nishantnepal/examplevotingapp_worker
+        imagePullPolicy: IfNotPresent
         name: worker
