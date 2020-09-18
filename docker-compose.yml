@@ -64,8 +64,7 @@ services:
     ports: ["5432"]
     environment:
       - POSTGRES_DB=database
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
     volumes:
