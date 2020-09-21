@@ -2,35 +2,30 @@ version: "3"
 
 services:
   vote:
-    build: ./vote
+    image: georgerodriguex/vote:1.0
     command: python app.py
-    volumes:
-     - ./vote:/app
     ports:
-      - "5000:80"
-    networks:
-      - front-tier
-      - back-tier
-
-  result:
-    build: ./result
-    command: nodemon server.js
-    volumes:
-      - ./result:/app
-    ports:
-      - "5001:80"
-      - "5858:5858"
+      - "1234:80"
     networks:
       - front-tier
       - back-tier
 
   worker:
-    build:
-      context: ./worker
+    image: georgerodriguex/worker:1.0
     depends_on:
       - "redis"
       - "db"
     networks:
+      - back-tier
+
+  result:
+    image: georgerodriguex/result:1.0
+    command: nodemon server.js
+    ports:
+      - "1235:80"
+      - "5858:5858"
+    networks:
+      - front-tier
       - back-tier
 
   redis:
@@ -52,8 +47,9 @@ services:
       - back-tier
 
 volumes:
-  db-data:
+        db-data:
 
 networks:
-  front-tier:
-  back-tier:
+        front-tier:
+        back-tier:
+
