@@ -2,7 +2,7 @@ FROM node:10-slim
 
 WORKDIR /app
 
-RUN npm install -g nodemon
+RUN npm install -g nodemon@2.0.4
 
 COPY package*.json ./
 
