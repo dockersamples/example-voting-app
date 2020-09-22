@@ -1,0 +1,25 @@
+name: Lint Dockerfile
+
+on: [push, pull_request]
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Lint vote Dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: vote/Dockerfile
+        
+      - name: Lint worker Dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: worker/Dockerfile
+          
+          
+      - name: Lint result Dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: result/Dockerfile
