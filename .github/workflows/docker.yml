@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push
+        name: build 'n push vote
         uses: docker/build-push-action@v2
         with:
           context: ./vote/
@@ -30,7 +30,29 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/386
           push: true
           tags: georgerodriguex/vote:latest
+      -
+        name: build 'n push worker
+        uses: docker/build-push-action@v2
+        with:
+          context: ./worker/
+          file: ./worker/Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/386
+          push: true
+          tags: georgerodriguex/worker:latest
+      -
+        name: build 'n push result
+        uses: docker/build-push-action@v2
+        with:
+          context: ./result/
+          file: ./result/Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/386
+          push: true
+          tags: georgerodriguex/result:latest
 
+
+
+    
+              
 
 
 
