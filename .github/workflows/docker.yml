@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  docker build and push:
+  docker_build:
     runs-on: ubuntu-latest
     steps:
       -
