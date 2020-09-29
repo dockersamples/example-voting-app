@@ -3,7 +3,7 @@ name: Lint Dockerfile
 on: [push, pull_request]
 
 jobs:
-  linter:
+  lint dockerfile:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

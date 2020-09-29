@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  path-context:
+  docker build and push:
     runs-on: ubuntu-latest
     steps:
       -
