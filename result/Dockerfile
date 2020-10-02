@@ -2,13 +2,13 @@ FROM node:10-slim
 
 WORKDIR /app
 
-RUN npm install -g nodemon
+RUN npm install -g nodemon@2.0.4
 
 COPY package*.json ./
 
 RUN npm ci \
- && npm cache clean --force \
- && mv /app/node_modules /node_modules
+    && npm cache clean --force \
+    && mv /app/node_modules /node_modules
 
 COPY . .
 
