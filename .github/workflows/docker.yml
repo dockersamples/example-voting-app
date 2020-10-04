@@ -81,11 +81,10 @@ jobs:
 
   gcprunner:
     runs-on: self-hosted
-
     steps:
-      - name: build and run
+      - name: run
         run: |
-        cd /home/george/
+        cd /home/george
         docker-compose down
         docker pull georgerodriguex/vote:latest
         docker pull georgerodriguex/worker:latest
