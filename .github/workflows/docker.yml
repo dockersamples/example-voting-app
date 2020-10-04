@@ -26,31 +26,52 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: build 'n push vote
+        id: vote
+        env:
+          DOCKER_REGISTRY: georgerodriguex
+          DOCKER_REPOSITORY: vote
+          IMAGE_TAG: ${{ github.sha }}
         uses: docker/build-push-action@v2
         with:
           context: ./vote/
           file: ./vote/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: georgerodriguex/vote:latest
+          tags: |
+            georgerodriguex/vote:latest
+            georgerodriguex/vote:$IMAGE_TAG
       -
         name: build 'n push worker
+        id: worker
+        env:
+          DOCKER_REGISTRY: georgerodriguex
+          DOCKER_REPOSITORY: worker
+          IMAGE_TAG: ${{ github.sha }}
         uses: docker/build-push-action@v2
         with:
           context: ./worker/
           file: ./worker/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: georgerodriguex/worker:latest
+          tags: |
+            georgerodriguex/worker:latest
+            georgerodriguex/worker:$IMAGE_TAG
       -
         name: build 'n push result
+        id: result
+        env:
+          DOCKER_REGISTRY: georgerodriguex
+          DOCKER_REPOSITORY: result
+          IMAGE_TAG: ${{ github.sha }}
         uses: docker/build-push-action@v2
         with:
           context: ./result/
           file: ./result/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: georgerodriguex/result:latest
+          tags: |
+            georgerodriguex/result:latest
+            georgerodriguex/result:$IMAGE_TAG
 
 
 
