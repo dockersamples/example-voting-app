@@ -78,8 +78,7 @@ jobs:
             docker pull georgerodriguex/result:latest
             docker-compose up -d
       
-
-- 
+      - 
         name: ssh deploy gcp
         uses: appleboy/ssh-action@master
         with:
