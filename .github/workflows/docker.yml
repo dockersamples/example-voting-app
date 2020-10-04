@@ -64,7 +64,7 @@ jobs:
           docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
           echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest"
       - 
-        name: ssh deploy
+        name: ssh deploy aws
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -78,15 +78,17 @@ jobs:
             docker pull georgerodriguex/result:latest
             docker-compose up -d
       
-
-  gcprunner:
-    runs-on: self-hosted
-    steps:
-      - name: build and run
-        run: |
-          cd /home/george
-          docker-compose down
-          docker pull georgerodriguex/vote:latest
-          docker pull georgerodriguex/worker:latest
-          docker pull georgerodriguex/result:latest
-          docker-compose up -d
+      - 
+        name: ssh deploy gcp
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST2 }}
+          username: ${{ secrets.USERNAME2 }}
+          key: ${{ secrets.KEY2 }}
+          port: ${{ secrets.PORT }}
+          script: |
+            docker-compose down
+            docker pull georgerodriguex/vote:latest
+            docker pull georgerodriguex/worker:latest
+            docker pull georgerodriguex/result:latest
+            docker-compose up -d
