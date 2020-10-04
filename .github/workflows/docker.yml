@@ -77,3 +77,12 @@ jobs:
             docker pull georgerodriguex/worker:latest
             docker pull georgerodriguex/result:latest
             docker-compose up -d
+      
+
+  gcp runner:
+    runs-on: self-hosted
+
+    steps:
+      - name: build and run
+        run: |
+          docker-compose -f /home/george/docker-compose.yml
