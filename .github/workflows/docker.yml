@@ -38,8 +38,8 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            georgerodriguex/vote:latest
-            georgerodriguex/vote:$IMAGE_TAG
+            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$(date +%s)
       -
         name: build 'n push worker
         id: worker
@@ -54,8 +54,8 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            georgerodriguex/worker:latest
-            georgerodriguex/worker:$IMAGE_TAG
+            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$(date +%s)
       -
         name: build 'n push result
         id: result
@@ -70,8 +70,8 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            georgerodriguex/result:latest
-            georgerodriguex/result:$IMAGE_TAG
+            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$(date +%s)
 
 
 
