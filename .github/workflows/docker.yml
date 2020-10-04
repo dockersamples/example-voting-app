@@ -72,5 +72,8 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            whoami
-            ls -al
+            docker-compose down
+            docker pull georgerodriguex/vote:latest
+            docker pull georgerodriguex/worker:latest
+            docker pull georgerodriguex/result:latest
+            docker-compose up
