@@ -79,7 +79,7 @@ jobs:
             docker-compose up -d
       
 
-  gcp runner:
+  gcprunner:
     runs-on: self-hosted
 
     steps:
