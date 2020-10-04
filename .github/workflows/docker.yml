@@ -63,3 +63,14 @@ jobs:
           docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
           docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
           echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest"
+      - 
+        name: ssh deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            whoami
+            ls -al
