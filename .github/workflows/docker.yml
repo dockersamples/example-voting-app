@@ -85,4 +85,5 @@ jobs:
     steps:
       - name: build and run
         run: |
-          docker-compose -f /home/george/docker-compose.yml
+          docker-compose -f /home/george/docker-compose.yml down
+          docker-compose -f /home/george/docker-compose.yml up -d
