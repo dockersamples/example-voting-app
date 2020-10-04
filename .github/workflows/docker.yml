@@ -25,59 +25,41 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: build 'n push vote
+        name: build, tag and push vote image
         id: vote
         env:
           DOCKER_REGISTRY: georgerodriguex
           DOCKER_REPOSITORY: vote
           IMAGE_TAG: ${{ github.sha }}
-        uses: docker/build-push-action@v2
-        with:
-          context: ./vote/
-          file: ./vote/Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: |
-            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
-            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$(date +%s)
+        run: |
+          docker build -t $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG ./vote/
+          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG
+          docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+          echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest"
       -
-        name: build 'n push worker
+        name: build, tag and push vote worker
         id: worker
         env:
           DOCKER_REGISTRY: georgerodriguex
           DOCKER_REPOSITORY: worker
           IMAGE_TAG: ${{ github.sha }}
-        uses: docker/build-push-action@v2
-        with:
-          context: ./worker/
-          file: ./worker/Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: |
-            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
-            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$(date +%s)
+        run: |
+          docker build -t $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG ./worker/
+          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG
+          docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+          echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest"
       -
-        name: build 'n push result
+        name: build, tag and push result image
         id: result
         env:
           DOCKER_REGISTRY: georgerodriguex
           DOCKER_REPOSITORY: result
           IMAGE_TAG: ${{ github.sha }}
-        uses: docker/build-push-action@v2
-        with:
-          context: ./result/
-          file: ./result/Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: |
-            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
-            $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$(date +%s)
-
-
-
-    
-              
-
-
-
-          
+        run: |
+          docker build -t $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG ./result/
+          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG
+          docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+          echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest"
