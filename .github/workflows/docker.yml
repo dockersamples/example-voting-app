@@ -76,4 +76,4 @@ jobs:
             docker pull georgerodriguex/vote:latest
             docker pull georgerodriguex/worker:latest
             docker pull georgerodriguex/result:latest
-            docker-compose up > logs.txt
+            docker-compose up -d
