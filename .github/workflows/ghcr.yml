@@ -27,7 +27,7 @@ jobs:
           name: build, tag and push vote image
           id: vote
           env:
-            DOCKER_REPOSITORY: ghcr.io
+            DOCKER_REGISTRY: ghcr.io
             DOCKER_USER: georgerodriguex
             DOCKER_REPOSITORY: vote
             IMAGE_TAG: ${{ github.sha }}
@@ -41,7 +41,7 @@ jobs:
           name: build, tag and push vote worker
           id: worker
           env:
-            DOCKER_REPOSITORY: ghcr.io
+            DOCKER_REGISTRY: ghcr.io
             DOCKER_USER: georgerodriguex
             DOCKER_REPOSITORY: worker
             IMAGE_TAG: ${{ github.sha }}
@@ -55,7 +55,7 @@ jobs:
           name: build, tag and push result image
           id: result
           env:
-            DOCKER_REPOSITORY: ghcr.io
+            DOCKER_REGISTRY: ghcr.io
             DOCKER_USER: georgerodriguex
             DOCKER_REPOSITORY: result
             IMAGE_TAG: ${{ github.sha }}
