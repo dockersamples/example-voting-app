@@ -4,7 +4,7 @@ on:
     branches: ci
 
 jobs:
-  login:
+  push_to_ghcr:
     runs-on: ubuntu-latest
     steps:
         -
