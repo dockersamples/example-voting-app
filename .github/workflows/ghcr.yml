@@ -24,44 +24,44 @@ jobs:
             username: ${{ github.repository_owner }}
             password: ${{ secrets.GHCR_TOKEN }}
         -
-            name: build, tag and push vote image
-            id: vote
-            env:
-              DOCKER_REPOSITORY: ghcr.io
-              DOCKER_USER: georgerodriguex
-              DOCKER_REPOSITORY: vote
-              IMAGE_TAG: ${{ github.sha }}
-            run: |
-              docker build -t $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG ./vote/
-              docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG
-              docker tag $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
-              docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
-              echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest"
-          -
-            name: build, tag and push vote worker
-            id: worker
-            env:
-              DOCKER_REPOSITORY: ghcr.io
-              DOCKER_USER: georgerodriguex
-              DOCKER_REPOSITORY: worker
-              IMAGE_TAG: ${{ github.sha }}
-            run: |
-              docker build -t $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG ./worker/
-              docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG
-              docker tag $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
-              docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
-              echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest"
-          -
-            name: build, tag and push result image
-            id: result
-            env:
-              DOCKER_REPOSITORY: ghcr.io
-              DOCKER_USER: georgerodriguex
-              DOCKER_REPOSITORY: result
-              IMAGE_TAG: ${{ github.sha }}
-            run: |
-              docker build -t $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG ./result/
-              docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG
-              docker tag $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
-              docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
-              echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest"
+          name: build, tag and push vote image
+          id: vote
+          env:
+            DOCKER_REPOSITORY: ghcr.io
+            DOCKER_USER: georgerodriguex
+            DOCKER_REPOSITORY: vote
+            IMAGE_TAG: ${{ github.sha }}
+          run: |
+            docker build -t $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG ./vote/
+            docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG
+            docker tag $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
+            docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
+            echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest"
+        -
+          name: build, tag and push vote worker
+          id: worker
+          env:
+            DOCKER_REPOSITORY: ghcr.io
+            DOCKER_USER: georgerodriguex
+            DOCKER_REPOSITORY: worker
+            IMAGE_TAG: ${{ github.sha }}
+          run: |
+            docker build -t $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG ./worker/
+            docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG
+            docker tag $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
+            docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
+            echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest"
+        -
+          name: build, tag and push result image
+          id: result
+          env:
+            DOCKER_REPOSITORY: ghcr.io
+            DOCKER_USER: georgerodriguex
+            DOCKER_REPOSITORY: result
+            IMAGE_TAG: ${{ github.sha }}
+          run: |
+            docker build -t $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG ./result/
+            docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG
+            docker tag $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
+            docker push $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest
+            echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_REPOSITORY:latest"
