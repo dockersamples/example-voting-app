@@ -1,4 +1,4 @@
-name: Lint Dockerfile
+name: lint Dockerfile
 
 on: [push, pull_request]
 
@@ -17,7 +17,6 @@ jobs:
         uses: brpaz/hadolint-action@master
         with:
           dockerfile: worker/Dockerfile
-          
           
       - name: Lint result Dockerfile
         uses: brpaz/hadolint-action@master
