@@ -50,7 +50,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/worker
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
           file: worker/Dockerfile
           context: worker
 
