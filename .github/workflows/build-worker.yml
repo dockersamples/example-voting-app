@@ -50,6 +50,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
+          load: true
           tags: ghcr.io/${{ github.repository_owner }}/worker
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
