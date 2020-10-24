@@ -63,6 +63,6 @@ jobs:
       - name: Docker images
         run: |
           docker images
-          docker pull ghcr.io/${{ github.repository_owner }}/worker
-          docker images
+         # docker pull ghcr.io/${{ github.repository_owner }}/worker
+         # docker images
 
