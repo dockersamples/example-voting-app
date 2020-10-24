@@ -27,6 +27,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+        with:
+          driver: docker-container
       -
         name: Cache Docker layers
         uses: actions/cache@v2
@@ -54,6 +56,9 @@ jobs:
           file: worker/Dockerfile
           context: worker
 
-      -
-        name: Image digest
+      - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Docker images
+        run: docker images
+
