@@ -50,7 +50,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          load: true
           tags: ghcr.io/${{ github.repository_owner }}/worker
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
@@ -59,6 +58,19 @@ jobs:
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Build local - should be cached
+        id: docker_buildl
+        uses: docker/build-push-action@v2
+        with:
+          local: true
+          tags: ghcr.io/${{ github.repository_owner }}/worker
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+          file: worker/Dockerfile
+          context: worker
+
+
 
       - name: Docker images
         run: docker images
