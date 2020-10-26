@@ -1,5 +1,9 @@
 pipeline {
-  agent any
+  agent {
+        docker { image 'node:14-alpine' 
+                 args '-v $HOME/.m2:/root/.m2'
+        }
+    }
   stages {
     stage('Build result') {
       steps {
