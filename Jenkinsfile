@@ -1,6 +1,5 @@
 pipeline {
     environment { 
-        registry = "YourDockerhubAccount/YourRepository" 
         registryCredential = 'docker-hub-credentials'
         dockerImage = '' 
     }
@@ -23,21 +22,21 @@ pipeline {
     }
     stage('Push result image') {
       steps {
-        withDockerRegistry(credentialsId: registryCredential, url:'') {
+        withDockerRegistry(credentialsId: registryCredential, url:'https://hub.docker.com/repository/docker/milelucero98/tp-integrador') {
           sh 'docker push dockersamples/result'
         }
       }
     }
     stage('Push vote image') {
       steps {
-        withDockerRegistry(credentialsId: registryCredential, url:'') {
+        withDockerRegistry(credentialsId: registryCredential, url:'https://hub.docker.com/repository/docker/milelucero98/tp-integrador') {
           sh 'docker push dockersamples/vote'
         }
       }
     }
     stage('Push worker image') {
       steps {
-        withDockerRegistry(credentialsId: registryCredential, url:'') {
+        withDockerRegistry(credentialsId: registryCredential, url:'https://hub.docker.com/repository/docker/milelucero98/tp-integrador') {
           sh 'docker push dockersamples/worker'
         }
       }
