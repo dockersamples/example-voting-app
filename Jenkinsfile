@@ -2,14 +2,16 @@ pipeline {
     environment { 
         registry = "milelucero98/tp-integrador" 
         registryCredential = 'docker-hub-credentials'
-        dockerImage = '' 
+        dockerImageResult = 'dockersamples/result'
+        dockerImageVote = 'dockersamples/vote'
+        dockerImageWorker = 'dockersamples/worker'
      }
   agent any
   stages {
     stage('Build result') {
       steps {
         script { 
-            dockerImage = docker.build dockersamples/result + ":$BUILD_NUMBER" 
+            dockerImage = docker.build dockerImageResult + ":$BUILD_NUMBER" 
         }
       }
     }
@@ -26,7 +28,7 @@ pipeline {
     stage('Build vote') {
       steps {
         script { 
-            dockerImage = docker.build dockersamples/vote ./vote + ":$BUILD_NUMBER" 
+            dockerImage = docker.build dockerImageVote ./vote + ":$BUILD_NUMBER" 
             }
         }
     }
@@ -42,7 +44,7 @@ pipeline {
     stage('Build worker') { 
       steps {
        script { 
-            dockerImage = docker.build dockersamples/worker ./worker + ":$BUILD_NUMBER" 
+            dockerImage = docker.build dockerImageWorker ./worker + ":$BUILD_NUMBER" 
         }
       }
     }
