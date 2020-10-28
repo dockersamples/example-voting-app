@@ -23,21 +23,21 @@ pipeline {
     }
     stage('Push result image') {
       steps {
-        withDockerRegistry(registryCredential, url:'') {
+        withDockerRegistry(credentialsId: registryCredential, url:'') {
           sh 'docker push dockersamples/result'
         }
       }
     }
     stage('Push vote image') {
       steps {
-        withDockerRegistry(registryCredential, url:'') {
+        withDockerRegistry(credentialsId: registryCredential, url:'') {
           sh 'docker push dockersamples/vote'
         }
       }
     }
     stage('Push worker image') {
       steps {
-        withDockerRegistry(credentialsId: 'dockerbuildbot-index.docker.io', url:'') {
+        withDockerRegistry(credentialsId: registryCredential, url:'') {
           sh 'docker push dockersamples/worker'
         }
       }
