@@ -11,7 +11,7 @@ pipeline {
     stage('Build result') {
       steps {
         script { 
-            dockerImage = docker.build dockerImageResult + ":$BUILD_NUMBER" 
+            dockerImage = docker.build dockerImageResult ./result + ":$BUILD_NUMBER" 
         }
       }
     }
