@@ -1,7 +1,10 @@
 pipeline {
     environment { 
+        registry = "milelucero98/tp-integrador" 
         registryCredential = 'docker-hub-credentials'
-        dockerImage = '' 
+        dockerImageResult = 'dockersamples/result' 
+        dockerImageVote = 'dockersamples/vote'
+        dockerImageWorker = 'dockersamples/worker'
     }
   agent any
   stages {
@@ -10,36 +13,43 @@ pipeline {
         sh 'docker build -t dockersamples/result ./result'
       }
     } 
+    stage('Deploy result') { 
+        steps {
+            script {
+                docker.withRegistry( '', registryCredential ) { 
+                dockerImageResult.push() 
+                }
+            } 
+        }
+    } 
     stage('Build vote') {
       steps {
         sh 'docker build -t dockersamples/vote ./vote'
       }
     }
+    stage('Deploy vote') { 
+        steps {
+            script {
+                docker.withRegistry( '', registryCredential ) { 
+                dockerImageVote.push() 
+                }
+            } 
+        }
+    } 
     stage('Build worker') {
       steps {
         sh 'docker build -t dockersamples/worker ./worker'
       }
     }
-    stage('Push result image') {
-      steps {
-        withDockerRegistry(credentialsId: registryCredential, url:'https://hub.docker.com/repository/docker/milelucero98/tp-integrador') {
-          sh 'docker push dockersamples/result'
+    stage('Deploy worker') { 
+        steps {
+            script {
+                docker.withRegistry( '', registryCredential ) { 
+                dockerImageWorker.push() 
+                }
+            } 
         }
-      }
-    }
-    stage('Push vote image') {
-      steps {
-        withDockerRegistry(credentialsId: registryCredential, url:'https://hub.docker.com/repository/docker/milelucero98/tp-integrador') {
-          sh 'docker push dockersamples/vote'
-        }
-      }
-    }
-    stage('Push worker image') {
-      steps {
-        withDockerRegistry(credentialsId: registryCredential, url:'https://hub.docker.com/repository/docker/milelucero98/tp-integrador') {
-          sh 'docker push dockersamples/worker'
-        }
-      }
-    }
+    } 
+
   }
 }
