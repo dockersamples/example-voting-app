@@ -61,7 +61,9 @@ stages:
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
-        arguments: '--cache-from type=local,src=$(cache_dir) --cache-to=type=local,src=$(cache_dir),mode=max'
+        arguments: |
+          --cache-from type=local,src=$(cache_dir)
+          --cache-to=type=local,src=$(cache_dir),mode=max
 
 
     - task: Docker@2
