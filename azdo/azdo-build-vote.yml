@@ -85,6 +85,7 @@ stages:
     - task: CmdLine@2
       inputs:
         script: |
+          mkdir --p '$(cache_dir)'  # Make sure cache dir exists
           docker buildx create --use
           docker buildx build \
               --push \
