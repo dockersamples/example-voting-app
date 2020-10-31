@@ -35,7 +35,7 @@ stages:
     - task: Cache@2
       displayName: Set cache directory
       inputs:
-        key: 'buildxvote|$(Agent.OS)|$(Build.SourceVersion)|index.json'
+        key: 'buildxvote|$(Agent.OS)|$(Build.SourceVersion)|$(cache_dir)/index.json'
         path: '$(cache_dir)'
         restoreKeys: 'buildxvote|$(Agent.OS)'
 
