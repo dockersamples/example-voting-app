@@ -31,6 +31,8 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
         
+      
+      #### This step is failing with 'bad manifest'
       - name: Build and push voting app
         id: docker_build
         uses: docker/build-push-action@v2
