@@ -64,7 +64,7 @@ stages:
 #        containerRegistry: $(dockerRegistryServiceConnection)
 #        arguments: |
 #          --cache-from type=local,src=$(cache_dir)
-#          --cache-to=type=local,src=$(cache_dir),mode=max
+#          --cache-to=type=local,dest=$(cache_dir),mode=max
 
 
 #    - task: Docker@2
@@ -91,7 +91,7 @@ stages:
               --push \
               -t $(imageRepository) \
               --cache-from=type=local,src=$(cache_dir) \
-              --cache-to=type=local,src=$(cache_dir),mode=max \
+              --cache-to=type=local,dest=$(cache_dir),mode=max \
               $(dockercontextpath)
 
 
