@@ -87,7 +87,7 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az acr login $(containerRegistry)
+          az acr login -n $(containerRegistry)
           mkdir --p '$(cache_dir)'  # Make sure cache dir exists
           docker buildx create --use
           docker buildx build \
