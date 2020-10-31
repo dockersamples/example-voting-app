@@ -87,12 +87,12 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az acr login -n $(containerRegistry)
+          # az acr login -n $(containerRegistry)
           mkdir --p '$(cache_dir)'  # Make sure cache dir exists
           docker buildx create --use
           docker buildx build \
               --push \
-              -t $(imageRepository) \
+              -t $(containerRegistry)/$(imageRepository):$(tag) \
               --cache-from=type=local,src=$(cache_dir) \
               --cache-to=type=local,dest=$(cache_dir),mode=max \
               $(dockercontextpath)
