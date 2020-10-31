@@ -35,7 +35,7 @@ stages:
       inputs:
         key: 'buildx-$(Agent.OS)-$(Build.SourcesDirectory)-$(Build.SourceVersion)'
         path: '/tmp/.buildx-cache'
-        restoreKeys: 'z'
+        restoreKeys: 'buildx-$(Agent.OS)-$(Build.SourcesDirectory)'
 
 
     - task: CmdLine@2
