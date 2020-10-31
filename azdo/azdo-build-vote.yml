@@ -57,7 +57,7 @@ stages:
     - task: Docker@2
       displayName: Build image with cache
       inputs:
-        command: buildx
+        command: 'buildx build'
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
