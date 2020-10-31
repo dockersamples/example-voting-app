@@ -39,10 +39,10 @@ stages:
         restoreKeys: 'buildxvote|$(Agent.OS)'
 
 
-    - task: CmdLine@2
-      displayName: Install Docker buildx
-      inputs:
-        script: 'docker buildx install'
+ #   - task: CmdLine@2
+ #     displayName: Install Docker buildx
+ #     inputs:
+ #       script: 'docker buildx install'
 
 #    - task: Docker@2
 #      displayName: Build and push an image to container registry
