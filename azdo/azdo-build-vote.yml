@@ -29,6 +29,20 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+
+    - task: Cache@2
+      displayName: Set cache directory
+      inputs:
+        key: 'buildx-$(Agent.OS)-$(Build.SourcesDirectory)-$(Build.SourceVersion)'
+        path: '/tmp/.buildx-cache'
+        restoreKeys: 'z'
+
+
+    - task: CmdLine@2
+      displayName: Install Docker buildx
+      inputs:
+        script: 'docker buildx install'
+
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
