@@ -33,9 +33,9 @@ stages:
     - task: Cache@2
       displayName: Set cache directory
       inputs:
-        key: 'buildx-$(Agent.OS)-$(Build.SourcesDirectory)-$(Build.SourceVersion)'
+        key: 'buildxvote|$(Agent.OS)|$(Build.SourcesDirectory)|$(Build.SourceVersion)'
         path: '/tmp/.buildx-cache'
-        restoreKeys: 'buildx-$(Agent.OS)-$(Build.SourcesDirectory)'
+        restoreKeys: 'buildxvote|$(Agent.OS)|$(Build.SourcesDirectory)'
 
 
     - task: CmdLine@2
