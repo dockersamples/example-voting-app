@@ -15,6 +15,7 @@ variables:
   containerRegistry: 'lncdockertesting.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/vote/Dockerfile'
   tag: '$(Build.BuildId)'
+  DOCKER_BUILDKIT: 1
   
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
