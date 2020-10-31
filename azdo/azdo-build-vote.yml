@@ -81,24 +81,21 @@ stages:
         containerRegistry: 'lncdockertesting'
         command: 'login'
 
-
-
-
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'Claman - Azure Internal Consumption(c94d4599-cae9-464d-b022-01c2795f7496)'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      az acr login $(containerRegistry)
-      mkdir --p '$(cache_dir)'  # Make sure cache dir exists
-      docker buildx create --use
-      docker buildx build \
-          --push \
-          -t $(imageRepository) \
-          --cache-from=type=local,src=$(cache_dir) \
-          --cache-to=type=local,dest=$(cache_dir),mode=max \
-          $(dockercontextpath)
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'Claman - Azure Internal Consumption(c94d4599-cae9-464d-b022-01c2795f7496)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az acr login $(containerRegistry)
+          mkdir --p '$(cache_dir)'  # Make sure cache dir exists
+          docker buildx create --use
+          docker buildx build \
+              --push \
+              -t $(imageRepository) \
+              --cache-from=type=local,src=$(cache_dir) \
+              --cache-to=type=local,dest=$(cache_dir),mode=max \
+              $(dockercontextpath)
 
 
 
