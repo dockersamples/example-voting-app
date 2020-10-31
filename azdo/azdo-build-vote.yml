@@ -32,6 +32,12 @@ stages:
       vmImage: $(vmImageName)
     steps:
 
+
+    - task: CmdLine@2
+      inputs:
+        script: 'mkdir -p $(cache_dir)'
+
+
     - task: Cache@2
       displayName: Set cache directory
       inputs:
