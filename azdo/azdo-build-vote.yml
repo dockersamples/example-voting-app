@@ -35,7 +35,7 @@ stages:
     - task: Cache@2
       displayName: Set cache directory
       inputs:
-        key: 'buildxvote|$(Agent.OS)|$(Build.SourceVersion)'
+        key: 'buildxvote|$(Agent.OS)|$(Build.SourceVersion)|$(cache_dir)/index.json'
         path: '$(cache_dir)'
         restoreKeys: 'buildxvote|$(Agent.OS)'
 
@@ -81,34 +81,33 @@ stages:
         containerRegistry: 'lncdockertesting'
         command: 'login'
 
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'Claman - Azure Internal Consumption(c94d4599-cae9-464d-b022-01c2795f7496)'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          # az acr login -n $(containerRegistry)
-          mkdir --p '$(cache_dir)'  # Make sure cache dir exists
-          docker buildx create --use
-          docker buildx build \
-              --push \
-              -t $(containerRegistry)/$(imageRepository):$(tag) \
-              --cache-from=type=local,src=$(cache_dir) \
-              --cache-to=type=local,dest=$(cache_dir),mode=max \
-              $(dockercontextpath)
-
-
-
-#    - task: CmdLine@2
+#    - task: AzureCLI@2
 #      inputs:
-#        script: |
+#        azureSubscription: 'Claman - Azure Internal Consumption(c94d4599-cae9-464d-b022-01c2795f7496)'
+#        scriptType: 'bash'
+#        scriptLocation: 'inlineScript'
+#        inlineScript: |
 #          mkdir --p '$(cache_dir)'  # Make sure cache dir exists
 #          docker buildx create --use
 #          docker buildx build \
 #              --push \
-#              -t $(imageRepository) \
+#              -t $(containerRegistry)/$(imageRepository):$(tag) \
 #              --cache-from=type=local,src=$(cache_dir) \
 #              --cache-to=type=local,dest=$(cache_dir),mode=max \
 #              $(dockercontextpath)
+
+
+
+    - task: CmdLine@2
+      inputs:
+        script: |
+          mkdir --p '$(cache_dir)'  # Make sure cache dir exists
+          docker buildx create --use
+          docker buildx build \
+             --push \
+             -t $(containerRegistry)/$(imageRepository):$(tag) \
+             --cache-from=type=local,src=$(cache_dir) \
+             --cache-to=type=local,dest=$(cache_dir),mode=max \
+             $(dockercontextpath)
 
 
