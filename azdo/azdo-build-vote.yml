@@ -85,10 +85,11 @@ stages:
     - task: CmdLine@2
       inputs:
         script: |
-          ls -l $(dockerfilePath)
-          docker buildx build -t $(imageRepository) \
+          ls -l $(dockercontextpath)
+          docker buildx build --push \
+              -t $(imageRepository) \
               --cache-from type=local,src=$(cache_dir) \
-              --cache-to=type=local,src=$(cache_dir),mode=max \
+              --cache-to type=local,src=$(cache_dir),mode=max \
               $(dockercontextpath)
 
 
