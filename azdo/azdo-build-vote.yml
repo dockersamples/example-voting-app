@@ -14,6 +14,7 @@ variables:
   imageRepository: 'larryclamanexamplevotingapp'
   containerRegistry: 'lncdockertesting.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/vote/Dockerfile'
+  dockercontextpath: '$(Build.SourcesDirectory)/vote'
   tag: '$(Build.BuildId)'
   DOCKER_BUILDKIT: 1
   cache_dir: '/tmp/.buildx-cache'
@@ -88,6 +89,6 @@ stages:
           docker buildx build -t $(imageRepository) \
               --cache-from type=local,src=$(cache_dir) \
               --cache-to=type=local,src=$(cache_dir),mode=max
-              $(dockerfilePath)
+              dockercontextpath
 
 
