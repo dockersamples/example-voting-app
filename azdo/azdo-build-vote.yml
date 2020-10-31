@@ -89,8 +89,8 @@ stages:
           docker buildx build \
               --push \
               -t $(imageRepository) \
-              --cache-from type=local,src=$(cache_dir) \
-              --cache-to type=local,src=$(cache_dir),mode=max \
+              --cache-from=type=local,src=$(cache_dir) \
+              --cache-to=type=local,src=$(cache_dir),mode=max \
               $(dockercontextpath)
 
 
