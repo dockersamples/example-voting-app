@@ -21,27 +21,27 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      
+      - name: Login Docker Hub
+        run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
 
       # Runs a single command using the runners shell
       - name: Build result
         run: docker build -t milelucero98/result:latest ./result
         
+      - name: Push result
+        run: docker push milelucero98/result:latest
+        
       # Runs a set of commands using the runners shell
       - name: Build vote
         run: docker built -t milelucero98/vote:latest ./vote
       
-      - name: Build worker 
-        run: docker built -t milelucero98/worker:latest ./worker
-      
-      - name: Login Docker Hub
-        run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
-     
-      - name: Push result
-        run: docker push milelucero98/result:latest
-      
       - name: Push vote
         run: docker push milelucero98/vote:latest
       
+      - name: Build worker 
+        run: docker built -t milelucero98/worker:latest ./worker
+        
       - name: Push worker
         run: docker push milelucero98/worker:latest
           
