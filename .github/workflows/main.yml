@@ -34,13 +34,13 @@ jobs:
         
       # Runs a set of commands using the runners shell
       - name: Build vote
-        run: docker built -t milelucero98/vote:latest ./vote
+        run: docker build -tt milelucero98/vote:latest ./vote
       
       - name: Push vote
         run: docker push milelucero98/vote:latest
       
       - name: Build worker 
-        run: docker built -t milelucero98/worker:latest ./worker
+        run: docker build -t milelucero98/worker:latest ./worker
         
       - name: Push worker
         run: docker push milelucero98/worker:latest
