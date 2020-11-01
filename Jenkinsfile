@@ -1,55 +1,60 @@
 pipeline {
     environment { 
-        registry = "milelucero98/tp-integrador" 
         registryCredential = 'docker-hub-credentials'
-        dockerImageResult = 'dockersamples/result' 
-        dockerImageVote = 'dockersamples/vote'
-        dockerImageWorker = 'dockersamples/worker'
     }
   agent any
   stages {
     stage('Build result') {
       steps {
-        sh 'docker build -t dockersamples/result ./result'
+        script{
+            dockerImage = docker.build("milelucero98/result:${env.BUILD_ID}", "-t ${dockerfile} ./result")
+        }
       }
     } 
-    stage('Deploy result') { 
+    
+    stage('Deploy image') { 
         steps {
             script {
-                docker.withRegistry( '', registryCredential ) { 
-                dockerImageResult.push() 
+                docker.withRegistry('', registryCredential) { 
+                dockerImage.push() 
                 }
             } 
         }
-    } 
+    }
+    
     stage('Build vote') {
       steps {
-        sh 'docker build -t dockersamples/vote ./vote'
+        sh 'docker build -t milelucero98/vote:latest ./vote'
       }
     }
-    stage('Deploy vote') { 
+    
+    stage('Deploy image') { 
         steps {
             script {
-                docker.withRegistry( '', registryCredential ) { 
-                dockerImageVote.push() 
+                docker.withRegistry('', registryCredential ) { 
+                dockerImage.push() 
                 }
             } 
         }
-    } 
+    }
+    
     stage('Build worker') {
       steps {
-        sh 'docker build -t dockersamples/worker ./worker'
+        sh 'docker build -t milelucero98/worker:latest ./worker'
       }
     }
-    stage('Deploy worker') { 
+    
+    stage('Deploy image') { 
         steps {
             script {
                 docker.withRegistry( '', registryCredential ) { 
-                dockerImageWorker.push() 
+                dockerImage.push() 
                 }
             } 
         }
     } 
+    
+    
 
   }
 }
