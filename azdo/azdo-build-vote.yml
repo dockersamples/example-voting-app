@@ -64,13 +64,13 @@ stages:
     - task: Docker@2
       displayName: Build image with cache
       inputs:
-        command: 'buildx build'
+        command: 'buildx build' 
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         arguments: |
-          --cache-from=type=local,src=$(cache_dir)
-          --cache-to=type=local,dest=$(cache_dir),mode=max
+          --cache-from type=local,src=$(cache_dir)
+          --cache-to type=local,dest=$(cache_dir),mode=max
 
 
 #    - task: Docker@2
