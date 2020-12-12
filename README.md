@@ -11,9 +11,7 @@ Download [Docker Desktop](https://www.docker.com/products/docker-desktop) for Ma
 
 ## Linux Containers
 
-The Linux stack uses Python, Node.js, .NET Core (or optionally Java), with Redis for messaging and Postgres for storage.
-
-> If you're using [Docker Desktop on Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows), you can run the Linux version by [switching to Linux containers](https://docs.docker.com/docker-for-windows/#switch-between-windows-and-linux-containers), or run the Windows containers version.
+The Linux stack uses Python, Node.js, Java, with Redis for messaging and Postgres for storage.
 
 Run in this directory:
 ```
