@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 
 services:
   vote:
@@ -27,14 +27,12 @@ services:
   worker:
     build:
       context: ./worker
-    depends_on:
-      - "redis"
-      - "db"
+      dockerfile: Dockerfile
     networks:
       - back-tier
 
   redis:
-    image: redis:alpine
+    image: redis:6.0.9-buster
     container_name: redis
     ports: ["6379"]
     networks:
