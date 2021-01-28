@@ -50,9 +50,11 @@ steps:
     title: "Running test"
     type: "freestyle"
     image: "curlimages/curl"
+    fail_fast: false
     working_directory: "${{clone}}" # Running command where code cloned
     commands:
       - curl vote_service:80
+      - exit 1
     stage: "test"
     services:
       composition:
@@ -81,18 +83,23 @@ steps:
     commands:
       - echo ${{valueUpdated}}
 
-  wait-approval:
-    title: "Wait for approval"
-    type: "pending-approval"
-    stage: push
-    timeout:
-      duration: 1
-      finalState: denied
+  # wait-approval:
+  #   title: "Wait for approval"
+  #   type: "pending-approval"
+  #   stage: push
+  #   timeout:
+  #     duration: 1
+  #     finalState: denied
+
   push:
     type: push
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     registry: docker-lr
     stage: "push"
+    when:
+        condition:
+          any:
+            testPass: steps.test.result === 'success'
     scale:
       push-vote:
         title: "Pushing vote image"
