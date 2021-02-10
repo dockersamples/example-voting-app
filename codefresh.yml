@@ -18,55 +18,55 @@ steps:
     git: "github"
     stage: "clone"
 
-  build:
-    type: parallel
-    stage: "build"
-    steps:
-      build-vote:
-        title: "Building Docker image for vote service"
-        type: "build"
-        image_name: "lrochette/vote"
-        working_directory: "${{clone}}/vote"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
-      build-result:
-        title: "Building Docker image for result service"
-        type: "build"
-        image_name: "lrochette/result"
-        working_directory: "${{clone}}/result"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
-      build-worker:
-        title: "Building Docker image for worker service"
-        type: "build"
-        image_name: "lrochette/worker"
-        working_directory: "${{clone}}/worker"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
-  test:
-    title: "Running test"
-    type: "freestyle"
-    image: "curlimages/curl"
-    fail_fast: false
-    working_directory: "${{clone}}" # Running command where code cloned
-    commands:
-      - curl vote_service:80
-      - exit 1
-    stage: "test"
-    services:
-      composition:
-        vote_service:
-          image: "${{build-vote}}"
-          ports:
-            - 80
-      readiness:
-        image: "curlimages/curl"
-        timeoutSeconds: 30
-        commands:
-          - curl vote_service:80
+  # build:
+  #   type: parallel
+  #   stage: "build"
+  #   steps:
+  #     build-vote:
+  #       title: "Building Docker image for vote service"
+  #       type: "build"
+  #       image_name: "lrochette/vote"
+  #       working_directory: "${{clone}}/vote"
+  #       tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+  #       dockerfile: "Dockerfile"
+  #       disable_push: true
+  #     build-result:
+  #       title: "Building Docker image for result service"
+  #       type: "build"
+  #       image_name: "lrochette/result"
+  #       working_directory: "${{clone}}/result"
+  #       tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+  #       dockerfile: "Dockerfile"
+  #       disable_push: true
+  #     build-worker:
+  #       title: "Building Docker image for worker service"
+  #       type: "build"
+  #       image_name: "lrochette/worker"
+  #       working_directory: "${{clone}}/worker"
+  #       tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+  #       dockerfile: "Dockerfile"
+  #       disable_push: true
+  # test:
+  #   title: "Running test"
+  #   type: "freestyle"
+  #   image: "curlimages/curl"
+  #   fail_fast: false
+  #   working_directory: "${{clone}}" # Running command where code cloned
+  #   commands:
+  #     - curl vote_service:80
+  #     - exit 0
+  #   stage: "test"
+  #   services:
+  #     composition:
+  #       vote_service:
+  #         image: "${{build-vote}}"
+  #         ports:
+  #           - 80
+  #     readiness:
+  #       image: "curlimages/curl"
+  #       timeoutSeconds: 30
+  #       commands:
+  #         - curl vote_service:80
   export:
     title: "Export variable"
     type: "freestyle"
@@ -77,6 +77,7 @@ steps:
       - export ARTIFACT_NAME=appsync-graphql-api-k6_verify_72523dd
       - export YARN_CACHE_FOLDER=/codefresh/volumes/yarn-cache
       - cf_export valueUpdated=true YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER  ARTIFACT_NAME=$ARTIFACT_NAME
+      - cat /codefresh/volume/cf_export
   check:
     title: "Check variable value"
     type: "freestyle"
