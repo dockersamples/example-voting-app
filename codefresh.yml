@@ -74,7 +74,9 @@ steps:
     stage: test
     commands:
       - echo ${{valueUpdated}}
-      - cf_export valueUpdated=true
+      - export ARTIFACT_NAME=appsync-graphql-api-k6_verify_72523dd
+      - export YARN_CACHE_FOLDER=/codefresh/volumes/yarn-cache
+      - cf_export valueUpdated=true YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER  ARTIFACT_NAME=$ARTIFACT_NAME
   check:
     title: "Check variable value"
     type: "freestyle"
@@ -82,6 +84,7 @@ steps:
     stage: test
     commands:
       - echo ${{valueUpdated}}
+      - cat ${{CF_VOLUME_PATH}}/env_vars_to_export
 
   # wait-approval:
   #   title: "Wait for approval"
