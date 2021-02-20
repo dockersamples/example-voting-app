@@ -6,12 +6,12 @@ pipeline {
 	}
 
 	stages{
-		stage{
+		stage("build"){
 			when {
 				changeset "**/worker/**"
 			}
 
-			step("build"){
+			steps{
 				echo 'Compiling worker app'
 
 				dir('worker'){
@@ -19,12 +19,12 @@ pipeline {
 				}
 			}
 		}
-		stage{
+		stage("test"){
 			when {
 				changeset "**/worker/**"
 			}
 
-			step("test"){
+			steps{
 				echo 'Testing worker app'
 
 				dir('worker'){
@@ -32,12 +32,12 @@ pipeline {
 				}
 			}
 		}
-		stage{
+		stage("package"){
 			when {
 				changeset "**/worker/**"
 			}
 
-			step("package"){
+			steps{
 				echo 'Packaging worker app'
 
 				dir('worker'){
