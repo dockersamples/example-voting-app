@@ -101,7 +101,7 @@ steps:
     image: "alpine:latest"
     stage: "push"
     commands:
-      - echo ${{steps.wait-approval.approver}}
+      - echo ${{steps.wait-approval.result}}
 
   push:
     type: push
