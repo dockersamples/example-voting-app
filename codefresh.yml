@@ -102,6 +102,9 @@ steps:
     stage: "push"
     commands:
       - echo ${{steps.wait-approval.result}}
+      - echo ${{steps.wait-approval.name}}
+      - echo ${{steps.wait-approval.status}}
+      - echo ${{steps.wait-approval.accountId}}
 
   push:
     type: push
