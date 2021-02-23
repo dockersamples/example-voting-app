@@ -99,6 +99,7 @@ steps:
     title: "Check approver"
     type: "freestyle"
     image: "alpine:latest"
+    stage: "push"
     commands:
       - echo ${{steps.wait-approval.approver}}
 
