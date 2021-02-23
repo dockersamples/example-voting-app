@@ -87,13 +87,20 @@ steps:
       - echo ${{valueUpdated}}
       - cat ${{CF_VOLUME_PATH}}/env_vars_to_export
 
-  # wait-approval:
-  #   title: "Wait for approval"
-  #   type: "pending-approval"
-  #   stage: push
-  #   timeout:
-  #     duration: 1
-  #     finalState: denied
+  wait-approval:
+    title: "Wait for approval"
+    type: "pending-approval"
+    stage: push
+    timeout:
+      duration: 1
+      finalState: denied
+
+  approver:
+    title: "Check approver"
+    type: "freestyle"
+    image: "alpine:latest"
+    commands:
+      - echo ${{steps.wait-approval.approver}}
 
   push:
     type: push
