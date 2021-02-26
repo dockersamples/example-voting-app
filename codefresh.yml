@@ -18,18 +18,18 @@ steps:
     git: "github"
     stage: "clone"
 
-  # build:
-  #   type: parallel
-  #   stage: "build"
-  #   steps:
-  #     build-vote:
-  #       title: "Building Docker image for vote service"
-  #       type: "build"
-  #       image_name: "lrochette/vote"
-  #       working_directory: "${{clone}}/vote"
-  #       tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-  #       dockerfile: "Dockerfile"
-  #       disable_push: true
+  build:
+    type: parallel
+    stage: "build"
+    steps:
+      build-vote:
+        title: "Building Docker image for vote service"
+        type: "build"
+        image_name: "lrochette/vote"
+        working_directory: "${{clone}}/vote"
+        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+        dockerfile: "Dockerfile"
+        disable_push: true
   #     build-result:
   #       title: "Building Docker image for result service"
   #       type: "build"
@@ -73,7 +73,7 @@ steps:
     image: "alpine:latest"
     stage: test
     commands:
-      - echo ${{valueUpdated}}
+#      - echo ${{valueUpdated}}
       - export ARTIFACT_NAME=appsync-graphql-api-k6_verify_72523dd
       - export YARN_CACHE_FOLDER=/codefresh/volumes/yarn-cache
       - cf_export valueUpdated=true YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER  ARTIFACT_NAME=$ARTIFACT_NAME
