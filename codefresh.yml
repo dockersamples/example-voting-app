@@ -67,17 +67,17 @@ steps:
   #       timeoutSeconds: 30
   #       commands:
   #         - curl vote_service:80
-#   export:
-#     title: "Export variable"
-#     type: "freestyle"
-#     image: "alpine:latest"
-#     stage: test
-#     commands:
-#       - echo ${{valueUpdated}}
-#       - export ARTIFACT_NAME=appsync-graphql-api-k6_verify_72523dd
-#       - export YARN_CACHE_FOLDER=/codefresh/volumes/yarn-cache
-#       - cf_export valueUpdated=true YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER  ARTIFACT_NAME=$ARTIFACT_NAME
-#       - cat /codefresh/volume/cf_export
+  export:
+    title: "Export variable"
+    type: "freestyle"
+    image: "alpine:latest"
+    stage: test
+    commands:
+      # - echo ${{valueUpdated}}
+      - export ARTIFACT_NAME=appsync-graphql-api-k6_verify_72523dd
+      - export YARN_CACHE_FOLDER=/codefresh/volumes/yarn-cache
+      - cf_export REG=docker-lr valueUpdated=true YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER  ARTIFACT_NAME=$ARTIFACT_NAME
+      - cat /codefresh/volume/cf_export
 #   check:
 #     title: "Check variable value"
 #     type: "freestyle"
