@@ -67,64 +67,64 @@ steps:
   #       timeoutSeconds: 30
   #       commands:
   #         - curl vote_service:80
-  export:
-    title: "Export variable"
-    type: "freestyle"
-    image: "alpine:latest"
-    stage: test
-    commands:
-#      - echo ${{valueUpdated}}
-      - export ARTIFACT_NAME=appsync-graphql-api-k6_verify_72523dd
-      - export YARN_CACHE_FOLDER=/codefresh/volumes/yarn-cache
-      - cf_export valueUpdated=true YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER  ARTIFACT_NAME=$ARTIFACT_NAME
-      - cat /codefresh/volume/cf_export
-  check:
-    title: "Check variable value"
-    type: "freestyle"
-    image: "alpine:latest"
-    stage: test
-    commands:
-      - echo ${{valueUpdated}}
-      - cat ${{CF_VOLUME_PATH}}/env_vars_to_export
+#   export:
+#     title: "Export variable"
+#     type: "freestyle"
+#     image: "alpine:latest"
+#     stage: test
+#     commands:
+#       - echo ${{valueUpdated}}
+#       - export ARTIFACT_NAME=appsync-graphql-api-k6_verify_72523dd
+#       - export YARN_CACHE_FOLDER=/codefresh/volumes/yarn-cache
+#       - cf_export valueUpdated=true YARN_CACHE_FOLDER=$YARN_CACHE_FOLDER  ARTIFACT_NAME=$ARTIFACT_NAME
+#       - cat /codefresh/volume/cf_export
+#   check:
+#     title: "Check variable value"
+#     type: "freestyle"
+#     image: "alpine:latest"
+#     stage: test
+#     commands:
+#       - echo ${{valueUpdated}}
+#       - cat ${{CF_VOLUME_PATH}}/env_vars_to_export
 
-  wait-approval:
-    title: "Wait for approval"
-    type: "pending-approval"
-    stage: push
-    timeout:
-      duration: 1
-      finalState: denied
-
-  approver:
-    title: "Check approver"
-    type: "freestyle"
-    image: "alpine:latest"
-    stage: "push"
-    commands:
-      - echo ${{steps.wait-approval.result}}
-      - echo ${{steps.wait-approval.name}}
-      - echo ${{steps.wait-approval.status}}
-      - echo ${{steps.wait-approval.authEntity.name}}
+  # wait-approval:
+  #   title: "Wait for approval"
+  #   type: "pending-approval"
+  #   stage: push
+  #   timeout:
+  #     duration: 1
+  #     finalState: denied
+  #
+  # approver:
+  #   title: "Check approver"
+  #   type: "freestyle"
+  #   image: "alpine:latest"
+  #   stage: "push"
+  #   commands:
+  #     - echo ${{steps.wait-approval.result}}
+  #     - echo ${{steps.wait-approval.name}}
+  #     - echo ${{steps.wait-approval.status}}
+  #     - echo ${{steps.wait-approval.authEntity.name}}
 
   push:
     type: push
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     registry: ${{REG}}
     stage: "push"
-    when:
-        condition:
-          any:
-            testPass: steps.test.result === 'success'
+    # when:
+    #     condition:
+    #       any:
+    #         testPass: steps.test.result === 'success'
     scale:
       push-vote:
         title: "Pushing vote image"
         candidate: ${{build-vote}}
         image_name: "lrochette/vote"
-      push-worker:
-        title: "Pushing worker image"
-        candidate: ${{build-worker}}
-        image_name: "lrochette/worker"
-      push-result:
-        title: "Pushing result image"
-        candidate: ${{build-result}}
-        image_name: "lrochette/result"
+      # push-worker:
+      #   title: "Pushing worker image"
+      #   candidate: ${{build-worker}}
+      #   image_name: "lrochette/worker"
+      # push-result:
+      #   title: "Pushing result image"
+      #   candidate: ${{build-result}}
+      #   image_name: "lrochette/result"
