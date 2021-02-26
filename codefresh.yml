@@ -109,7 +109,7 @@ steps:
   push:
     type: push
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-    registry: docker-lr
+    registry: ${{REG}}
     stage: "push"
     when:
         condition:
