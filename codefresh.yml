@@ -112,6 +112,7 @@ steps:
     registry: 'docker-lr'
     provider: 'ecr'
     region: 'us-east-1'
+    accessKeyId: '${{ACCESS_KEY}}'
     stage: "push"
     # when:
     #     condition:
