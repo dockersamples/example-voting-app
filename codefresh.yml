@@ -109,7 +109,7 @@ steps:
   push:
     type: push
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-    registry: 'ecr'
+    registry: 'ecr-support'
     stage: "push"
     # when:
     #     condition:
