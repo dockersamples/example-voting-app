@@ -112,8 +112,8 @@ steps:
     registry: 'ecr-support'
     provider: 'ecr'
     region: 'us-east-1'
-    accessKeyId: '${{ACCESS_KEY}}'
-    secretAccessKey: '${{SECRET_KEY}}'
+    accessKeyId: '${{secrets.ECR.ACCESS_KEY}}'
+    secretAccessKey: '${{secrets.ECR.SECRET_KEY}}'
     stage: "push"
     # when:
     #     condition:
