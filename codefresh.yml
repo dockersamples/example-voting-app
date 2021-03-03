@@ -113,6 +113,7 @@ steps:
     provider: 'ecr'
     region: 'us-east-1'
     accessKeyId: '${{ACCESS_KEY}}'
+    secretAccessKey: '${{SECRET_KEY}}'
     stage: "push"
     # when:
     #     condition:
