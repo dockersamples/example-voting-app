@@ -109,7 +109,7 @@ steps:
   push:
     type: push
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-    registry: 'docker-lr'
+    registry: 'ecr-support'
     provider: 'ecr'
     region: 'us-east-1'
     accessKeyId: '${{ACCESS_KEY}}'
