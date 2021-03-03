@@ -109,7 +109,9 @@ steps:
   push:
     type: push
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-    registry: 'ecr-support'
+    registry: 'docker-lr'
+    provider: 'ecr'
+    region: 'us-east-1'
     stage: "push"
     # when:
     #     condition:
