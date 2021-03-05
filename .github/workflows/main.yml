@@ -40,5 +40,4 @@ jobs:
         env:
           PIPELINE_NAME: 'training/voting-app'
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
-          CF_BRANCH: ${BRANCH_NAME}
-          id: voting-app
+        id: run-pipeline
