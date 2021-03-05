@@ -25,7 +25,7 @@ steps:
       build-vote:
         title: "Building Docker image for vote service"
         type: "build"
-        image_name: "lrochette/vote"
+        image_name: "lrochette/vote2"
         working_directory: "${{clone}}/vote"
         tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
         dockerfile: "Dockerfile"
@@ -112,8 +112,8 @@ steps:
     registry: 'ecr-support'
     provider: 'ecr'
     region: 'us-east-1'
-    accessKeyId: '${{secrets.ECR@ACCESS_KEY}}'
-    secretAccessKey: '${{secrets.ECR@SECRET_KEY}}'
+    accessKeyId: '$ACCESS_KEY'
+    secretAccessKey: '$SECRET_KEY'
     stage: "push"
     # when:
     #     condition:
@@ -123,7 +123,7 @@ steps:
       push-vote:
         title: "Pushing vote image"
         candidate: ${{build-vote}}
-        image_name: "lrochette/vote"
+        image_name: "lrochette/vote2"
       # push-worker:
       #   title: "Pushing worker image"
       #   candidate: ${{build-worker}}
