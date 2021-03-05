@@ -40,4 +40,6 @@ jobs:
         env:
           PIPELINE_NAME: 'training/voting-app'
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          CF_BRANCH: "master"
+          TRIGGER_NAME: "lrochette/helm-sample-app"
         id: run-pipeline
