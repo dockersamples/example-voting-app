@@ -2,7 +2,7 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -35,11 +35,10 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
 
-     - name: Trigger CodeFresh Pipeline
-       uses: codefresh-io/codefresh-pipeline-runner@v7
-       env:
-        PIPELINE_NAME: 'training/voting-app'
-        CF_API_KEY: ${{ secrets.CF_API_KEY }}
-        CF_BRANCH: ${BRANCH_NAME}
-        id: voting-app
-        
+      - name: Trigger CodeFresh Pipeline
+        uses: codefresh-io/codefresh-pipeline-runner@v7
+        env:
+          PIPELINE_NAME: 'training/voting-app'
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          CF_BRANCH: ${BRANCH_NAME}
+          id: voting-app
