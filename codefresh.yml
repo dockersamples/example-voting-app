@@ -25,7 +25,7 @@ steps:
       build-vote:
         title: "Building Docker image for vote service"
         type: "build"
-        image_name: "lrochette/vote2"
+        image_name: "lrochette/vote3"
         working_directory: "${{clone}}/vote"
         tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
         dockerfile: "Dockerfile"
@@ -123,7 +123,7 @@ steps:
       push-vote:
         title: "Pushing vote image"
         candidate: ${{build-vote}}
-        image_name: "lrochette/vote2"
+        image_name: "lrochette/vote3"
       # push-worker:
       #   title: "Pushing worker image"
       #   candidate: ${{build-worker}}
