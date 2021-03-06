@@ -110,10 +110,10 @@ steps:
     type: push
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     registry: 'ecr-support'
-    provider: 'ecr'
-    region: 'us-east-1'
-    accessKeyId: '$ACCESS_KEY'
-    secretAccessKey: '$SECRET_KEY'
+    # provider: 'ecr'
+    # region: 'us-east-1'
+    # accessKeyId: '$ACCESS_KEY'
+    # secretAccessKey: '$SECRET_KEY'
     stage: "push"
     # when:
     #     condition:
@@ -123,7 +123,7 @@ steps:
       push-vote:
         title: "Pushing vote image"
         candidate: ${{build-vote}}
-        image_name: "912778628153.dkr.ecr.us-east-1.amazonaws.com/lrochette/vote2"
+        image_name: "lrochette/vote2"
       # push-worker:
       #   title: "Pushing worker image"
       #   candidate: ${{build-worker}}
