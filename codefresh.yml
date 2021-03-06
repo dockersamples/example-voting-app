@@ -123,7 +123,7 @@ steps:
       push-vote:
         title: "Pushing vote image"
         candidate: ${{build-vote}}
-        image_name: "lrochette/vote2"
+        image_name: "912778628153.dkr.ecr.us-east-1.amazonaws.com/lrochette/vote2"
       # push-worker:
       #   title: "Pushing worker image"
       #   candidate: ${{build-worker}}
