@@ -20,6 +20,7 @@ steps:
 
   build:
     type: build
+    title: "Build application docker images"
     stage: "build"
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     disable_push: true
@@ -43,12 +44,14 @@ steps:
   BuildingTestDockerImage:
     title: Building Test Docker Image
     type: build
+    stage: "build"
     image_name: lrochette/example-voting-app-tests
-    working_directory: ./Selenium
+    working_directory: ${{clone}}/Selenium
     dockerfile: Dockerfile
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}'
   PostDeploymentVerificationTests:
     title: Running Selenium DVTs
+    stage: "test"
     type: composition
     composition:
       version: '2'
