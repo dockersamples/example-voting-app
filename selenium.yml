@@ -49,6 +49,7 @@ steps:
     working_directory: ${{clone}}/Selenium
     dockerfile: Dockerfile
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}'
+
   PostDeploymentVerificationTests:
     title: Running Selenium DVTs
     stage: "test"
@@ -56,6 +57,12 @@ steps:
     composition:
       version: '2'
       services:
+        voting:
+          image: ${{build-vote}}
+          port: 80
+        result:
+          image: ${{build-result}}
+          port: 80
         selenium_hub:
           image: selenium/hub
           ports:
@@ -94,8 +101,8 @@ steps:
         image: ${{BuildingTestDockerImage}}
         working_dir: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
         environment:
-          VOTE_ENDPOINT_IP: ${{VOTE_ENDPOINT_IP}}
-          RESULT_ENDPOINT_IP: ${{RESULT_ENDPOINT_IP}}
+          VOTE_ENDPOINT_IP: voting
+          RESULT_ENDPOINT_IP: result
         command: bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "$${browserarray[@]}"; do BROWSER=$$browser python -m pytest -vvv --html=./selenium-report-$${browser}.html --self-contained-html ./tests/selenium/test_app.py; done'
         volumes:
           - '${{CF_VOLUME_NAME}}:/codefresh/volume'
