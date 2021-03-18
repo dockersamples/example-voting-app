@@ -1,0 +1,116 @@
+# More examples of Codefresh YAML can be found at
+# https://codefresh.io/docs/docs/yaml-examples/examples/
+
+version: "1.0"
+# Stages can help you organize your steps in stages
+stages:
+  - "clone"
+  - "build"
+  - "test"
+  - "push"
+
+steps:
+  clone:
+    title: "Cloning repository"
+    type: "git-clone"
+    repo: "${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}"
+    revision: "${{CF_BRANCH}}"
+    git: "github"
+    stage: "clone"
+
+  build:
+    type: parallel
+    stage: "build"
+    steps:
+      build-vote:
+        title: "Building Docker image for vote service"
+        type: "build"
+        image_name: "lrochette/vote"
+        working_directory: "${{clone}}/vote"
+        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+        dockerfile: "Dockerfile"
+        disable_push: true
+      build-result:
+        title: "Building Docker image for result service"
+        type: "build"
+        image_name: "lrochette/result"
+        working_directory: "${{clone}}/result"
+        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+        dockerfile: "Dockerfile"
+        disable_push: true
+      build-worker:
+        title: "Building Docker image for worker service"
+        type: "build"
+        image_name: "lrochette/worker"
+        working_directory: "${{clone}}/worker"
+        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+        dockerfile: "Dockerfile"
+        disable_push: true
+
+ BuildingTestDockerImage:
+    title: Building Test Docker Image
+    type: build
+    image_name: codefresh/example-voting-app-tests
+    working_directory: ./
+    dockerfile: Dockerfile
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}'
+  PostDeploymentVerificationTests:
+    title: Running Selenium DVTs
+    type: composition
+    composition:
+      version: '2'
+      services:
+        selenium_hub:
+          image: selenium/hub
+          ports:
+            - 4444
+          environment:
+            - SE_OPTS=-debug
+            - GRID_MAX_SESSION=5
+        chrome_node:
+          image: selenium/node-chrome
+          ports:
+            - 5900
+            - 5555
+          command: bash -c "sleep 5 && /opt/bin/entry_point.sh"
+          depends_on:
+            - selenium_hub
+          environment:
+            - HUB_HOST=selenium_hub
+            - REMOTE_HOST=http://chrome_node:5555
+            - NODE_MAX_SESSION=5
+            - NODE_MAX_INSTANCES=5
+        firefox_node:
+          image: selenium/node-firefox
+          ports:
+            - 5900
+            - 5555
+          command: bash -c "sleep 5 && /opt/bin/entry_point.sh"
+          depends_on:
+            - selenium_hub
+          environment:
+            - HUB_HOST=selenium_hub
+            - REMOTE_HOST=http://firefox_node:5555
+            - NODE_MAX_SESSION=5
+            - NODE_MAX_INSTANCES=5
+    composition_candidates:
+      test:
+        image: ${{BuildingTestDockerImage}}
+        working_dir: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+        environment:
+          VOTE_ENDPOINT_IP: ${{VOTE_ENDPOINT_IP}}
+          RESULT_ENDPOINT_IP: ${{RESULT_ENDPOINT_IP}}
+        command: bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "$${browserarray[@]}"; do BROWSER=$$browser python -m pytest -vvv --html=./selenium-report-$${browser}.html --self-contained-html ./tests/selenium/test_app.py; done'
+        volumes:
+          - '${{CF_VOLUME_NAME}}:/codefresh/volume'
+    add_flow_volume_to_composition: true
+    on_success:
+      metadata:
+        set:
+          - '${{BuildingTestDockerImage.imageId}}':
+              - SELENIUM_DVTS: true
+    on_fail:
+      metadata:
+        set:
+          - '${{BuildingTestDockerImage.imageId}}':
+              - SELENIUM_DVTS: false
