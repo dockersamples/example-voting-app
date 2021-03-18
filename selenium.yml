@@ -59,10 +59,12 @@ steps:
       services:
         voting:
           image: ${{build-vote}}
-          port: 80
+          ports:
+            - 80
         result:
           image: ${{build-result}}
-          port: 80
+          ports:
+            - 80
         selenium_hub:
           image: selenium/hub
           ports:
