@@ -19,39 +19,32 @@ steps:
     stage: "clone"
 
   build:
-    type: parallel
+    type: build
     stage: "build"
-    steps:
+    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+    disable_push: true
+    dockerfile: "Dockerfile"
+    scale:
       build-vote:
         title: "Building Docker image for vote service"
-        type: "build"
         image_name: "lrochette/vote"
         working_directory: "${{clone}}/vote"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
       build-result:
         title: "Building Docker image for result service"
         type: "build"
         image_name: "lrochette/result"
         working_directory: "${{clone}}/result"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
       build-worker:
         title: "Building Docker image for worker service"
         type: "build"
         image_name: "lrochette/worker"
         working_directory: "${{clone}}/worker"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
 
    BuildingTestDockerImage:
       title: Building Test Docker Image
       type: build
-      image_name: codefresh/example-voting-app-tests
-      working_directory: ./
+      image_name: lrochette/example-voting-app-tests
+      working_directory: ./Selenium
       dockerfile: Dockerfile
       tag: '${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}'
     PostDeploymentVerificationTests:
