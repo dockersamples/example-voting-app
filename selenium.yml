@@ -132,7 +132,6 @@ steps:
      working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
      stage: test
      environment:
-       - REPORT_DIR=.
        - REPORT_INDEX_FILE=selenium-report-chrome.html
        - BUCKET_NAME=cf-laurent-bucket
        - CF_STORAGE_INTEGRATION=aws-lr-storage
