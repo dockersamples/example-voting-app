@@ -135,7 +135,7 @@ steps:
        - "${{CF_BRANCH_TAG_NORMALIZED}}"
        - latest
     registry: docker-lr
-    stage: "deploy"
+    stage: deploy
     scale:
       push-vote:
         title: "Pushing vote image"
@@ -153,9 +153,10 @@ steps:
   helmDeploy:
     title: Helm upgrade
     type: helm
+    stage: deploy
     arguments:
       action: install
       chart_name: example-voting-appended
-      release_name: 1
+      release_name: first
       helm_version: 3.0.1
       kube_context: laurent-cluster@codefresh-support
