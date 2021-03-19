@@ -148,6 +148,16 @@ steps:
         candidate: ${{build-result}}
         image_name: "lrochette/result"
 
+  helmDebug:
+    title: Debug helm
+    type: helm
+    stage: deploy
+    arguments:
+      action: auth
+      kube_context: laurent-cluster@codefresh-support
+      commands:
+        -  repo list
+
   helmDeploy:
     title: Helm upgrade
     type: helm
@@ -155,7 +165,7 @@ steps:
     working_directory: ${{CF_REPO_NAME}}
     arguments:
       action: install
-      chart_name: example-voting-app
+      chart_name: ./example-voting-app
       release_name: first
       namespace: voting
       kube_context: laurent-cluster@codefresh-support
