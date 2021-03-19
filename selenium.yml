@@ -74,13 +74,13 @@ steps:
           image: ${{build-result}}
           ports:
             - 80
-        selenium-hub:
+        selenium_hub:
           image: selenium/hub:3.141.59-20210311
-          container_name: selenium-hub
+          #container_name: seleniumhub
           ports:
             - 4444
           environment:
-            - SE_OPTS=-debug START_XVFB=false
+            - SE_OPTS=-debug
 
         chrome:
           image: selenium/node-chrome:3.141.59-20210311
