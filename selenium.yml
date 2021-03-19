@@ -67,6 +67,7 @@ steps:
             - 80
         selenium_hub:
           image: selenium/hub
+          user: 1000:1000
           ports:
             - 4444
           environment:
