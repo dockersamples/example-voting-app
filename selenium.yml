@@ -87,12 +87,12 @@ steps:
           volumes:
             - /dev/shm
           depends_on:
-            - selenium-hub
+            - selenium_hub
           environment:
-            - SE_EVENT_BUS_HOST=selenium-hub
+            - SE_EVENT_BUS_HOST=selenium_hub
             - SE_EVENT_BUS_PUBLISH_PORT=4442
             - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-            - HUB_HOST=selenium-hub
+            - HUB_HOST=selenium_hub
             - REMOTE_HOST=http://chrome:5555
           ports:
             - 5900
