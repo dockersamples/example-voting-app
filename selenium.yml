@@ -134,4 +134,4 @@ steps:
      environment:
        - REPORT_INDEX_FILE=selenium-report-chrome.html
        - BUCKET_NAME=cf-laurent-bucket
-       - CF_STORAGE_INTEGRATION=aws-lr-storage
+       - CF_STORAGE_INTEGRATION=google
