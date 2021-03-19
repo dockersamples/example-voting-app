@@ -154,9 +154,10 @@ steps:
     title: Helm upgrade
     type: helm
     stage: deploy
+    working_directory: ${{CF_REPO_NAME}}
     arguments:
       action: install
       chart_name: example-voting-app
       release_name: first
-      helm_version: 3.0.1
+      namespace: voting
       kube_context: laurent-cluster@codefresh-support
