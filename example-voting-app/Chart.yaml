@@ -7,7 +7,7 @@ keywords:
 - example-voting-app
 version: 0.1.1
 sources:
-- https://github.com/codefresh-io/example-voting-app
+- https://github.com/lrochette/example-voting-app
 maintainers:
-- name: Dustin Van Buskirk
-  email: dustinvb@codefresh.io
+- name: Laurent Rochette
+  email: laurent.rochette@codefresh.io

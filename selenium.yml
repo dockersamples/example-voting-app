@@ -7,7 +7,7 @@ stages:
   - "clone"
   - "build"
   - "test"
-  - "push"
+  - "deploy"
 
 steps:
   clone:
@@ -128,6 +128,27 @@ steps:
        - REPORT_INDEX_FILE=selenium-report-chrome.html
        - BUCKET_NAME=cf-laurent-bucket
        - CF_STORAGE_INTEGRATION=google
+
+  push:
+    type: push
+    tags:
+       - "${{CF_BRANCH_TAG_NORMALIZED}}"
+       - latest
+    registry: docker-lr
+    stage: "deploy"
+    scale:
+      push-vote:
+        title: "Pushing vote image"
+        candidate: ${{build-vote}}
+        image_name: "lrochette/vote"
+      push-worker:
+        title: "Pushing worker image"
+        candidate: ${{build-worker}}
+        image_name: "lrochette/worker"
+      push-result:
+        title: "Pushing result image"
+        candidate: ${{build-result}}
+        image_name: "lrochette/result"
 
   helmDeploy:
     title: Helm upgrade
