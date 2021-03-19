@@ -84,7 +84,7 @@ steps:
         chrome:
           image: selenium/node-chrome:4.0.0-beta-3-prerelease-20210319
           volumes:
-            - /dev/shm:/dev/shm
+            - /dev/shm
           depends_on:
             - selenium-hub
           environment:
@@ -92,7 +92,7 @@ steps:
             - SE_EVENT_BUS_PUBLISH_PORT=4442
             - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
           ports:
-            - "6900:5900"
+            - 5900
     composition_candidates:
       test:
         image: ${{BuildingTestDockerImage}}
