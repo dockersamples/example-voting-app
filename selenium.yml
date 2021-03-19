@@ -119,10 +119,18 @@ steps:
           - '${{BuildingTestDockerImage.imageId}}':
               - SELENIUM_DVTS: false
 
+  ls:
+    title: List files
+    image: alpine
+    stage: test
+    commands:
+      ls -ail ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+
   uploadTestResults:
      title: Upload Selenium test reports
      image: codefresh/cf-docker-test-reporting
      working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+     stage: test
      environment:
        - REPORT_DIR=.
        - REPORT_INDEX_FILE=selenium-report-chrome.html
