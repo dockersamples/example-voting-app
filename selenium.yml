@@ -80,8 +80,8 @@ steps:
           ports:
             - 4444
           environment:
-            - SE_OPTS=-debug
-              
+            - SE_OPTS=-debug START_XVFB=false
+
         chrome:
           image: selenium/node-chrome:3.141.59-20210311
           volumes:
@@ -93,8 +93,10 @@ steps:
             - SE_EVENT_BUS_PUBLISH_PORT=4442
             - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
             - HUB_HOST=selenium-hub
+            - REMOTE_HOST=http://chrome:5555
           ports:
             - 5900
+            - 5555
     composition_candidates:
       test:
         image: ${{BuildingTestDockerImage}}
