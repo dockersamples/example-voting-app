@@ -50,6 +50,15 @@ steps:
     dockerfile: Dockerfile
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}'
 
+  # Brandon's Test
+
+  # selenium:
+  #   image: selenium/standalone-firefox:latest
+  #   user: 1000:1000
+  #   ports:
+  #     - 4444
+  #   container_name: selenium
+
   PostDeploymentVerificationTests:
     title: Running Selenium DVTs
     stage: "test"
@@ -65,40 +74,25 @@ steps:
           image: ${{build-result}}
           ports:
             - 80
-        selenium_hub:
-          image: selenium/hub
-          user: 1000:1000
+        selenium-hub:
+          image: selenium/hub:4.0.0-beta-3-prerelease-20210319
+          container_name: selenium-hub
           ports:
-            - 4444
-          environment:
-            - SE_OPTS=-debug
-            - GRID_MAX_SESSION=5
-        chrome_node:
-          image: selenium/node-chrome
-          ports:
-            - 5900
-            - 5555
-          command: bash -c "sleep 5 && /opt/bin/entry_point.sh"
+            - "4442:4442"
+            - "4443:4443"
+            - "4444:4444"
+        chrome:
+          image: selenium/node-chrome:4.0.0-beta-3-prerelease-20210319
+          volumes:
+            - /dev/shm:/dev/shm
           depends_on:
-            - selenium_hub
+            - selenium-hub
           environment:
-            - HUB_HOST=selenium_hub
-            - REMOTE_HOST=http://chrome_node:5555
-            - NODE_MAX_SESSION=5
-            - NODE_MAX_INSTANCES=5
-        firefox_node:
-          image: selenium/node-firefox
+            - SE_EVENT_BUS_HOST=selenium-hub
+            - SE_EVENT_BUS_PUBLISH_PORT=4442
+            - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
           ports:
-            - 5900
-            - 5555
-          command: bash -c "sleep 5 && /opt/bin/entry_point.sh"
-          depends_on:
-            - selenium_hub
-          environment:
-            - HUB_HOST=selenium_hub
-            - REMOTE_HOST=http://firefox_node:5555
-            - NODE_MAX_SESSION=5
-            - NODE_MAX_INSTANCES=5
+            - "6900:5900"
     composition_candidates:
       test:
         image: ${{BuildingTestDockerImage}}
