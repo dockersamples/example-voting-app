@@ -124,7 +124,7 @@ steps:
     image: alpine
     stage: test
     commands:
-      ls -ail ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+      - ls -ail ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
 
   uploadTestResults:
      title: Upload Selenium test reports
