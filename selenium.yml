@@ -75,12 +75,15 @@ steps:
           ports:
             - 80
         selenium-hub:
-          image: selenium/hub:4.0.0-beta-3-prerelease-20210319
+          image: selenium/hub:3.141.59-20210311
           container_name: selenium-hub
           ports:
             - 4444
+          environment:
+            - SE_OPTS=-debug
+              
         chrome:
-          image: selenium/node-chrome:4.0.0-beta-3-prerelease-20210319
+          image: selenium/node-chrome:3.141.59-20210311
           volumes:
             - /dev/shm
           depends_on:
@@ -89,6 +92,7 @@ steps:
             - SE_EVENT_BUS_HOST=selenium-hub
             - SE_EVENT_BUS_PUBLISH_PORT=4442
             - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+            - HUB_HOST=selenium-hub
           ports:
             - 5900
     composition_candidates:
