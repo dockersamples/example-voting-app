@@ -156,7 +156,7 @@ steps:
       action: auth
       kube_context: laurent-cluster@codefresh-support
       commands:
-        -  repo list
+        - helm repo list
 
   helmDeploy:
     title: Helm upgrade
