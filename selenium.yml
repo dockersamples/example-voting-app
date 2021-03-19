@@ -118,3 +118,13 @@ steps:
         set:
           - '${{BuildingTestDockerImage.imageId}}':
               - SELENIUM_DVTS: false
+
+  uploadTestResults:
+     title: Upload Selenium test reports
+     image: codefresh/cf-docker-test-reporting
+     working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+     environment:
+       - REPORT_DIR=.
+       - REPORT_INDEX_FILE=selenium-report-chrome.html
+       - BUCKET_NAME=Selenium
+       - CF_STORAGE_INTEGRATION=aws-lr-storage
