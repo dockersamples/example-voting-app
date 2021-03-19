@@ -157,6 +157,9 @@ steps:
       kube_context: laurent-cluster@codefresh-support
       commands:
         - helm repo list
+        - helm repo rm stable
+        - helm repo add stable https://charts.helm.sh/stable
+        - helm repo list
 
   helmDeploy:
     title: Helm upgrade
