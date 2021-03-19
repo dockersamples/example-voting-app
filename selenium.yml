@@ -119,13 +119,6 @@ steps:
           - '${{BuildingTestDockerImage.imageId}}':
               - SELENIUM_DVTS: false
 
-  ls:
-    title: List files
-    image: alpine
-    stage: test
-    commands:
-      - ls -ail ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
-
   uploadTestResults:
      title: Upload Selenium test reports
      image: codefresh/cf-docker-test-reporting
@@ -135,3 +128,13 @@ steps:
        - REPORT_INDEX_FILE=selenium-report-chrome.html
        - BUCKET_NAME=cf-laurent-bucket
        - CF_STORAGE_INTEGRATION=google
+
+  helmDeploy:
+    title: Helm upgrade
+    type: helm
+    arguments:
+      action: install
+      chart_name: example-voting-appended
+      release_name: 1
+      helm_version: 3.0.1
+      kube_context: laurent-cluster@codefresh-support
