@@ -1,8 +1,6 @@
-# More examples of Codefresh YAML can be found at
-# https://codefresh.io/docs/docs/yaml-examples/examples/
 
 version: "1.0"
-# Stages can help you organize your steps in stages
+
 stages:
   - "clone"
   - "build"
