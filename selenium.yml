@@ -157,10 +157,11 @@ steps:
     arguments:
       helm_version: 3.2.3
       action: push
+      chart_name: example-voting-app
+      kube_context: laurent-cluster@codefresh-support
       # chart_repo_url: 'cm://h.cfcr.io/laurent-cf/default'
       # url is not needed if the HELM config is attached to the pipeline
-      chart_name: charts/example-voting-app
-      kube_context: laurent-cluster@codefresh-support
+
 
   helmDebug:
     title: Debug helm
@@ -185,7 +186,7 @@ steps:
     arguments:
       helm_version: 3.2.3
       action: install
-      chart_name: charts/example-voting-app
+      chart_name: example-voting-app
       release_name: first
       namespace: voting
       kube_context: laurent-cluster@codefresh-support
