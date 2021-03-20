@@ -155,8 +155,10 @@ steps:
     stage: push
     working_directory: ${{CF_REPO_NAME}}
     arguments:
+      helm_version: 3.2.3
       action: push
-      chart_repo_url: 'cm://h.cfcr.io/laurent-cf/default'
+      # chart_repo_url: 'cm://h.cfcr.io/laurent-cf/default'
+      # url is not needed if the HELM config is attached to the pipeline
       chart_name: charts/example-voting-app
       kube_context: laurent-cluster@codefresh-support
 
@@ -165,6 +167,7 @@ steps:
     type: helm
     stage: deploy
     arguments:
+      helm_version: 3.2.3
       action: auth
       kube_context: laurent-cluster@codefresh-support
       commands:
@@ -180,6 +183,7 @@ steps:
     stage: deploy
     working_directory: ${{CF_REPO_NAME}}
     arguments:
+      helm_version: 3.2.3
       action: install
       chart_name: charts/example-voting-app
       release_name: first
