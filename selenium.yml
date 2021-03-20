@@ -156,6 +156,7 @@ steps:
     working_directory: ${{CF_REPO_NAME}}
     arguments:
       action: push
+      chart_repo_url: 'cm://h.cfcr.io/laurent-cf/default'
       chart_name: charts/example-voting-app
       kube_context: laurent-cluster@codefresh-support
 
