@@ -163,17 +163,17 @@ steps:
       # url is not needed if the HELM config is attached to the pipeline
 
 
-  # helmDebug:
-  #   title: Debug helm
-  #   type: helm
-  #   stage: deploy
-  #   fail_fast: false
-  #   arguments:
-  #     helm_version: 3.2.3
-  #     action: auth
-  #     kube_context: laurent-cluster@codefresh-support
-  #     commands:
-  #       - helm repo list
+  helmDebug:
+    title: Debug helm
+    type: helm
+    stage: deploy
+    fail_fast: false
+    arguments:
+      helm_version: 3.2.3
+      action: auth
+      kube_context: laurent-cluster@codefresh-support
+      commands:
+        - helm repo list
   #       - helm repo rm stable
   #       - helm repo add stable https://charts.helm.sh/stable
   #       - helm repo list
