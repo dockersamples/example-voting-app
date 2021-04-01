@@ -1,4 +1,4 @@
-version: ':8080'
+version: '3'
 
 services:
   redis:
@@ -17,7 +17,7 @@ services:
     ports:
       - "5000:80"
     deploy:
-      replicas: 2
+      replicas: 1
   result:
     image: dockersamples/examplevotingapp_result:before
     ports:
