@@ -1,0 +1,54 @@
+# Default values for voting-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+vote:
+  replicaCount: 1
+  image:
+    repository: dockersamples/examplevotingapp_vote
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "before"
+  
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: vote
+  service:
+    type: ClusterIP
+    port: 80
+
+result:
+  replicaCount: 1
+  image:
+    repository: dockersamples/examplevotingapp_result
+    tag: before
+  service:
+    type: NodePort
+    port: 5001
+    targetPort: 80
+    nodePort: 31001
+
+redis:
+  replicaCount: 1
+  image:
+    repository: redis
+    tag: alpine
+  volumes:
+    name: redis-data
+  service:
+    type: ClusterIP
+    port: 6379 
+    targetPort: 6379 
+
+
+db:
+  image:
+    repository: postgres
+    tag: 9.4
+  volumes:
+    name: db-data
+  service:
+    type: ClusterIP
+    port: 5432
+    targetPort: 5432
