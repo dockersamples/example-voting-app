@@ -1,35 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "voting-app.fullname" . }}
+  name: {{ include "redis.fullname" . }}
   labels:
-    {{- include "voting-app.labels" . | nindent 4 }}
+    {{- include "redis.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.vote.replicaCount }}
+  replicas: {{ .Values.redis.replicaCount }}
   selector:
     matchLabels:
-      {{- include "voting-app.selectorLabels" . | nindent 6 }}
+      {{- include "redis.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.vote.podAnnotations }}
+    {{- with .Values.redis.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "voting-app.selectorLabels" . | nindent 8 }}
+        {{- include "redis.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.vote.imagePullSecrets }}
+      {{- with .Values.redis.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        {{- toYaml .Values.vote.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.redis.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.vote.securityContext | nindent 12 }}
-          image: "{{ .Values.vote.image.repository }}:{{ .Values.vote.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.vote.image.pullPolicy }}
+            {{- toYaml .Values.redis.securityContext | nindent 12 }}
+          image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 80
@@ -43,16 +43,16 @@ spec:
               path: /
               port: http
           resources:
-            {{- toYaml .Values.vote.resources | nindent 12 }}
-      {{- with .Values.vote.nodeSelector }}
+            {{- toYaml .Values.redis.resources | nindent 12 }}
+      {{- with .Values.redis.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.vote.affinity }}
+      {{- with .Values.redis.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.vote.tolerations }}
+      {{- with .Values.redis.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

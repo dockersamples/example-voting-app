@@ -5,9 +5,9 @@ metadata:
   labels:
     {{- include "voting-app.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.vote.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.vote.service.port }}
       targetPort: http
       protocol: TCP
       name: http

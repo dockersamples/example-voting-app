@@ -1,35 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "voting-app.fullname" . }}
+  name: {{ include "result.fullname" . }}
   labels:
-    {{- include "voting-app.labels" . | nindent 4 }}
+    {{- include "result.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.vote.replicaCount }}
+  replicas: {{ .Values.result.replicaCount }}
   selector:
     matchLabels:
-      {{- include "voting-app.selectorLabels" . | nindent 6 }}
+      {{- include "result.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.vote.podAnnotations }}
+    {{- with .Values.result.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "voting-app.selectorLabels" . | nindent 8 }}
+        {{- include "result.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.vote.imagePullSecrets }}
+      {{- with .Values.result.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       securityContext:
-        {{- toYaml .Values.vote.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.result.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.vote.securityContext | nindent 12 }}
-          image: "{{ .Values.vote.image.repository }}:{{ .Values.vote.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.vote.image.pullPolicy }}
+            {{- toYaml .Values.result.securityContext | nindent 12 }}
+          image: "{{ .Values.result.image.repository }}:{{ .Values.result.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.result.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 80
@@ -43,16 +44,16 @@ spec:
               path: /
               port: http
           resources:
-            {{- toYaml .Values.vote.resources | nindent 12 }}
-      {{- with .Values.vote.nodeSelector }}
+            {{- toYaml .Values.result.resources | nindent 12 }}
+      {{- with .Values.result.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.vote.affinity }}
+      {{- with .Values.result.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.vote.tolerations }}
+      {{- with .Values.result.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

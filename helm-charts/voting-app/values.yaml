@@ -11,7 +11,7 @@ vote:
     tag: "before"
   
   serviceAccount:
-    create: true
+    create: false
     annotations: {}
     name: vote
   service:
