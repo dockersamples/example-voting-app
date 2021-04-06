@@ -1,21 +1,22 @@
 apiVersion: apps/v1
-#
 kind: Deployment
 metadata:
-  name: vote
+  name: result
+  labels:
+    app: result
 spec:
   replicas: 1
-  revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: vote
+      app: result
   template:
     metadata:
       labels:
-        app: vote
+        app: result
     spec:
       containers:
-      - image: lrochette/vote:latest
-        name: vote
+      - name: result
+        image: lrochette/result:latest
         ports:
         - containerPort: 80
+          name: result

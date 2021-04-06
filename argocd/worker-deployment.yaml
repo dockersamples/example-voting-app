@@ -1,11 +1,11 @@
 apiVersion: apps/v1
-#
 kind: Deployment
 metadata:
+  labels:
+    app: worker
   name: worker
 spec:
   replicas: 1
-  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: worker
@@ -17,5 +17,3 @@ spec:
       containers:
       - image: lrochette/worker:latest
         name: worker
-        ports:
-        - containerPort: 80
