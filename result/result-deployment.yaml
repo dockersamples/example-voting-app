@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+#
+kind: Deployment
+metadata:
+  name: result
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: result
+  template:
+    metadata:
+      labels:
+        app: result
+    spec:
+      containers:
+      - image: lrochette/result:latest
+        name: result
+        ports:
+        - containerPort: 80

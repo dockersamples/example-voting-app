@@ -1,0 +1,10 @@
+apiVersion: v1
+clusters:
+- cluster:
+    server: ""
+  name: gke_codefresh-support_us-central1-c_laurent-cluster
+contexts: null
+current-context: ""
+kind: Config
+preferences: {}
+users: null

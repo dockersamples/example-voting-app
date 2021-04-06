@@ -1,6 +1,6 @@
 dependencies:
 - name: postgresql
-  version: 0.9.5
+  version: 8.6.4
   repository: https://charts.helm.sh/stable/postgres
   condition: postgresql.enabled
   tags:
