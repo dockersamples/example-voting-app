@@ -136,25 +136,9 @@ steps:
   sync_and_wait:
     type: argocd-sync
     stage: "deploy"
-    scale:
-      sync_vote:
-        title: Sync ArgoCD vote
-        working_directory: ${{clone}}/vote
-        arguments:
-          context: "argocd"
-          app_name: "vote"
-          wait_healthy: true
-      sync_worker:
-        title: Sync ArgoCD worker
-        working_directory: ${{clone}}/worker
-        arguments:
-          context: "argocd"
-          app_name: "worker"
-          wait_healthy: true
-      sync_result:
-        title: Sync ArgoCD result
-        working_directory: ${{clone}}/result
-        arguments:
-          context: "argocd"
-          app_name: "result"
-          wait_healthy: true
+    title: Sync ArgoCD
+    working_directory: ${{clone}}/argocd
+    arguments:
+      context: "argocd"
+      app_name: "voting"
+      wait_healthy: true
