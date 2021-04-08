@@ -14,7 +14,7 @@
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "method-override": "^3.0.0",
-    "pg": "^7.12.1",
+    "pg": "^7.18.2",
     "socket.io": "^2.2.0",
     "stoppable": "^1.1.0"
   }
