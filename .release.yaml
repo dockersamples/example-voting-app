@@ -1,0 +1,2 @@
+default_app_template: app-config.yaml
+default_env_variables: env-config.yaml

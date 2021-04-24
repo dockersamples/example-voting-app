@@ -1,0 +1,29 @@
+---
+defaults:
+- key: POSTGRES_DB
+  value: database
+- key: POSTGRES_HOST
+  value: db
+- key: POSTGRES_PORT
+  value: '5432'
+- key: POSTGRES_USER
+  value: postgres
+- key: POSTGRES_HOST_AUTH_METHOD
+  value: trust
+- key: PGDATA
+  value: "/var/lib/postgresql/data/pgdata"
+services:
+  db:
+  - key: POSTGRES_DB
+    value: database
+  - key: POSTGRES_HOST
+    value: db
+  - key: POSTGRES_PORT
+    value: '5432'
+  - key: POSTGRES_USER
+    value: postgres
+  - key: POSTGRES_HOST_AUTH_METHOD
+    value: trust
+  - key: PGDATA
+    value: "/var/lib/postgresql/data/pgdata"
+
