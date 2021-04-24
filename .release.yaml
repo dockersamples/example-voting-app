@@ -1,2 +1,2 @@
-default_app_template: app-config.yaml
-default_env_variables: env-config.yaml
+application_template: app-config.yaml
+environment_variables: env-config.yaml
