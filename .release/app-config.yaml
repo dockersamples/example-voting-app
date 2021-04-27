@@ -41,8 +41,6 @@ services:
     target_port: '80'
     port: '5000'
   node_selector:
-  - key: failure-domain.beta.kubernetes.io/zone
-    value: us-east-1b
   - key: kubernetes.io/arch
     value: amd64
 - name: result
