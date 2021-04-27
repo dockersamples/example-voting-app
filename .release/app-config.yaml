@@ -7,7 +7,7 @@ mode: development
 repo_name: dustyspace/example-voting-app
 node_selector:
 - key: failure-domain.beta.kubernetes.io/zone
-  value: us-east-1b
+  value: us-west-2a
 - key: kubernetes.io/arch
   value: amd64
 hostnames:
