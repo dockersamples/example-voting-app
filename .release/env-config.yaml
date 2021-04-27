@@ -1,5 +1,7 @@
 ---
 defaults:
+- key: FRESH
+  value: 'and so clean'
 - key: POSTGRES_DB
   value: database
 - key: POSTGRES_HOST
