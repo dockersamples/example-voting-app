@@ -95,8 +95,4 @@ workflows:
   order_from:
   - services.vote
   - services.result
-  - services.worker
-
-
-
 
