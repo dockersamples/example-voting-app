@@ -23,6 +23,7 @@ steps:
     stage: "build"
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     disable_push: true
+    registry: docker-lr
     dockerfile: "Dockerfile"
     scale:
       build-vote:
@@ -45,6 +46,7 @@ steps:
     type: build
     stage: "build"
     image_name: lrochette/example-voting-app-tests
+    registry: docker-lr
     working_directory: ${{clone}}/Selenium
     dockerfile: Dockerfile
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}'
