@@ -108,14 +108,21 @@ steps:
   #     - echo ${{steps.wait-approval.status}}
   #     - echo ${{steps.wait-approval.authEntity.name}}
 
+  push_ecr:
+    type: push
+    title: push vote to ecr
+    provider: 'ecr'
+    region: 'us-east-1'
+    accessKeyId: '$ACCESS_KEY'
+    secretAccessKey: '$SECRET_KEY'
+    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+    candidate: ${{build-vote}}
+    image_name: "lrochette/vote"
   push:
     type: push
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     registry: 'docker-lr'
-    # provider: 'ecr'
-    # region: 'us-east-1'
-    # accessKeyId: '$ACCESS_KEY'
-    # secretAccessKey: '$SECRET_KEY'
+
     stage: "push"
     # when:
     #     condition:
