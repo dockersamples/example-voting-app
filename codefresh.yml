@@ -10,8 +10,6 @@ stages:
   - "push"
 
 steps:
-  cli:
-    image: codefresh/cli
   clone:
     title: "Cloning repository"
     type: "git-clone"
