@@ -22,7 +22,7 @@ steps:
     type: parallel
     stage: "build"
     steps:
-      build-vote:
+      build_vote:
         title: "Building Docker image for vote service"
         type: "build"
         image_name: "lrochette/vote"
@@ -30,22 +30,22 @@ steps:
         tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
         dockerfile: "Dockerfile"
         disable_push: true
-      build-result:
-        title: "Building Docker image for result service"
-        type: "build"
-        image_name: "lrochette/result"
-        working_directory: "${{clone}}/result"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
-      build-worker:
-        title: "Building Docker image for worker service"
-        type: "build"
-        image_name: "lrochette/worker"
-        working_directory: "${{clone}}/worker"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
+      # build_result:
+      #   title: "Building Docker image for result service"
+      #   type: "build"
+      #   image_name: "lrochette/result"
+      #   working_directory: "${{clone}}/result"
+      #   tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+      #   dockerfile: "Dockerfile"
+      #   disable_push: true
+      # build_worker:
+      #   title: "Building Docker image for worker service"
+      #   type: "build"
+      #   image_name: "lrochette/worker"
+      #   working_directory: "${{clone}}/worker"
+      #   tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+      #   dockerfile: "Dockerfile"
+      #   disable_push: true
   # test:
   #   title: "Running test"
   #   type: "freestyle"
@@ -59,7 +59,7 @@ steps:
   #   services:
   #     composition:
   #       vote_service:
-  #         image: "${{build-vote}}"
+  #         image: "${{build_vote}}"
   #         ports:
   #           - 80
   #     readiness:
@@ -116,7 +116,7 @@ steps:
     accessKeyId: '$ACCESS_KEY'
     secretAccessKey: '$SECRET_KEY'
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-    candidate: ${{build-vote}}
+    candidate: ${{build_vote}}
     image_name: "lrochette/vote"
   push:
     type: push
@@ -130,23 +130,23 @@ steps:
     scale:
       push_vote:
         title: "Pushing vote image"
-        candidate: ${{build-vote}}
+        candidate: ${{build_vote}}
         image_name: "lrochette/vote"
-      push_worker:
-        title: "Pushing worker image"
-        candidate: ${{build-worker}}
-        image_name: "lrochette/worker"
-      push_result:
-        title: "Pushing result image"
-        candidate: ${{build-result}}
-        image_name: "lrochette/result"
+      # push_worker:
+      #   title: "Pushing worker image"
+      #   candidate: ${{build_worker}}
+      #   image_name: "lrochette/worker"
+      # push_result:
+      #   title: "Pushing result image"
+      #   candidate: ${{build_result}}
+      #   image_name: "lrochette/result"
 
-  sync_and_wait:
-    type: argocd-sync
-    stage: "deploy"
-    title: Sync ArgoCD
-    working_directory: ${{clone}}/argocd
-    arguments:
-      context: "argocd"
-      app_name: "voting"
-      wait_healthy: true
+  # sync_and_wait:
+  #   type: argocd-sync
+  #   stage: "deploy"
+  #   title: Sync ArgoCD
+  #   working_directory: ${{clone}}/argocd
+  #   arguments:
+  #     context: "argocd"
+  #     app_name: "voting"
+  #     wait_healthy: true
