@@ -113,8 +113,8 @@ steps:
     provider: 'ecr'
     region: 'us-east-1'
     registry: ecr-support
-    # accessKeyId: '$ACCESS_KEY'
-    # secretAccessKey: '$SECRET_KEY'
+    accessKeyId: '$ACCESS_KEY'
+    secretAccessKey: '$SECRET_KEY'
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     candidate: ${{build-vote}}
     image_name: "lrochette/vote"
@@ -128,15 +128,15 @@ steps:
     #       any:
     #         testPass: steps.test.result === 'success'
     scale:
-      push-vote:
+      push_vote:
         title: "Pushing vote image"
         candidate: ${{build-vote}}
         image_name: "lrochette/vote"
-      push-worker:
+      push_worker:
         title: "Pushing worker image"
         candidate: ${{build-worker}}
         image_name: "lrochette/worker"
-      push-result:
+      push_result:
         title: "Pushing result image"
         candidate: ${{build-result}}
         image_name: "lrochette/result"
