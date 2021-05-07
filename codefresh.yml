@@ -30,22 +30,22 @@ steps:
         tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
         dockerfile: "Dockerfile"
         disable_push: true
-      # build_result:
-      #   title: "Building Docker image for result service"
-      #   type: "build"
-      #   image_name: "lrochette/result"
-      #   working_directory: "${{clone}}/result"
-      #   tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-      #   dockerfile: "Dockerfile"
-      #   disable_push: true
-      # build_worker:
-      #   title: "Building Docker image for worker service"
-      #   type: "build"
-      #   image_name: "lrochette/worker"
-      #   working_directory: "${{clone}}/worker"
-      #   tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-      #   dockerfile: "Dockerfile"
-      #   disable_push: true
+      build_result:
+        title: "Building Docker image for result service"
+        type: "build"
+        image_name: "lrochette/result"
+        working_directory: "${{clone}}/result"
+        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+        dockerfile: "Dockerfile"
+        disable_push: true
+      build_worker:
+        title: "Building Docker image for worker service"
+        type: "build"
+        image_name: "lrochette/worker"
+        working_directory: "${{clone}}/worker"
+        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+        dockerfile: "Dockerfile"
+        disable_push: true
   # test:
   #   title: "Running test"
   #   type: "freestyle"
@@ -118,19 +118,19 @@ steps:
   #   tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
   #   candidate: ${{build_vote}}
   #   image_name: "lrochette/vote"
-  push_gcr:
-    type: push
-    title: push vote to Google
-    stage: push
-    registry: gcr
-    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-    candidate: ${{build_vote}}
-    image_name: "lrochette/vote"
-  push:
-    type: push
-    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-    registry: 'docker-lr'
-    stage: "push"
+  # push_gcr:
+  #   type: push
+  #   title: push vote to Google
+  #   stage: push
+  #   registry: gcr
+  #   tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+  #   candidate: ${{build_vote}}
+  #   image_name: "lrochette/vote"
+  # push:
+  #   type: push
+  #   tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+  #   registry: 'docker-lr'
+  #   stage: "push"
     # when:
     #     condition:
     #       any:
@@ -140,14 +140,14 @@ steps:
         title: "Pushing vote image"
         candidate: ${{build_vote}}
         image_name: "lrochette/vote"
-      # push_worker:
-      #   title: "Pushing worker image"
-      #   candidate: ${{build_worker}}
-      #   image_name: "lrochette/worker"
-      # push_result:
-      #   title: "Pushing result image"
-      #   candidate: ${{build_result}}
-      #   image_name: "lrochette/result"
+      push_worker:
+        title: "Pushing worker image"
+        candidate: ${{build_worker}}
+        image_name: "lrochette/worker"
+      push_result:
+        title: "Pushing result image"
+        candidate: ${{build_result}}
+        image_name: "lrochette/result"
 
   # sync_and_wait:
   #   type: argocd-sync
