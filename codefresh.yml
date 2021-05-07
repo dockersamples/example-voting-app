@@ -118,11 +118,11 @@ steps:
   #   tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
   #   candidate: ${{build_vote}}
   #   image_name: "lrochette/vote"
-  # push:
-  #   type: push
-  #   tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-  #   registry: 'docker-lr'
-  #   stage: "push"
+  push:
+    type: push
+    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+    registry: 'docker-lr'
+    stage: "push"
     # when:
     #     condition:
     #       any:
