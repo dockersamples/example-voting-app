@@ -23,7 +23,7 @@ steps:
     stage: build
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     dockerfile: "Dockerfile"
-    disable_push: true
+    disable_push: false
     scale:
       build_vote:
         title: "Building Docker image for vote service"
