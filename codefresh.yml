@@ -19,33 +19,25 @@ steps:
     stage: "clone"
 
   build:
-    type: parallel
-    stage: "build"
-    steps:
+    type: build
+    stage: build
+    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+    dockerfile: "Dockerfile"
+    disable_push: true
+    scale:
       build_vote:
         title: "Building Docker image for vote service"
-        type: "build"
         image_name: "lrochette/vote"
         working_directory: "${{clone}}/vote"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
       build_result:
         title: "Building Docker image for result service"
-        type: "build"
         image_name: "lrochette/result"
         working_directory: "${{clone}}/result"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
       build_worker:
         title: "Building Docker image for worker service"
-        type: "build"
         image_name: "lrochette/worker"
         working_directory: "${{clone}}/worker"
-        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-        dockerfile: "Dockerfile"
-        disable_push: true
+
   # test:
   #   title: "Running test"
   #   type: "freestyle"
