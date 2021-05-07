@@ -24,6 +24,7 @@ steps:
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     dockerfile: "Dockerfile"
     disable_push: false
+    registry: docker-lr
     scale:
       build_vote:
         title: "Building Docker image for vote service"
