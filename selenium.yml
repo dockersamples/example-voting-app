@@ -120,15 +120,34 @@ steps:
           - '${{BuildingTestDockerImage.imageId}}':
               - SELENIUM_DVTS: false
 
-  uploadTestResults:
-     title: Upload Selenium test reports
-     image: codefresh/cf-docker-test-reporting
-     working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
-     stage: test
-     environment:
-       - REPORT_INDEX_FILE=selenium-report-chrome.html
-       - BUCKET_NAME=cf-laurent-bucket
-       - CF_STORAGE_INTEGRATION=google
+  ls:
+    title: "List files"
+    image: alpine
+    working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+    commands:
+      - ls -ailR
+
+
+  # uploadTestResults:
+  #    title: Upload Selenium test reports
+  #    image: codefresh/cf-docker-test-reporting
+  #    working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+  #    stage: test
+  #    environment:
+  #      - REPORT_INDEX_FILE=selenium-report-chrome.html
+  #      - BUCKET_NAME=cf-laurent-bucket
+  #      - CF_STORAGE_INTEGRATION=google
+
+  allureUpload:
+    title: Allure Upload
+    type: test-reporting
+    working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+    arguments:
+        branch: ${{CF_BRANCH}}
+        bucket_name: cf-laurent-bucket
+        report_dir: .
+        report_index_file: selenium-report-chrome.html
+        storage_integration: google
 
   push:
     type: push
