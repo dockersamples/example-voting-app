@@ -147,7 +147,7 @@ steps:
     arguments:
         branch: ${{CF_BRANCH}}
         bucket_name: cf-laurent-bucket
-        report_dir: .
+        report_dir: tests
         report_index_file: selenium-report-chrome.html
         storage_integration: google
 
