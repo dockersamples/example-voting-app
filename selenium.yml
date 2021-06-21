@@ -145,9 +145,7 @@ steps:
     working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
     stage: test
     arguments:
-        branch: ${{CF_BRANCH}}
         bucket_name: cf-laurent-bucket
-        report_dir: tests
         report_index_file: selenium-report-chrome.html
         storage_integration: google
 
