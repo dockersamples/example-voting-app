@@ -124,6 +124,7 @@ steps:
     title: "List files"
     image: alpine
     working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+    stage: test
     commands:
       - ls -ailR
 
@@ -142,6 +143,7 @@ steps:
     title: Allure Upload
     type: test-reporting
     working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}
+    stage: test
     arguments:
         branch: ${{CF_BRANCH}}
         bucket_name: cf-laurent-bucket
