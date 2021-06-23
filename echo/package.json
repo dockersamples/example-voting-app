@@ -1,0 +1,25 @@
+{
+  "name": "@mendhak/http-https-echo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mendhak/docker-http-echo"
+  },
+  "version": "1.0.1",
+  "description": "JSON service for debugging a web setup",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mendhak <gpslogger@mendhak.com>",
+  "license": "BSD-3-Clause",
+  "engines": {
+    "node": ">=6.3.0"
+  },
+  "dependencies": {
+    "concat-stream": "^2.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.0",
+    "morgan": "^1.10.0"
+  }
+}

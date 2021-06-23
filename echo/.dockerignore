@@ -1,0 +1,8 @@
+# Ignore everything
+**
+
+# Except
+!generate-cert.sh
+!index.js
+!package.json
+!package-lock.json
