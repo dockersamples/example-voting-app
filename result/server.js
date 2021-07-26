@@ -24,7 +24,8 @@ io.sockets.on('connection', function (socket) {
 });
 
 var pool = new pg.Pool({
-  connectionString: 'postgres://postgres:postgres@db/postgres'
+  // changed to `localhost` from host `db`.
+  connectionString: 'postgres://postgres:postgres@localhost/postgres'
 });
 
 async.retry(
