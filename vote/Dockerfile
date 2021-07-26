@@ -17,8 +17,8 @@ RUN pip install -r requirements.txt
 # Copy our code from the current folder to /app inside the container
 COPY . .
 
-# Make port 80 available for links and/or publish
-EXPOSE 80
+# Make port 8888 available for links and/or publish
+EXPOSE 8888
 
 # Define our command to be run when launching the container
-CMD ["gunicorn", "app:app", "-b", "0.0.0.0:80", "--log-file", "-", "--access-logfile", "-", "--workers", "4", "--keep-alive", "0"]
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8888", "--log-file", "-", "--access-logfile", "-", "--workers", "4", "--keep-alive", "0"]
