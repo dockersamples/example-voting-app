@@ -50,9 +50,9 @@ services:
   - type: node_port
     target_port: '80'
     port: '5001'
-#  - type: node_port
-#    target_port: '5858'
-#    port: '5858'
+  - type: node_port
+    target_port: '5858'
+    port: '5858'
 - name: worker
   image: dustyspace/example-voting-app/worker
   build:
