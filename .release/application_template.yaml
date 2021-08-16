@@ -2,7 +2,7 @@
 app: example-voting-app
 auto_deploy: true
 context: release-handsup-us-east-1
-domain: example-voting-app.releaseapp.gethandsup.com
+domain: app.releaseapp.gethandsup.com
 mode: development
 repo_name: dustyspace/example-voting-app
 hostnames:
