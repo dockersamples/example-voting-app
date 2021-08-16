@@ -5,11 +5,6 @@ context: release-handsup-us-east-1
 domain: example-voting-app.releaseapp.gethandsup.com
 mode: development
 repo_name: dustyspace/example-voting-app
-node_selector:
-- key: failure-domain.beta.kubernetes.io/zone
-  value: us-west-2a
-- key: kubernetes.io/arch
-  value: amd64
 hostnames:
 - vote: vote-${env_id}-${domain}
 - result: result-${env_id}-${domain}
