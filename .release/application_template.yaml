@@ -81,10 +81,23 @@ services:
     type: aws-efs
 workflows:
 - name: setup
-  order_from:
-  - services.all
+  parallelize:
+  - step: data
+    tasks:
+    - services.db
+    - services.redis
+  - step: worker
+    tasks:
+    - services.worker
+  - step: frontend
+    tasks:
+    - services.result
+    - services.vote
 - name: patch
-  order_from:
-  - services.vote
-  - services.result
+  parallelize:
+  - step: all
+    tasks:
+    - services.worker
+    - services.result
+    - services.vote
 
