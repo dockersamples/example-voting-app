@@ -35,9 +35,6 @@ services:
   - type: node_port
     target_port: '80'
     port: '5000'
-  node_selector:
-  - key: kubernetes.io/arch
-    value: amd64
 - name: result
   image: dustyspace/example-voting-app/result
   build:
