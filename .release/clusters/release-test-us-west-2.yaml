@@ -1,0 +1,11 @@
+---
+charts:
+- name: argo-wf
+  repo_url: https://argoproj.github.io/argo-helm
+  add: argo
+  install: argo/argo-workflows
+  version: "0.2.12"
+  include_crds: true
+  directory: helm/argo
+  values: values.yaml
+  name_template: "argo-workflows" 
