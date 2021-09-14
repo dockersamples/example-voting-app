@@ -127,3 +127,7 @@ button.b{
   width:50%;
   height:100%;
 }
+.form-content {
+  display: flex;
+  justify-content: center;
+}

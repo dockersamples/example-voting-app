@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, make_response, g
 from redis import Redis
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+
 import os
 import socket
 import random
@@ -29,13 +32,21 @@ def hello():
         voter_id = hex(random.getrandbits(64))[2:-1]
 
     vote = None
+    lambda_vote = None
 
     if request.method == 'POST':
-        redis = get_redis()
         vote = request.form['vote']
         app.logger.info('Received vote for %s', vote)
-        data = json.dumps({'voter_id': voter_id, 'vote': vote})
-        redis.rpush('votes', data)
+        url = os.getenv('LAMBDA_VOTE_RESULT_URL')
+        post_fields = {'vote': vote}
+
+        r = Request(url, urlencode(post_fields).encode())
+        r.add_header('Content-Type', 'application/json')
+        response = urlopen(r)
+        json = response.read()
+        app.logger.info('Response from AWS Lambda:')
+        app.logger.info(json)
+        lambda_vote = json
 
     resp = make_response(render_template(
         'index.html',
@@ -43,6 +54,8 @@ def hello():
         option_b=option_b,
         hostname=hostname,
         vote=vote,
+        lambda_vote=lambda_vote,
+        lambda_url=os.getenv('LAMBDA_VOTE_RESULT_URL')
     ))
     resp.set_cookie('voter_id', voter_id)
     return resp

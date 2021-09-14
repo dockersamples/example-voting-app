@@ -17,22 +17,24 @@ services:
     networks:
       - front-tier
       - back-tier
+    environment:
+      LAMBDA_VOTE_RESULT_URL: ''
 
-  result:
-    build: ./result
-    # use nodemon rather than node for local dev
-    command: nodemon server.js
-    depends_on:
-      db:
-        condition: service_healthy 
-    volumes:
-      - ./result:/app
-    ports:
-      - "5001:80"
-      - "5858:5858"
-    networks:
-      - front-tier
-      - back-tier
+  # result:
+  #   build: ./result
+  #   # use nodemon rather than node for local dev
+  #   command: nodemon server.js
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy 
+  #   volumes:
+  #     - ./result:/app
+  #   ports:
+  #     - "5001:80"
+  #     - "5858:5858"
+  #   networks:
+  #     - front-tier
+  #     - back-tier
 
   worker:
     build:
