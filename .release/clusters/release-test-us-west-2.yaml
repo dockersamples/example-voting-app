@@ -9,3 +9,5 @@ charts:
   directory: helm/argo
   values: values.yaml
   name_template: "argo-workflows" 
+context: release-test-us-west-2
+namesapce: argo-wf-test
