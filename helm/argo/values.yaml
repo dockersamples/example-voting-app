@@ -1,0 +1,22 @@
+singleNamespace: true
+
+workflow:
+  rbac:
+    create: false
+
+controller:
+  metricsConfig:
+    enabled: true
+  serviceAccount:
+    name: "argo"
+  workflowNamespaces: []
+  clusterWorkflowTemplates:
+    enabled: false
+
+clusterWorkflowTemplates:
+  enabled: false
+  enableEditing: false
+
+server:
+  serviceAccount:
+    name: "argo-server"
