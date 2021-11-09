@@ -12,5 +12,10 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
-script:
-  - docker-compose up
+jobs:
+  include:
+    - stage: integration tests
+      script: docker-compose -f result/docker-compose.test.yml run sut
+
+after_success:
+  - echo "================ All passed! ================"
