@@ -15,7 +15,6 @@ before_install:
 jobs:
   include:
     - stage: integration tests
-      script: docker-compose -f result/docker-compose.test.yml run sut
-
-after_success:
-  - echo "================ All passed! ================"
+      script: 
+        - echo "================ Integration Test started ================"
+        - docker-compose -f result/docker-compose.test.yml run sut
