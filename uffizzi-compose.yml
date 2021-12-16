@@ -1,0 +1,52 @@
+services:
+
+  nginx:
+    image: nginx:latest
+    configs:
+      - source: vote-nginx-conf
+        target: /etc/nginx/conf.d/default.conf
+        
+  redis:
+    image: redis:latest
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+
+  worker:
+    build: 
+      context: github.com/UffizziCloud/example-voting-app-serverlessdemo/worker:main
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+
+  vote:
+    build: 
+      context: github.com/UffizziCloud/example-voting-app-serverlessdemo/vote:main
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+
+  result:
+    build: 
+      context: github.com/UffizziCloud/example-voting-app-serverlessdemo/result:main
+    
+configs:
+  vote-nginx-conf:
+    file: vote.conf
+    
+continuous_preview:
+  deploy_preview_when_image_tag_is_created: true
+  share_to_github: true
+
+ingress:
+  service: nginx
+  port: 8080
