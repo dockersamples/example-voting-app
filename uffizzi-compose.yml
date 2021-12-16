@@ -21,7 +21,7 @@ services:
 
   worker:
     build: 
-      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo:master
+      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo
       dockerfile: ./worker/Dockerfile
     deploy:
       resources:
@@ -30,7 +30,7 @@ services:
 
   vote:
     build: 
-      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo:master
+      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo
       dockerfile: ./vote/Dockerfile
     deploy:
       resources:
@@ -39,7 +39,7 @@ services:
 
   result:
     build: 
-      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo:master
+      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo
       dockerfile: ./result/Dockerfile
     
 configs:
