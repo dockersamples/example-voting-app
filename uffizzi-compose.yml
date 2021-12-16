@@ -21,7 +21,7 @@ services:
 
   worker:
     build: 
-      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo/worker:main
+      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo/worker:master
     deploy:
       resources:
         limits:
@@ -29,7 +29,7 @@ services:
 
   vote:
     build: 
-      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo/vote:main
+      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo/vote:master
     deploy:
       resources:
         limits:
@@ -37,7 +37,7 @@ services:
 
   result:
     build: 
-      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo/result:main
+      context: https://github.com/UffizziCloud/example-voting-app-serverlessdemo/result:master
     
 configs:
   vote-nginx-conf:
