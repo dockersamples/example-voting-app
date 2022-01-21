@@ -1,0 +1,61 @@
+services:
+  vote:
+    build: ../../vote
+    command: python app.py
+    volumes:
+      - ../../vote:/app
+    ports:
+      - "5000:80"
+    networks:
+      - front-tier
+
+  result:
+    build: ../../result
+    command: nodemon server.js
+    environment:
+      FLASK_ENV: development
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ../../result:/app
+    ports:
+      - "5001:80"
+      - "5858:5858"
+    networks:
+      - front-tier
+
+  worker:
+    build:
+      context: ../../worker
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - back-tier
+
+  redis:
+    image: redis:6.2.6
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]    
+    networks:
+      - front-tier
+      - back-tier
+
+  db:
+    image: postgres:9.4
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    networks:
+      - front-tier
+      - back-tier
+
+volumes:
+  db-data: {}
+
+networks:
+  front-tier: {}
+  back-tier: {}
