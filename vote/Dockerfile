@@ -15,7 +15,9 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
 # Copy our code from the current folder to /app inside the container
-COPY . .
+COPY static .
+COPY templates .
+COPY app.py .
 
 # Make port 80 available for links and/or publish
 EXPOSE 80
