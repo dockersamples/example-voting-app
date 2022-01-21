@@ -1,16 +1,17 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder
+FROM maven:3.5-jdk-8-alpine AS build
 
-WORKDIR /Worker
-COPY src/Worker/Worker.csproj .
-RUN dotnet restore
+WORKDIR /code
 
-COPY src/Worker/ .
-RUN dotnet publish -c Release -o /out Worker.csproj
+COPY pom.xml /code/pom.xml
+RUN ["mvn", "dependency:resolve"]
+RUN ["mvn", "verify"]
 
-# app image
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+# Adding source, compile and package into a fat jar
+COPY ["src/main", "/code/src/main"]
+RUN ["mvn", "package"]
 
-WORKDIR /app
-ENTRYPOINT ["dotnet", "Worker.dll"]
+FROM openjdk:8-jre-alpine
 
-COPY --from=builder /out .
+COPY --from=build /code/target/worker-jar-with-dependencies.jar /
+
+CMD ["java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "/worker-jar-with-dependencies.jar"]
