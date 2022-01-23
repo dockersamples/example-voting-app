@@ -1,102 +1,105 @@
 package worker;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.exceptions.JedisConnectionException;
+
+import java.security.InvalidParameterException;
 import java.sql.*;
 import org.json.JSONObject;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
-class Worker {
-  public static void main(String[] args) {
-    try {
-      Jedis redis = connectToRedis("redis");
-      Connection dbConn = connectToDB("db");
+public class Worker {
 
-      System.err.println("Watching vote queue");
+  private static final Logger logger = LogManager.getLogger(Worker.class);
 
-      while (true) {
-        String voteJSON = redis.blpop(0, "votes").get(1);
-        JSONObject voteData = new JSONObject(voteJSON);
-        String voterID = voteData.getString("voter_id");
-        String vote = voteData.getString("vote");
+  private PreparedStatement SELECT_STATEMENT = null;
+  private PreparedStatement INSERT_STATEMENT = null;
+  private PreparedStatement UPDATE_STATEMENT = null;
 
-        System.err.printf("Processing vote for '%s' by '%s'\n", vote, voterID);
-        updateVote(dbConn, voterID, vote);
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-      System.exit(1);
+  private Jedis redis = null;
+  private Connection dbConn = null;
+
+
+  public static void main(String[] args) throws SQLException, InterruptedException {
+    Worker w = new Worker();
+    logger.info("Watching vote queue");
+    while(true) {
+      w.work();
     }
   }
 
-  static void updateVote(Connection dbConn, String voterID, String vote) throws SQLException {
-    PreparedStatement insert = dbConn.prepareStatement(
-      "INSERT INTO votes (id, vote) VALUES (?, ?)");
-    insert.setString(1, voterID);
-    insert.setString(2, vote);
+  public Worker() throws SQLException {
+    String redisHost = getEnv("REDIS_HOST");    
+    Integer redisPort = Integer.parseInt(getEnv("REDIS_PORT"));
+    Integer redisDb = Integer.parseInt(getEnv("REDIS_DB"));
+    String postgresUser = getEnv("POSTGRES_USER");
+    String postgresPassword = getEnv("POSTGRES_PASSWORD");
+    String postgresHost = getEnv("POSTGRES_HOST");
+    String postgresPort = getEnv("POSTGRES_PORT");
+    String postgresDatabase = getEnv("POSTGRES_DB");
 
-    try {
-      insert.executeUpdate();
-    } catch (SQLException e) {
-      PreparedStatement update = dbConn.prepareStatement(
-        "UPDATE votes SET vote = ? WHERE id = ?");
-      update.setString(1, vote);
-      update.setString(2, voterID);
-      update.executeUpdate();
+    redis = this.connectToRedis("redis://" + redisHost + ":" + redisPort + "/" + redisDb);
+    dbConn = this.connectToDB("jdbc:postgresql://" + postgresHost + ':' + postgresPort + '/' + postgresDatabase, postgresUser, postgresPassword);
+
+    SELECT_STATEMENT = dbConn.prepareStatement("SELECT id FROM votes WHERE (id = ?::varchar)");
+    INSERT_STATEMENT = dbConn.prepareStatement("INSERT INTO votes (id, vote) VALUES (?,?)");
+    UPDATE_STATEMENT = dbConn.prepareStatement("UPDATE votes SET vote = ? WHERE id = ?");
+  }
+
+  private void work() throws SQLException {
+    String voteJSON = redis.blpop(0, "votes").get(1);
+    JSONObject voteData = new JSONObject(voteJSON);
+    String voterID = voteData.getString("voter_id");
+    String vote = voteData.getString("vote");
+
+    logger.debug("Processing vote for {} by {}", vote, voterID);
+    updateVote(dbConn, voterID, vote);
+  }
+
+  private String getEnv(String varEnv) {
+    String value = System.getenv(varEnv);
+    if(value == null) {
+      logger.error("cannot found var env {}", varEnv);
+      throw new InvalidParameterException("cannot found var env " + varEnv);
+    }
+    else {
+      return  value;
     }
   }
 
-  static Jedis connectToRedis(String host) {
-    Jedis conn = new Jedis(host);
+  private void updateVote(Connection dbConn, String voterID, String vote) throws SQLException {
 
-    while (true) {
-      try {
-        conn.keys("*");
-        break;
-      } catch (JedisConnectionException e) {
-        System.err.println("Waiting for redis");
-        sleep(1000);
-      }
-    }
+    logger.debug("SELECT id {}", voterID);
+    //Statement stmt = dbConn.createStatement();
+    //ResultSet rs = stmt.executeQuery("SELECT id FROM votes WHERE id = '" + voterID + "'");
+    SELECT_STATEMENT.setString(1, voterID);
+    ResultSet rs = SELECT_STATEMENT.executeQuery();
 
-    System.err.println("Connected to redis");
+    if(rs.next()){
+      logger.debug("UPDATE votedID {} with vote {}", voterID, vote);
+      UPDATE_STATEMENT.setString(1, vote);
+      UPDATE_STATEMENT.setString(2, voterID);
+      UPDATE_STATEMENT.executeUpdate();
+    } else {
+      logger.debug("INSERT votedID {} with vote {}", voterID, vote);
+      INSERT_STATEMENT.setString(1, voterID);
+      INSERT_STATEMENT.setString(2, vote);
+      INSERT_STATEMENT.executeUpdate();
+  }
+}
+
+  private Jedis connectToRedis(String url) {
+    logger.info("connection to redis url {}", url);
+    Jedis conn = new Jedis(url);
+    conn.keys("*");
+    logger.info("connected to redis url {}", url);
     return conn;
   }
 
-  static Connection connectToDB(String host) throws SQLException {
-    Connection conn = null;
-
-    try {
-
-      Class.forName("org.postgresql.Driver");
-      String url = "jdbc:postgresql://" + host + "/postgres";
-
-      while (conn == null) {
-        try {
-          conn = DriverManager.getConnection(url, "postgres", "postgres");
-        } catch (SQLException e) {
-          System.err.println("Waiting for db");
-          sleep(1000);
-        }
-      }
-
-      PreparedStatement st = conn.prepareStatement(
-        "CREATE TABLE IF NOT EXISTS votes (id VARCHAR(255) NOT NULL UNIQUE, vote VARCHAR(255) NOT NULL)");
-      st.executeUpdate();
-
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-      System.exit(1);
+  private Connection connectToDB(String url, String user, String password) throws SQLException {
+        logger.info("connection to db url {}, user {}", url, user);
+        Connection connection =  DriverManager.getConnection(url, user, password);
+        logger.info("connected to db url {}, user {}", url, user);
+        return connection;
     }
-
-    System.err.println("Connected to db");
-    return conn;
-  }
-
-  static void sleep(long duration) {
-    try {
-      Thread.sleep(duration);
-    } catch (InterruptedException e) {
-      System.exit(1);
-    }
-  }
 }

@@ -27,9 +27,17 @@ services:
   worker:
     build:
       context: ../../worker
+    restart: on-failure
     environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: postgres
+      LOG4J_LEVEL: DEBUG
     networks:
       - back-tier
 
