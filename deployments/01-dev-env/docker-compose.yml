@@ -43,12 +43,12 @@ services:
       - back-tier
 
   db:
-    image: postgres:9.4
+    image: postgres:14.1
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: postgres
     volumes:
       - "db-data:/var/lib/postgresql/data"
+      - ./postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql
     networks:
       - front-tier
       - back-tier
