@@ -20,19 +20,25 @@ services:
       - pg_password
 
   worker:
-    build: ./worker
+    build:
+      context: ./worker
+      dockerfile: ./worker/Dockerfile
     deploy:
       resources:
         limits:
           memory: 250M
 
   result:
-    build: ./result
+    build:
+      context: ./result
+      dockerfile: ./result/Dockerfile
     environment:
       PORT: 8088
 
   vote:
-    build: ./vote
+    build:
+      context: ./vote
+      dockerfile: ./result/Dockerfile
     deploy:
       resources:
         limits:
