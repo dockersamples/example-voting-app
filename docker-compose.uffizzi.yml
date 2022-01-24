@@ -38,7 +38,7 @@ services:
   vote:
     build:
       context: ./vote
-      dockerfile: ./result/Dockerfile
+      dockerfile: ./vote/Dockerfile
     deploy:
       resources:
         limits:
