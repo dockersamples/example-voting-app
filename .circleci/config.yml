@@ -10,7 +10,7 @@ workflows:
           name: Build Image from Pull Request and Push to Docker Hub
           filters:
             branches:
-              ignore: main
+              ignore: master
           pre-steps:
             - run:
                 name: Setup Environment Variables For Pull Request
@@ -27,10 +27,10 @@ workflows:
             - test-adams-docker-hub
 
       - docker/publish:
-          name: Build Image from `main` Branch and Push to Docker Hub as `latest`
+          name: Build Image from `master` Branch and Push to Docker Hub as `latest`
           filters:
             branches:
-              only: main
+              only: master
           path: ./vote
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-vote
@@ -60,7 +60,7 @@ workflows:
           name: Build Image from Pull Request and Push to Docker Hub
           filters:
             branches:
-              ignore: main
+              ignore: master
           pre-steps:
             - run:
                 name: Setup Environment Variables For Pull Request
@@ -77,10 +77,10 @@ workflows:
             - test-adams-docker-hub
 
       - docker/publish:
-          name: Build Image from `main` Branch and Push to Docker Hub as `latest`
+          name: Build Image from `master` Branch and Push to Docker Hub as `latest`
           filters:
             branches:
-              only: main
+              only: master
           path: ./result
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-result
@@ -110,7 +110,7 @@ workflows:
           name: Build Image from Pull Request and Push to Docker Hub
           filters:
             branches:
-              ignore: main
+              ignore: master
           pre-steps:
             - run:
                 name: Setup Environment Variables For Pull Request
@@ -127,10 +127,10 @@ workflows:
             - test-adams-docker-hub
 
       - docker/publish:
-          name: Build Image from `main` Branch and Push to Docker Hub as `latest`
+          name: Build Image from `master` Branch and Push to Docker Hub as `latest`
           filters:
             branches:
-              only: main
+              only: master
           path: ./worker
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-worker
