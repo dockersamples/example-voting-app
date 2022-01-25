@@ -28,7 +28,7 @@ var pool = new pg.Pool({
 });
 
 async.retry(
-  {times: 1000, interval: 1000},
+  {times: 10000, interval: 10000},
   function(callback) {
     pool.connect(function(err, client, done) {
       if (err) {
@@ -47,15 +47,16 @@ async.retry(
 );
 
 function getVotes(client) {
-  client.query('SELECT vote, COUNT(id) AS count FROM votes GROUP BY vote', [], function(err, result) {
+  client.query('SELECT Final_Score from votes order by Final_Score limit 1', [], function(err, result) {
     if (err) {
       console.error("Error performing query: " + err);
     } else {
-      var votes = collectVotesFromResult(result);
-      io.sockets.emit("scores", JSON.stringify(votes));
+      var final_score = result.rows[0].final_score;
+      console.log(final_score);
+      io.sockets.emit("scores", JSON.stringify(final_score));
     }
 
-    setTimeout(function() {getVotes(client) }, 1000);
+    setTimeout(function() {getVotes(client) }, 20000);
   });
 }
 
