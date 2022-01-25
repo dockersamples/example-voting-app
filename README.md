@@ -89,7 +89,7 @@ Names in the diagram are NOT updated to show the working of this particular bran
 * A [Redis](https://hub.docker.com/_/redis/) queue which collects new marks-data of students
 * A [Java](/worker/src/main) worker which consumes marks, calculates result and stores them in…
 * A [Postgres](https://hub.docker.com/_/postgres/) database backed by a Docker volume
-* A [Node.js](/result) webapp which shows the results of the voting in real time
+* A [Node.js](/result) webapp which shows the student's result out of 100 in real time
 
 All other files which enables support for multiple labguages/frameworks forked from master branch are not deleted, however they do not play any role.
 
