@@ -4,7 +4,7 @@ orbs:
   docker: circleci/docker@2.0.1
 
 workflows:
-  build-push-docker-hub:
+  build-push-vote:
     jobs:
       - docker/publish:
           name: Build Image from Pull Request and Push to Docker Hub
@@ -18,9 +18,9 @@ workflows:
             - run:
                 name: (Echo $TAG for Troubleshooting)
                 command: echo $TAG
-          dockerfile: Dockerfile
+          path: ./vote
           lint-dockerfile: true
-          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-vote
           tag: $TAG
           update-description: false
           context:
@@ -31,9 +31,9 @@ workflows:
           filters:
             branches:
               only: main
-          dockerfile: Dockerfile
+          path: ./vote
           lint-dockerfile: true
-          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-vote
           tag: latest
           update-description: true
           context:
@@ -46,9 +46,109 @@ workflows:
               only: /.*/
             branches:
               ignore: /.*/
-          dockerfile: Dockerfile
+          path: ./vote
           lint-dockerfile: true
-          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-vote
+          tag: $CIRCLE_TAG
+          update-description: false
+          context:
+            - test-adams-docker-hub
+
+  build-push-result:
+    jobs:
+      - docker/publish:
+          name: Build Image from Pull Request and Push to Docker Hub
+          filters:
+            branches:
+              ignore: main
+          pre-steps:
+            - run:
+                name: Setup Environment Variables For Pull Request
+                command: echo 'export TAG=uffizzi_request_`echo $CIRCLE_PULL_REQUEST | grep [^\/]*$ --only-matching`' >> $BASH_ENV
+            - run:
+                name: (Echo $TAG for Troubleshooting)
+                command: echo $TAG
+          path: ./result
+          lint-dockerfile: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-result
+          tag: $TAG
+          update-description: false
+          context:
+            - test-adams-docker-hub
+
+      - docker/publish:
+          name: Build Image from `main` Branch and Push to Docker Hub as `latest`
+          filters:
+            branches:
+              only: main
+          path: ./result
+          lint-dockerfile: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-result
+          tag: latest
+          update-description: true
+          context:
+            - test-adams-docker-hub
+
+      - docker/publish:
+          name: Build Image from Tag and Push to Docker Hub
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+          path: ./result
+          lint-dockerfile: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-result
+          tag: $CIRCLE_TAG
+          update-description: false
+          context:
+            - test-adams-docker-hub
+
+  build-push-worker:
+    jobs:
+      - docker/publish:
+          name: Build Image from Pull Request and Push to Docker Hub
+          filters:
+            branches:
+              ignore: main
+          pre-steps:
+            - run:
+                name: Setup Environment Variables For Pull Request
+                command: echo 'export TAG=uffizzi_request_`echo $CIRCLE_PULL_REQUEST | grep [^\/]*$ --only-matching`' >> $BASH_ENV
+            - run:
+                name: (Echo $TAG for Troubleshooting)
+                command: echo $TAG
+          path: ./worker
+          lint-dockerfile: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-worker
+          tag: $TAG
+          update-description: false
+          context:
+            - test-adams-docker-hub
+
+      - docker/publish:
+          name: Build Image from `main` Branch and Push to Docker Hub as `latest`
+          filters:
+            branches:
+              only: main
+          path: ./worker
+          lint-dockerfile: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-worker
+          tag: latest
+          update-description: true
+          context:
+            - test-adams-docker-hub
+
+      - docker/publish:
+          name: Build Image from Tag and Push to Docker Hub
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+          path: ./worker
+          lint-dockerfile: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-worker
           tag: $CIRCLE_TAG
           update-description: false
           context:
