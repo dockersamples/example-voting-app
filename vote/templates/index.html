@@ -2,6 +2,81 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <title>Student Data Entry</title>
+    <base href="/index.html">
+    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+    <meta name="keywords" content="docker-compose, docker, stack">
+    <meta name="author" content="Yagnesh M. Bhadiyadra (21MCEC11)">
+   </head>
+  <body>
+    <div id="content-container">
+      <div id="content-container-center">
+        <h3>Student Data Entry</h3>
+        <form id="choice" name='form' method="POST" action="/">
+          <label for="CT">Class Test Marks (out of 35):</label> 
+            <input type="number" id="CT" name="CT"> <br>
+          <label for="ST">Sessional Test Marks (out of 35): </label> 
+            <input type="number" id="ST" name="ST"> <br>
+          <label for="TP">Term Paper Marks (out of 30): </label> 
+            <input type="number" id="TP" name="TP"> <br>
+          <label for="LP"> Lab Practical Marks (out of 100): </label>
+            <input type="number" id="LP" name="LP"> <br>
+          <label for="LPE"> Lab Practical Exam Marks (out of 100): </label> 
+            <input type="number" id="LPE" name="LPE"> <br>
+          <label for="SEE"> Semester End Exam (out of 50): </label> 
+            <input type="number" id="SEE" name="SEE"> <br>
+          <input type="submit" value="Submit">
+        </form>
+        <div id ="hostname">
+          Processed by container ID {{hostname}}
+        </div>
+      </div>
+      <div id="Entered_data">
+        <h3> Previously Entered Data</h3>
+        Class Test, Sessional Test marks are out of 35.
+        Term Paper marks are out of 30.
+        Lap Pratical, Lab Practical Exam marks are out of 100.
+        Semester End Exam marks are out of 50.
+        <table>
+          <tr>
+            <th>Exam Detail</th>
+            <th>Marks</th>
+          </tr>
+          <tr>
+            <th>Class test marks </th>
+            <th> {{CT}}</th>
+          </tr>
+          <tr>
+            <th>Sessional test marks </th>
+            <th class="ST"> {{ST}}</th>
+          </tr>
+          <tr>
+            <th>Term Paper Marks </th>
+            <th class="TP"> {{TP}}</th>
+          </tr>
+          <tr>
+            <th>Lab Practical Marks </th>
+            <th class="LP"> {{LP}}</th>
+          </tr>
+          <tr>
+            <th>Lab Practical Exam Marks </th>
+            <th class="LPE"> {{LPE}}</th>
+          </tr>
+          <tr>
+            <th>Semester End Exam Marks </th>
+            <th class="SEE"> {{SEE}}</th>
+          </tr>
+        </table>
+        </div>
+    </div>
+  </body>
+</html>
+
+
+<!--<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
     <title>{{option_a}} vs {{option_b}}!</title>
     <base href="/index.html">
     <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
@@ -27,9 +102,9 @@
       </div>
     </div>
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script> 
 
-    {% if vote %}
+    {% if voot %}
     <script>
       var vote = "{{vote}}";
 
@@ -46,4 +121,4 @@
     </script>
     {% endif %}
   </body>
-</html>
+</html>-->
