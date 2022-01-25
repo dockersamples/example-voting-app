@@ -20,19 +20,19 @@ services:
       - pg_password
 
   worker:
-    build: ./worker
+    image: axisofentropy/example-voting-app-worker
     deploy:
       resources:
         limits:
           memory: 250M
 
   result:
-    build: ./result
+    image: axisofentropy/example-voting-app-result
     environment:
       PORT: 8088
 
   vote:
-    build: ./vote
+    image: axisofentropy/example-voting-app-vote
     deploy:
       resources:
         limits:
