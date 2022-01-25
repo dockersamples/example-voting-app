@@ -1,0 +1,55 @@
+version: 2.1 # Use version 2.1 config to get access to orbs, pipelines
+
+orbs:
+  docker: circleci/docker@2.0.1
+
+workflows:
+  build-push-docker-hub:
+    jobs:
+      - docker/publish:
+          name: Build Image from Pull Request and Push to Docker Hub
+          filters:
+            branches:
+              ignore: main
+          pre-steps:
+            - run:
+                name: Setup Environment Variables For Pull Request
+                command: echo 'export TAG=uffizzi_request_`echo $CIRCLE_PULL_REQUEST | grep [^\/]*$ --only-matching`' >> $BASH_ENV
+            - run:
+                name: (Echo $TAG for Troubleshooting)
+                command: echo $TAG
+          dockerfile: Dockerfile
+          lint-dockerfile: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          tag: $TAG
+          update-description: false
+          context:
+            - test-adams-docker-hub
+
+      - docker/publish:
+          name: Build Image from `main` Branch and Push to Docker Hub as `latest`
+          filters:
+            branches:
+              only: main
+          dockerfile: Dockerfile
+          lint-dockerfile: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          tag: latest
+          update-description: true
+          context:
+            - test-adams-docker-hub
+
+      - docker/publish:
+          name: Build Image from Tag and Push to Docker Hub
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+          dockerfile: Dockerfile
+          lint-dockerfile: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          tag: $CIRCLE_TAG
+          update-description: false
+          context:
+            - test-adams-docker-hub
