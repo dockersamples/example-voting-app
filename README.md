@@ -83,17 +83,25 @@ Architecture
 
 ![Architecture diagram](architecture.png)
 
-* A front-end web app in [Python](/vote) or [ASP.NET Core](/vote/dotnet) which lets you vote between two options
-* A [Redis](https://hub.docker.com/_/redis/) or [NATS](https://hub.docker.com/_/nats/) queue which collects new votes
-* A [.NET Core](/worker/src/Worker), [Java](/worker/src/main) or [.NET Core 2.1](/worker/dotnet) worker which consumes votes and stores them in…
-* A [Postgres](https://hub.docker.com/_/postgres/) or [TiDB](https://hub.docker.com/r/dockersamples/tidb/tags/) database backed by a Docker volume
-* A [Node.js](/result) or [ASP.NET Core SignalR](/result/dotnet) webapp which shows the results of the voting in real time
+* A front-end web app in [Python](/vote) which lets you add marks of various components of a student
+* A [Redis](https://hub.docker.com/_/redis/) queue which collects new marks-data of students
+* A [Java](/worker/src/main) worker which consumes marks, calculates result and stores them in…
+* A [Postgres](https://hub.docker.com/_/postgres/) database backed by a Docker volume
+* A [Node.js](/result) webapp which shows the results of the voting in real time
 
+All other files which enables support for multiple labguages/frameworks forked from master branch are not deleted, however they do not play any role.
 
 Notes
 -----
 
-The voting application only accepts one vote per client. It does not register votes if a vote has already been submitted from a client.
+This application takes marks data of a student in total 6 html fields:
+1. Class Test (carries 14% weightage)
+2. Sessional Test (carries 14% weightage)
+3. Term Paper (carries 12% weightage)
+4. Lab Practicals (carries 15% weightage)
+5. Lab Practical Exam (carries 5% weightage)
+6. Semester End Exam (carries 40% weightage)
+
 
 This isn't an example of a properly architected perfectly designed distributed app... it's just a simple 
 example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to 
