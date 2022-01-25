@@ -6,6 +6,8 @@ x-uffizzi:
   continuous_preview:
     deploy_preview_when_pull_request_is_opened: true
     delete_preview_when_pull_request_is_closed: true
+    deploy_preview_when_image_tag_is_created: true
+    delete_preview_after: 72h
     share_to_github: true
 
 # Vote applicaiton
