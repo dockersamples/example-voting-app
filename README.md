@@ -83,6 +83,8 @@ Architecture
 
 ![Architecture diagram](architecture.png)
 
+Names in the diagram are NOT updated to show the working of this particular branch.
+
 * A front-end web app in [Python](/vote) which lets you add marks of various components of a student
 * A [Redis](https://hub.docker.com/_/redis/) queue which collects new marks-data of students
 * A [Java](/worker/src/main) worker which consumes marks, calculates result and stores them in…
