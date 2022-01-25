@@ -6,8 +6,13 @@ import random
 import json
 import logging
 
-option_a = os.getenv('OPTION_A', "Cats")
-option_b = os.getenv('OPTION_B', "Dogs")
+
+CT_g = 0
+ST_g = 0
+TP_g = 0
+LP_g = 0
+LPE_g = 0
+SEE_g = 0
 hostname = socket.gethostname()
 
 app = Flask(__name__)
@@ -21,27 +26,35 @@ def get_redis():
         g.redis = Redis(host="redis", db=0, socket_timeout=5)
     return g.redis
 
-@app.route("/", methods=['POST','GET'])
+@app.route("/", methods=['POST','GET']) 
 def hello():
     voter_id = request.cookies.get('voter_id')
     if not voter_id:
         voter_id = hex(random.getrandbits(64))[2:-1]
 
-    vote = None
-
+    
     if request.method == 'POST':
         redis = get_redis()
-        vote = request.form['vote']
-        app.logger.info('Received vote for %s', vote)
-        data = json.dumps({'voter_id': voter_id, 'vote': vote})
+        CT_g = request.form['CT']
+        ST_g = request.form['ST']
+        TP_g = request.form['TP']
+        LP_g = request.form['LP']
+        LPE_g = request.form['LPE']
+        SEE_g = request.form['SEE']
+        data = json.dumps({'voter_id': voter_id, 'CT': CT_g, 'ST' : ST_g, 'TP' : TP_g, 'LP' : LP_g, 'LPE' : LPE_g, 'SEE' : SEE_g})
+        app.logger.info('Received Marks :', 'CT: ', CT_g, 'ST:', ST_g, 'TP:', TP_g, 'LP:', LP_g, 'LPE:', LPE_g, 'SEE:', SEE_g)
         redis.rpush('votes', data)
+        
 
     resp = make_response(render_template(
         'index.html',
-        option_a=option_a,
-        option_b=option_b,
-        hostname=hostname,
-        vote=vote,
+        CT_g=CT,
+        ST=ST_g,
+        TP=TP_g,
+        LP=LP_g,
+        LPE=LPE_g,
+        SEE=SEE_g,
+        hostname=hostname
     ))
     resp.set_cookie('voter_id', voter_id)
     return resp
