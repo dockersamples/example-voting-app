@@ -18,7 +18,7 @@ workflows:
             - run:
                 name: (Echo $TAG for Troubleshooting)
                 command: echo $TAG
-          path: ./vote
+          docker-context: ./vote
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-vote
           tag: $TAG
@@ -31,7 +31,7 @@ workflows:
           filters:
             branches:
               only: master
-          path: ./vote
+          docker-context: ./vote
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-vote
           tag: latest
@@ -46,7 +46,7 @@ workflows:
               only: /.*/
             branches:
               ignore: /.*/
-          path: ./vote
+          docker-context: ./vote
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-vote
           tag: $CIRCLE_TAG
@@ -68,7 +68,7 @@ workflows:
             - run:
                 name: (Echo $TAG for Troubleshooting)
                 command: echo $TAG
-          path: ./result
+          docker-context: ./result
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-result
           tag: $TAG
@@ -81,7 +81,7 @@ workflows:
           filters:
             branches:
               only: master
-          path: ./result
+          docker-context: ./result
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-result
           tag: latest
@@ -96,7 +96,7 @@ workflows:
               only: /.*/
             branches:
               ignore: /.*/
-          path: ./result
+          docker-context: ./result
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-result
           tag: $CIRCLE_TAG
@@ -118,7 +118,7 @@ workflows:
             - run:
                 name: (Echo $TAG for Troubleshooting)
                 command: echo $TAG
-          path: ./worker
+          docker-context: ./worker
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-worker
           tag: $TAG
@@ -131,7 +131,7 @@ workflows:
           filters:
             branches:
               only: master
-          path: ./worker
+          docker-context: ./worker
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-worker
           tag: latest
@@ -146,7 +146,7 @@ workflows:
               only: /.*/
             branches:
               ignore: /.*/
-          path: ./worker
+          docker-context: ./worker
           lint-dockerfile: true
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-worker
           tag: $CIRCLE_TAG
