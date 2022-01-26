@@ -1,17 +1,21 @@
-FROM maven:3.5-jdk-8-alpine AS build
+FROM maven:3.8.4-openjdk-17 AS build
 
-WORKDIR /code
+WORKDIR /usr/src/app/
+COPY pom.xml .
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:copy-dependencies
+COPY src ./src/
+RUN --mount=type=cache,target=/root/.m2 mvn package
 
-COPY pom.xml /code/pom.xml
-RUN ["mvn", "dependency:resolve"]
-RUN ["mvn", "verify"]
+FROM openjdk:17-alpine3.14
 
-# Adding source, compile and package into a fat jar
-COPY ["src/main", "/code/src/main"]
-RUN ["mvn", "package"]
+RUN apk update && \
+    apk add --no-cache su-exec && \
+    addgroup -S worker && adduser -S worker -G worker
 
-FROM openjdk:8-jre-alpine
+ARG TARGET_DIR=/usr/src/app/target
+COPY --from=build ${TARGET_DIR}/dependency /app/lib
+COPY --from=build ${TARGET_DIR}/classes /app
 
-COPY --from=build /code/target/worker-jar-with-dependencies.jar /
+EXPOSE 8080
 
-CMD ["java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "/worker-jar-with-dependencies.jar"]
+CMD ["su-exec","worker:worker","java","-cp","app:app/lib/*","worker.Worker"]
