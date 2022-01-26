@@ -1,2 +1,3 @@
 worker/target/
 worker/.idea/
+vote/__pycache__/
