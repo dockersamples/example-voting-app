@@ -1,23 +1,48 @@
 var express = require('express'),
     async = require('async'),
     pg = require('pg'),
-    { Pool } = require('pg'),
     path = require('path'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     app = express(),
     server = require('http').Server(app),
-    io = require('socket.io')(server);
+    io = require('socket.io')(server),
+    winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss'
+    }),
+    winston.format.splat(),
+    winston.format.json()
+  ),
+  defaultMeta: { service: 'result' },
+  transports: [
+    new winston.transports.Console()
+  ],
+});
 
 io.set('transports', ['polling']);
 
-const port = process.env.PORT || 4000;
-const postgres_host = process.env.POSTGRES_HOST || "db";
-const postgres_user = process.env.POSTGRES_USER || "postgres";
-const postgres_pass = process.env.POSTGRES_PASS || "postgres";
-const postgres_db   = process.env.POSTGRES_DB   || "postgres";
+function getEnv(name) {
+  let value = process.env[name];
+  if(!value) {
+    logger.error("Missing environment variable: " + name);
+    process.exit(1);
+  }
+  return value;
+}
 
+const PORT          = 4000;
+const POSTGRES_HOST = getEnv('POSTGRES_HOST');
+const POSTGRES_USER = getEnv('POSTGRES_USER');
+const POSTGRES_PASS = getEnv('POSTGRES_PASSWORD');
+const POSTGRES_DB   = getEnv('POSTGRES_DB');
+
+const POSTGRES_URL = 'postgres://' + POSTGRES_USER + ':' + POSTGRES_PASS + '@' + POSTGRES_HOST + '/' + POSTGRES_DB;
 
 io.sockets.on('connection', function (socket) {
 
@@ -29,7 +54,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 var pool = new pg.Pool({
-  connectionString: 'postgres://' + postgres_user + ':' + postgres_pass + '@' + postgres_host + '/' + postgres_db
+  connectionString: POSTGRES_URL
 });
 
 async.retry(
@@ -90,7 +115,7 @@ app.get('/', function (req, res) {
   res.sendFile(path.resolve(__dirname + '/views/index.html'));
 });
 
-server.listen(port, function () {
+server.listen(PORT, function () {
   var port = server.address().port;
-  console.log('App running on port ' + port);
+  logger.info('app running on port %d', port);  
 });
