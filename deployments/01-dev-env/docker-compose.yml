@@ -2,6 +2,7 @@ services:
   vote:
     build: 
       context: ../../vote
+    restart: on-failure
     command: ["flask", "run", "--host=0.0.0.0"]
     environment:
       FLASK_ENV: development
@@ -19,6 +20,7 @@ services:
   result:
     build: 
       context: ../../result
+    restart: on-failure
     command: ["nodemon", "server.js"]
     environment:
       NODE_ENV: development    
@@ -30,7 +32,7 @@ services:
     volumes:
       - ../../result:/app
     ports:
-      - "5001:80"
+      - "5001:4000"
       - "5858:5858"
     networks:
       - ingress-result
