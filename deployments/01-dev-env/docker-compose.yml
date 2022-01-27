@@ -1,45 +1,58 @@
 services:
   vote:
-    build: ../../vote
-    command: python app.py
+    build: 
+      context: ../../vote
+    command: ["flask", "run", "--host=0.0.0.0"]
+    environment:
+      FLASK_ENV: development
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_DB: ${REDIS_DB}
+      LOGLEVEL: DEBUG
     volumes:
       - ../../vote:/app
     ports:
-      - "5000:80"
+      - "5000:5000"
     networks:
-      - front-tier
+      - ingress-vote
 
   result:
-    build: ../../result
-    command: nodemon server.js
+    build: 
+      context: ../../result
+    command: ["nodemon", "server.js"]
     environment:
-      FLASK_ENV: development
+      NODE_ENV: development    
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ../../result:/app
     ports:
       - "5001:80"
       - "5858:5858"
     networks:
-      - front-tier
+      - ingress-result
 
   worker:
     build:
       context: ../../worker
     restart: on-failure
+    read_only: true
     environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_DB: 0
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_DB: ${REDIS_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_HOST: db
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: postgres
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
       LOG4J_LEVEL: DEBUG
     networks:
-      - back-tier
+      - backend-redis
+      - backend-db
 
   redis:
     image: redis:6.2.6
@@ -47,23 +60,25 @@ services:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]    
     networks:
-      - front-tier
-      - back-tier
+      - ingress-vote
+      - backend-redis
 
   db:
     image: postgres:14.1
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - "db-data:/var/lib/postgresql/data"
       - ./postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql
     networks:
-      - front-tier
-      - back-tier
+      - ingress-result
+      - backend-db
 
 volumes:
   db-data: {}
 
 networks:
-  front-tier: {}
-  back-tier: {}
+  ingress-result: {}
+  ingress-vote: {}
+  backend-redis: {}
+  backend-db: {}
