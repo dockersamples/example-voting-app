@@ -70,8 +70,6 @@ public class Worker {
   private void updateVote(Connection dbConn, String voterID, String vote) throws SQLException {
 
     logger.debug("SELECT id {}", voterID);
-    //Statement stmt = dbConn.createStatement();
-    //ResultSet rs = stmt.executeQuery("SELECT id FROM votes WHERE id = '" + voterID + "'");
     SELECT_STATEMENT.setString(1, voterID);
     ResultSet rs = SELECT_STATEMENT.executeQuery();
 
