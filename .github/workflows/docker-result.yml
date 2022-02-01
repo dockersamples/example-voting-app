@@ -1,4 +1,4 @@
-name: Vote Docker Image
+name: Result Docker Image
 on:
   push: {}
 
