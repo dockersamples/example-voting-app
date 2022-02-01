@@ -6,10 +6,24 @@ import java.sql.*;
 import org.json.JSONObject;
 
 class Worker {
+
+  private static final String DB_HOST = System.getenv("DB_HOST");
+  private static final String DB_NAME = System.getenv("DB_NAME");
+  private static final String DB_USERNAME = System.getenv("DB_USERNAME");
+  private static final String DB_PASSWORD = System.getenv("DB_PASSWORD");
+  private static final String REDIS_HOST = System.getenv("REDIS_HOST");
+
   public static void main(String[] args) {
     try {
-      Jedis redis = connectToRedis("redis");
-      Connection dbConn = connectToDB("db");
+      System.err.println("Environment variables:");
+      System.err.printf("DB_HOST = %s\n", DB_HOST);
+      System.err.printf("DB_NAME = %s\n", DB_NAME);
+      System.err.printf("DB_USERNAME = %s\n", DB_USERNAME);
+      System.err.printf("DB_PASSWORD = %s\n", DB_PASSWORD);
+      System.err.printf("REDIS_HOST = %s\n\n", REDIS_HOST);
+
+      Jedis redis = connectToRedis(REDIS_HOST);
+      Connection dbConn = connectToDB(DB_HOST);
 
       System.err.println("Watching vote queue");
 
@@ -68,11 +82,11 @@ class Worker {
     try {
 
       Class.forName("org.postgresql.Driver");
-      String url = "jdbc:postgresql://" + host + "/postgres";
+      String url = "jdbc:postgresql://" + host + "/" + DB_NAME;
 
       while (conn == null) {
         try {
-          conn = DriverManager.getConnection(url, "postgres", "postgres");
+          conn = DriverManager.getConnection(url, DB_USERNAME, DB_PASSWORD);
         } catch (SQLException e) {
           System.err.println("Waiting for db");
           sleep(1000);
