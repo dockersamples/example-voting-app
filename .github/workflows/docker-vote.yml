@@ -21,4 +21,4 @@ jobs:
       with:
         context: vote/
         push: true
-        tags: teamgrow/voting-vote:${GITHUB_SHA::8},teamgrow/voting-vote:latest
+        tags: teamgrow/voting-vote:${{ github.sha }},teamgrow/voting-vote:latest
