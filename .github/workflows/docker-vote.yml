@@ -1,6 +1,9 @@
 name: Vote Docker Image
+
 on:
-  push: {}
+  push:   
+    paths:
+      - 'vote/**'
 
 jobs:
   build:

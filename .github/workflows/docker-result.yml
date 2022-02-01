@@ -1,6 +1,9 @@
 name: Result Docker Image
+
 on:
-  push: {}
+  push:   
+    paths:
+      - 'result/**'
 
 jobs:
   build:

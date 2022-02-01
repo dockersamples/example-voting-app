@@ -1,6 +1,9 @@
 name: Worker Docker Image
+
 on:
-  push: {}
+  push:
+    paths:
+      - 'worker/**'
 
 jobs:
   build:
