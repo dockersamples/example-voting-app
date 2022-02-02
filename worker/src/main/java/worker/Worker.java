@@ -7,11 +7,11 @@ import org.json.JSONObject;
 
 class Worker {
 
-  private static final String DB_HOST = System.getenv("DB_HOST");
-  private static final String DB_NAME = System.getenv("DB_NAME");
-  private static final String DB_USERNAME = System.getenv("DB_USERNAME");
-  private static final String DB_PASSWORD = System.getenv("DB_PASSWORD");
-  private static final String REDIS_HOST = System.getenv("REDIS_HOST");
+  private static final String DB_HOST = readEnvVar("DB_HOST", "defaultHost");
+  private static final String DB_NAME = readEnvVar("DB_NAME", "defaultDbName");
+  private static final String DB_USERNAME = readEnvVar("DB_USERNAME", "defaultDbUsername");
+  private static final String DB_PASSWORD = readEnvVar("DB_PASSWORD", "defaultDbPassword");
+  private static final String REDIS_HOST = readEnvVar("REDIS_HOST", "defaultRedisHost");
 
   public static void main(String[] args) {
     try {
@@ -40,6 +40,11 @@ class Worker {
       e.printStackTrace();
       System.exit(1);
     }
+  }
+
+  private static String readEnvVar(String envVarName, String defaultValue) {
+    String envVar = System.getenv(envVarName);
+    return envVar != null ? envVar : defaultValue;
   }
 
   static void updateVote(Connection dbConn, String voterID, String vote) throws SQLException {
