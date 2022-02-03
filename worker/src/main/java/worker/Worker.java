@@ -5,12 +5,13 @@ import redis.clients.jedis.Jedis;
 import java.security.InvalidParameterException;
 import java.sql.*;
 import org.json.JSONObject;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Worker {
 
-  private static final Logger logger = LogManager.getLogger(Worker.class);
+  private static final Logger logger = LoggerFactory.getLogger(Worker.class);
 
   private PreparedStatement SELECT_STATEMENT = null;
   private PreparedStatement INSERT_STATEMENT = null;
