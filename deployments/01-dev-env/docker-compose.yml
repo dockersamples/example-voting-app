@@ -2,6 +2,7 @@ services:
   vote:
     build: 
       context: ../../vote
+    image: teamgrow/voting-vote:latest
     restart: on-failure
     command: ["flask", "run", "--host=0.0.0.0"]
     environment:
@@ -20,6 +21,7 @@ services:
   result:
     build: 
       context: ../../result
+    image: teamgrow/voting-result:latest
     restart: on-failure
     command: ["nodemon", "server.js"]
     environment:
@@ -40,6 +42,7 @@ services:
   worker:
     build:
       context: ../../worker
+    image: teamgrow/voting-worker:latest
     restart: on-failure
     read_only: true
     environment:
