@@ -1,28 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: db
   name: db
-  namespace: vote
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: db
   template:
-    metadata:
-      labels:
-        app: db
     spec:
       containers:
-      - image: postgres:9.4
+      - image: postgres
         name: postgres
-        env:
-        - name: POSTGRES_USER
-          value: postgres
-        - name: POSTGRES_PASSWORD
-          value: postgres
+        envFrom:
+          - configMapRef:
+              name: db
+          - secretRef:
+              name: db
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "64Mi"
+            cpu: "200m" 
         ports:
         - containerPort: 5432
           name: postgres

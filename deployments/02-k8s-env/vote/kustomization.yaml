@@ -1,0 +1,6 @@
+commonLabels:
+  app.kubernetes.io/name: vote
+
+resources:
+  - deployment.yaml
+  - service.yaml

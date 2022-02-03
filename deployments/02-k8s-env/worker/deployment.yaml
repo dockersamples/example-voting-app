@@ -4,7 +4,6 @@ metadata:
   labels:
     app: worker
   name: worker
-  namespace: vote
 spec:
   replicas: 1
   selector:
@@ -16,5 +15,12 @@ spec:
         app: worker
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_worker
+      - image: teamgrow/voting-worker:latest
         name: worker
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"        

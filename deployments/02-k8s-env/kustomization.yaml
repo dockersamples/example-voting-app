@@ -1,0 +1,13 @@
+namespace: voting-app
+
+commonLabels:
+  app.kubernetes.io/part-of: voting-app
+  app.kubernetes.io/managed-by: kustomize
+
+resources:
+  - ./db/
+  - ./redis/
+  - ./result/
+  - ./vote/
+  - ./worker/
+

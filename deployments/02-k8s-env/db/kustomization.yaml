@@ -1,0 +1,24 @@
+commonLabels:
+  app.kubernetes.io/name: db
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+images:
+- name: postgres
+  newTag: "14.1"
+
+secretGenerator:
+  - name: db
+    literals:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+configMapGenerator:
+  - name: db
+    literals:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=postgres
+

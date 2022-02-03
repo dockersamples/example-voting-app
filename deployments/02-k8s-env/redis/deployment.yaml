@@ -1,22 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: redis
   name: redis
-  namespace: vote
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: redis
   template:
-    metadata:
-      labels:
-        app: redis
     spec:
       containers:
-      - image: redis:alpine
+      - image: redis:6.2.6
         name: redis
         ports:
         - containerPort: 6379
