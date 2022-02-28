@@ -49,6 +49,7 @@ body{
 #result{
   z-index: 3;
   position: absolute;
+  text-decoration: underline;
   bottom: 40px;
   right: 20px;
   color: #fff;
