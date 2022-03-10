@@ -60,9 +60,11 @@ jobs:
         node-version: '14'
         check-latest: true
 
-    - run: |
-      cd result
-      docker buildx build -t result . --platform linux/amd64
+    - name: Build
+      id: build-image
+      run: |
+        cd result
+        docker buildx build -t result . --platform linux/amd64
 
     - name: S3 Sync
       uses: jakejarvis/s3-sync-action@master
