@@ -54,14 +54,15 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
     
-    - name: Npm install
+    - name: Setup node
       uses: actions/setup-node@v2
       with:
         node-version: '14'
         check-latest: true
 
-    - run: npm install
-    - run: npm run build
+    - run: |
+      cd result
+      docker buildx build -t result . --platform linux/amd64
 
     - name: S3 Sync
       uses: jakejarvis/s3-sync-action@master
