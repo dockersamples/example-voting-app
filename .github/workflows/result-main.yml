@@ -1,0 +1,74 @@
+name: Deploy result to S3
+
+# Controls when the action will run.
+on:
+ 
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+    tags: 
+      - .*
+  pull_request:
+    branches: [master]
+  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+env:
+  AWS_REGION: eu-central-1                   
+  ECS_SERVICE: demo-ci-service               
+  ECS_CLUSTER: test-aws-fargate              
+  ECS_TASK_DEFINITION: .aws/demo-ci.json
+  CONTAINER_NAME: demo-ci-container
+  ECR_REPOSITORY: example-app
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name: Build and Deploy Image
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+      
+    - name: Set Tag Number
+      id: tag-number
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      
+    - name: Check Tag Release
+      env:
+          RELEASE_VERSION: ${{ steps.tag-number.outputs.tag }}
+      run: |
+          echo $RELEASE_VERSION
+          echo ${{ steps.vars.outputs.tag }}
+          
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Npm install
+      uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          check-latest: true
+
+    - run: npm install
+    - run: npm run build
+
+    - name: S3 Sync
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --follow-symlinks --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_NAME }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ env.AWS_REGION }}
