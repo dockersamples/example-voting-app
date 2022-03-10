@@ -56,9 +56,9 @@ jobs:
     
     - name: Npm install
       uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-          check-latest: true
+      with:
+        node-version: '14'
+        check-latest: true
 
     - run: npm install
     - run: npm run build
