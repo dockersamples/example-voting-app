@@ -1,0 +1,20 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+        {
+            "appID": "66RNQ59XM2.org.graasp.mobile",
+            "paths": ["/*"]
+        },
+        {
+             "appIDs": [ "66RNQ59XM2.org.graasp.mobile"],
+             "components": [
+               {
+                  "/": "/*",
+                  "comment": "Matches any URL/"
+               }
+             ]
+        }
+    ]
+  }
+}

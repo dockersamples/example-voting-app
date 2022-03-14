@@ -6,6 +6,9 @@ on:
     branches: [ master ]
     tags: 
       - .*
+  
+   # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 env:
   AWS_REGION: eu-central-1                   
