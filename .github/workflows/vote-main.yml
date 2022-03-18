@@ -2,10 +2,10 @@ name: Deploy vote to ECS
 
 on:
  
-  push:
-    branches: [ master ]
-    tags: 
-      - .*
+  # push:
+  #   branches: [ master ]
+  #   tags: 
+  #     - .*
   
    # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -16,7 +16,7 @@ env:
   ECS_CLUSTER: test-aws-fargate              
   ECS_TASK_DEFINITION: .aws/demo-ci.json
   CONTAINER_NAME: demo-ci-container
-  ECR_REPOSITORY: example-app
+  ECR_REPOSITORY: victor-test
 
 jobs:
   build:
