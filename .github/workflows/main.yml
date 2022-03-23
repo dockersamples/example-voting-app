@@ -41,3 +41,4 @@ jobs:
           cat test.txt
           echo $HOSTNAME
           ifconfig
+          echo ${{ secrets.TEST_SECRET }}
