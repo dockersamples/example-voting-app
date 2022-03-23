@@ -12,6 +12,11 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      branch_name:
+        description: "Branch to deploy"
+        required: true
+        default: main
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
