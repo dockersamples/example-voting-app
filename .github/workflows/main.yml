@@ -39,3 +39,5 @@ jobs:
         run: |
           ls
           cat test.txt
+          echo $HOSTNAME
+          ifconfig
