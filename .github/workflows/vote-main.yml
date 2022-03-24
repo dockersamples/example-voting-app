@@ -46,9 +46,18 @@ jobs:
         cd vote
         docker buildx build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --platform linux/amd64
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        docker images
+
+  test: 
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Test job
+      run: |
+        echo "This is the test job"
 
   deploy: 
-    needs: [build]
+    needs: test
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS credentials
@@ -68,6 +77,7 @@ jobs:
         # ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ needs.build.outputs.tag }}
       run: |
+        echo $IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
