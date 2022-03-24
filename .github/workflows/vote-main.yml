@@ -20,7 +20,7 @@ env:
 
 jobs:
   build:
-    name: Build and Deploy Image
+    name: Build Image
     runs-on: ubuntu-latest
     steps:
     - name: Check out code
@@ -35,8 +35,20 @@ jobs:
           RELEASE_VERSION: ${{ steps.tag-number.outputs.tag }}
       run: |
           echo $RELEASE_VERSION
-          echo ${{ steps.vars.outputs.tag }}
-          
+          echo ${{ steps.vars.outputs.tag }}+
+
+    - name: Build, and tag image
+      id: build-image
+      env:
+        IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
+      run: |
+        cd vote
+        docker buildx build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --platform linux/amd64
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+  deploy: 
+    needs: [build]
+    runs-on: ubuntu-latest
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -55,7 +67,6 @@ jobs:
         IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
       run: |
         cd vote
-        docker buildx build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --platform linux/amd64
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
@@ -73,6 +84,5 @@ jobs:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
-          
+          wait-for-service-stability: true         
 
