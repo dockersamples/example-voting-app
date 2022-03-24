@@ -17,6 +17,7 @@ env:
   ECS_TASK_DEFINITION: .aws/demo-ci.json
   CONTAINER_NAME: demo-ci-container
   ECR_REPOSITORY: victor-test
+  ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
 jobs:
   build:
@@ -64,10 +65,9 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        # ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
       run: |
-        cd vote
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
