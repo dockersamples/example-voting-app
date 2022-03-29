@@ -20,8 +20,20 @@ env:
   ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
 jobs:
+  test: 
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+      
+    - name: Test job
+      run: |
+        echo "This is the test job"
+
   build:
-    name: Build Image
+    needs: test
+    name: Build image and push to ECR
     runs-on: ubuntu-latest
     steps:
     - name: Check out code
@@ -45,19 +57,33 @@ jobs:
       run: |
         cd vote
         docker buildx build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --platform linux/amd64
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-        docker images
 
-  test: 
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Test job
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
       run: |
-        echo "This is the test job"
+        echo $IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
   deploy: 
-    needs: test
+    needs: build
+    name: Deploy to Dev environment
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS credentials
@@ -70,16 +96,6 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
-      env:
-        # ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ needs.build.outputs.tag }}
-      run: |
-        echo $IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
