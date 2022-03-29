@@ -20,6 +20,8 @@ env:
   # BUILD_FOLDER: 'build'
   BUILD_FOLDER: 'result'
   VERSION: 'latest'
+  AWS_REGION: eu-central-1
+
 
   # rename necessary variables used in the app
   # REACT_APP_APPS_DEVELOPER_ID: ${{ secrets.APPS_DEVELOPER_ID }}
