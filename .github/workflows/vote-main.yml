@@ -68,13 +68,13 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Login to Amazon ECR
-      id: login-ecr
+      id: login-ecr-build
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Push image to Amazon ECR
-      id: build-image
+      id: push-image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: ${{ steps.login-ecr-build.outputs.registry }}
         IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
       run: |
         echo $IMAGE_TAG
@@ -94,7 +94,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Login to Amazon ECR
-      id: login-ecr
+      id: login-ecr-deploy
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Fill in the new image ID in the Amazon ECS task definition
