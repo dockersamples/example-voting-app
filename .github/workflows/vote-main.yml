@@ -50,7 +50,7 @@ jobs:
           RELEASE_VERSION: ${{ steps.tag-number.outputs.tag }}
       run: |
           echo $RELEASE_VERSION
-          echo ${{ steps.vars.outputs.tag }}+
+          echo ${{ steps.vars.outputs.tag }}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
