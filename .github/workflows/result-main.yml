@@ -17,8 +17,7 @@ on:
 
 env:
   # default build directory
-  # BUILD_FOLDER: 'build'
-  BUILD_FOLDER: 'result'
+  BUILD_FOLDER: 'build'
   VERSION: 'latest'
   AWS_REGION: eu-central-1
 
@@ -64,7 +63,7 @@ jobs:
       run: |
         cd result
         yarn install
-        echo "yarn build"
+        yarn run build
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
