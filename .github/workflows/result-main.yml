@@ -17,7 +17,8 @@ on:
 
 env:
   # default build directory
-  BUILD_FOLDER: 'build'
+  # BUILD_FOLDER: 'build'
+  BUILD_FOLDER: 'result'
   VERSION: 'latest'
 
   # rename necessary variables used in the app
@@ -53,7 +54,7 @@ jobs:
     - name: Setup node
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '16'
         check-latest: true
 
     - name: Yarn build dev
