@@ -52,15 +52,6 @@ jobs:
           echo $RELEASE_VERSION
           echo ${{ steps.vars.outputs.tag }}+
 
-    - name: Build, and tag image
-      id: build-image
-      env:
-        IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
-      run: |
-        cd vote
-        docker buildx build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --platform linux/amd64
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -71,6 +62,16 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr-build
       uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, and tag image
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
+      run: |
+        cd vote
+        docker buildx build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --platform linux/amd64
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
     - name: Push image to Amazon ECR
       id: push-image
@@ -86,6 +87,8 @@ jobs:
     name: Deploy to Dev environment
     runs-on: ubuntu-latest
     steps:
+    - run: echo ${{ needs.build.outputs.image }}
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
