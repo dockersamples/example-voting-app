@@ -66,7 +66,7 @@ jobs:
     - name: Build, and tag image
       id: build-image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: ${{ steps.login-ecr-build.outputs.registry }}
         IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
       run: |
         cd vote
