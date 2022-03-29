@@ -17,7 +17,8 @@ on:
 
 env:
   # default build directory
-  BUILD_FOLDER: 'build'
+  # BUILD_FOLDER: 'build'
+  BUILD_FOLDER: 'result/build'
   VERSION: 'latest'
   AWS_REGION: eu-central-1
 
