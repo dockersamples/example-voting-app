@@ -1,4 +1,4 @@
-name: CI S3 reusable repo
+name: CI ECS reusable repo
 
 # Controls when the action will run.
 on:
