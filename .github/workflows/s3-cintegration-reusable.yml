@@ -23,7 +23,7 @@ jobs:
     name: Test
     uses: victorggonzalez/workflows/.github/workflows/s3-cintegration.yml@main
     with:
-      build-folder: ${{env.BUILD_FOLDER}}
+      build-folder: ${{ env.BUILD_FOLDER }}
     secrets:
       ecr-registry: ${{ secrets.ECR_REGISTRY }}
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
