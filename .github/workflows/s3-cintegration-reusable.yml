@@ -1,0 +1,28 @@
+name: CI S3 reusable repo
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  #push:
+  #branches:
+  #  - master
+
+  #pull_request:
+  #  branches: [master]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  # default build directory
+  BUILD_FOLDER: "build"
+  VERSION: "latest"
+
+jobs:
+  call-reusable-workflow:
+    name: Test
+    uses: victorggonzalez/workflows/.github/workflows/s3-cintegration.yml@main
+    with:
+      username: mona
+    secrets:
+      envPAT: ${{ secrets.envPAT }}
