@@ -18,12 +18,13 @@ env:
 
 jobs:
   call-reusable-workflow:
-    name: Test
+    name: Graasp test
+    env:
+      ECR_REGISTRY: 'localhost'
     uses: victorggonzalez/workflows/.github/workflows/s3-cintegration.yml@main
     with:
       build-folder: 'result/build'
     secrets:
-      ecr-registry: ${{ secrets.ECR_REGISTRY }}
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       aws-region: ${{ secrets.AWS_REGION }}
