@@ -23,6 +23,6 @@ jobs:
     name: Test
     uses: victorggonzalez/workflows/.github/workflows/s3-cintegration.yml@main
     with:
-      build-command: mona
+      username: mona
     secrets:
       ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
