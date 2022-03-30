@@ -15,7 +15,7 @@ on:
 
 env:
   # default build directory
-  BUILD_FOLDER: 'build'
+  BUILD_FOLDER: 'result/build'
   VERSION: 'latest'
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
     name: Test
     uses: victorggonzalez/workflows/.github/workflows/s3-cintegration.yml@main
     with:
-      build-folder: build/result
+      build-folder: ${{env.BUILD_FOLDER}}
     secrets:
       ecr-registry: ${{ secrets.ECR_REGISTRY }}
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
