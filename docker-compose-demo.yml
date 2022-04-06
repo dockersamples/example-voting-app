@@ -1,0 +1,38 @@
+services:
+  nginx:
+    network_mode: "host"
+    image: nginx
+    configs:
+      - source: vote.conf
+        target: /etc/nginx/conf.d/vote.conf
+  
+  redis:
+    network_mode: "host"
+    image: redis
+
+  postgres:
+    network_mode: "host"
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres  
+  
+  vote:
+    network_mode: "host"
+    build: ./vote
+    environment:
+      PORT: 8888
+
+  worker:
+    network_mode: "host"
+    build: ./worker
+
+  result:
+    network_mode: "host"
+    build: ./result
+    environment:
+      PORT: 8088
+
+configs:
+  vote.conf:
+    file: ./vote.conf
