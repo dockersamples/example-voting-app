@@ -19,7 +19,7 @@ env:
 jobs:
   call-reusable-workflow:
     name: Graasp test
-    uses: victorggonzalez/workflows/.github/workflows/s3-cintegration.yml@main
+    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3-apps.yml@33c1d6065fba3b8761b7425d386ca3c4d7af8ceb
     with:
       build-folder: 'result/build'
     secrets:
