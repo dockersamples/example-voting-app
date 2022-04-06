@@ -26,7 +26,6 @@ jobs:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       aws-region: ${{ secrets.AWS_REGION }}
-      ecr-registry: ${{ secrets.ECR_REGISTRY }}
       ecs-cluster: ${{ secrets.ECS_CLUSTER }}
       ecs-service: ${{ secrets.ECS_SERVICE }}
       container-name: ${{ secrets.CONTAINER_NAME }}
