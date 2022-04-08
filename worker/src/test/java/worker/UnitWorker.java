@@ -30,6 +30,10 @@ class UnitWorker {
     void sample6() {
 
     }  
+    @Test
+    void sample7() {
+
+    }  
 }
 
 
