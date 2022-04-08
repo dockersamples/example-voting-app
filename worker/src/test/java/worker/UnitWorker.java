@@ -34,6 +34,24 @@ class UnitWorker {
     void sample7() {
 
     }  
+    @Test
+    void sample8() {
+
+    }  
+    @Test
+    void sample9() {
+
+    }  
+    @Test
+    void sample10() {
+
+    }  
+    @Test
+    void sample16() {
+
+    }  
+
+
 }
 
 
