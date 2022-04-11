@@ -109,7 +109,7 @@ jobs:
           envsubst < docker-compose.template.yml > tmp/docker-compose.rendered.yml
       - name: Deploy preview
         id: preview
-        uses: UffizziCloud/preview-action@v1
+        uses: UffizziCloud/preview-action@master
         with:
           compose-file: 'tmp/docker-compose.rendered.yml'
           username: ${{ secrets.UFFIZZI_USERNAME }}
