@@ -37,12 +37,8 @@ services:
       PORT: 8888
 
   loadbalancer:
-    image: nginx:latest
-    configs:
-      - source: nginx-vote-conf
-        target: /etc/nginx/conf.d/vote.conf
-
-# Loadbalancer configuration
-configs:
-  nginx-vote-conf:
-    file: ./vote.conf
+    image: "${LOADBALANCER_IMAGE}"
+    deploy:
+      resources:
+        limits:
+          memory: 125M

@@ -87,10 +87,40 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           context: ./result
 
+  build-and-push-loadbalancer:
+    name: Build and Push `loadbalancer`
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Checkout git repo
+        uses: actions/checkout@v3
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: uffizzi/example-voting-app-loadbalancer
+      - name: Build and Push Image to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          context: ./loadbalancer
+
   deploy-uffizzi-preview:
     name: Preview on Uffizzi
     runs-on: ubuntu-latest
-    needs: [build-and-push-vote,build-and-push-worker,build-and-push-result]
+    needs: 
+      - build-and-push-vote
+      - build-and-push-worker
+      - build-and-push-result
+      - build-and-push-loadbalancer
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v3
@@ -103,6 +133,8 @@ jobs:
           export WORKER_IMAGE
           RESULT_IMAGE=$(echo ${{ needs.build-and-push-result.outputs.tags }})
           export RESULT_IMAGE
+          LOADBALANCER_IMAGE=$(echo ${{ needs.build-and-push-loadbalancer.outputs.tags }})
+          export LOADBALANCER_IMAGE
           echo Result image: "$RESULT_IMAGE"
           # Render simple template from environment variables.
           envsubst < docker-compose.template.yml > docker-compose.rendered.yml
