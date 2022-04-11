@@ -16,19 +16,19 @@ services:
       POSTGRES_PASSWORD: postgres
 
   worker:
-    build: ./worker
+    image: "${WORKER_IMAGE}"
     deploy:
       resources:
         limits:
           memory: 250M
 
   result:
-    build: ./result
+    image: "${RESULT_IMAGE}"
     environment:
       PORT: 8088
 
   vote:
-    build: ./vote
+    image: "${VOTE_IMAGE}"
     deploy:
       resources:
         limits:
