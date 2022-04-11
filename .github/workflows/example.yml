@@ -1,0 +1,142 @@
+name: Example Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+  pull_request:
+    types: [opened,synchronize,reopened]
+
+        app: [vote, worker, result]
+jobs:
+  build-and-push-vote:
+    name: Build and Push `vote`
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: uffizzi/example-voting-app-vote
+      - name: Build and Push Image to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          context: ./vote
+
+  build-and-push-worker:
+    name: Build and Push `worker`
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: uffizzi/example-voting-app-worker
+      - name: Build and Push Image to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          context: ./worker
+
+  build-and-push-result:
+    name: Build and Push `result`
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: uffizzi/example-voting-app-result
+      - name: Build and Push Image to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          context: ./result
+
+  deploy-uffizzi-preview:
+    name: Preview on Uffizzi
+    runs-on: ubuntu-latest
+    needs: [build-and-push-vote,build-and-push-worker,build-and-push-result]
+    steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v3
+      - name: Render Compose File
+        run: |
+          # Cut all but the first image tag.
+          VOTE_IMAGE=$(echo ${{ needs.build-and-push-vote.outputs.tags }})
+          export VOTE_IMAGE
+          WORKER_IMAGE=$(echo ${{ needs.build-and-push-worker.outputs.tags }})
+          export WORKER_IMAGE
+          RESULT_IMAGE=$(echo ${{ needs.build-and-push-result.outputs.tags }})
+          export RESULT_IMAGE
+          echo Final image: "$RESULT_IMAGE"
+          mkdir tmp
+          # Render simple template from environment variables.
+          envsubst < docker-compose.template.yml > tmp/docker-compose.rendered.yml
+      - name: Deploy preview
+        id: preview
+        uses: UffizziCloud/preview-action@outputs
+        with:
+          compose-file: 'tmp/docker-compose.rendered.yml'
+          username: ${{ secrets.UFFIZZI_USERNAME }}
+          hostname: ${{ secrets.UFFIZZI_HOSTNAME }}
+          project: ${{ secrets.UFFIZZI_PROJECT }}
+          password: ${{ secrets.UFFIZZI_PASSWORD }}
+      - name: Check outputs
+        run: echo "${{ steps.preview.outputs.id }} at ${{ steps.preview.outputs.url }}"
+      - name: Confirm Successful Preview Deployment
+        run: curl --fail --location ${{ steps.preview.outputs.url }}
+
+      # If PR, put image tags in the PR comments
+      - name: Find comment for deployment URL
+        uses: peter-evans/find-comment@v1
+        if: github.event_name == 'pull_request'
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Uffizzi Preview deployed
+      - name: Create or update comment for deployment URL
+        uses: peter-evans/create-or-update-comment@v1
+        if: github.event_name == 'pull_request'
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Uffizzi Preview deployed:
+            ${{ steps.preview.outputs.url }}
+
+            Uffizzi Preview ID:
+            ```text
+            ${{ steps.preview.outputs.id }}
+            ```
+          edit-mode: replace
