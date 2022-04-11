@@ -8,7 +8,6 @@ on:
   pull_request:
     types: [opened,synchronize,reopened]
 
-        app: [vote, worker, result]
 jobs:
   build-and-push-vote:
     name: Build and Push `vote`
