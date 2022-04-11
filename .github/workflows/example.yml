@@ -20,6 +20,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Checkout git repo
+        uses: actions/checkout@v3
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v3
@@ -44,6 +46,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Checkout git repo
+        uses: actions/checkout@v3
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v3
@@ -68,6 +72,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Checkout git repo
+        uses: actions/checkout@v3
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v3
