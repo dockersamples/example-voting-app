@@ -150,7 +150,9 @@ jobs:
       - name: Check outputs
         run: echo "${{ steps.preview.outputs.id }} at ${{ steps.preview.outputs.url }}"
       - name: Confirm Successful Preview Deployment
-        run: curl --fail --location ${{ steps.preview.outputs.url }}
+        uses: docker://curlimages/curl:7.82.0
+        with:
+          args: --retry 5 --retry-all-errors --retry-delay 0 --fail --location ${{ steps.preview.outputs.url }}
 
       # If PR, put image tags in the PR comments
       - name: Find comment for deployment URL
