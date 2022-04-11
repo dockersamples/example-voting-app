@@ -104,9 +104,8 @@ jobs:
           RESULT_IMAGE=$(echo ${{ needs.build-and-push-result.outputs.tags }})
           export RESULT_IMAGE
           echo Result image: "$RESULT_IMAGE"
-          mkdir tmp
           # Render simple template from environment variables.
-          envsubst < docker-compose.template.yml > tmp/docker-compose.rendered.yml
+          envsubst < docker-compose.template.yml > docker-compose.rendered.yml
       - name: Deploy preview
         id: preview
         uses: UffizziCloud/preview-action@v1
@@ -115,7 +114,7 @@ jobs:
           username: admin@uffizzi.com
           server: https://tmp-eks-2022-04.uffizzi.com/
           project: default
-          password: password
+          password: ${{ secrets.UFFIZZI_PASSWORD }}
       - name: Check outputs
         run: echo "${{ steps.preview.outputs.id }} at ${{ steps.preview.outputs.url }}"
       - name: Confirm Successful Preview Deployment
