@@ -110,7 +110,7 @@ jobs:
         id: preview
         uses: UffizziCloud/preview-action@v1
         with:
-          compose-file: 'tmp/docker-compose.rendered.yml'
+          compose-file: 'docker-compose.rendered.yml'
           username: admin@uffizzi.com
           server: https://tmp-eks-2022-04.uffizzi.com/
           project: default
