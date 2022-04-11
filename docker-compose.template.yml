@@ -1,0 +1,48 @@
+# Uffizzi extension
+x-uffizzi:
+  ingress:
+    service: loadbalancer
+    port: 8080  
+
+# Vote application
+services:
+  redis:
+    image: redis:latest
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  worker:
+    build: ./worker
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+
+  result:
+    build: ./result
+    environment:
+      PORT: 8088
+
+  vote:
+    build: ./vote
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+    environment:
+      PORT: 8888
+
+  loadbalancer:
+    image: nginx:latest
+    configs:
+      - source: nginx-vote-conf
+        target: /etc/nginx/conf.d/vote.conf
+
+# Loadbalancer configuration
+configs:
+  nginx-vote-conf:
+    file: ./vote.conf
