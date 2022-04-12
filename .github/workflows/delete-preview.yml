@@ -28,7 +28,7 @@ jobs:
         uses: UffizziCloud/delete-preview-action@main
         with:
           id: ${{ steps.preview.outputs.id }}
-          username: admin@uffizzi.com
-          server: https://tmp-eks-2022-04.uffizzi.com/
+          username: user@uffizzi.com
+          server: https://temp-2022-04.uffizzi.com/
           project: default
           password: ${{ secrets.UFFIZZI_PASSWORD }}
