@@ -147,7 +147,7 @@ jobs:
         with:
           compose-file: 'docker-compose.rendered.yml'
           username: user@uffizzi.com
-          server: https://temp-2022-04.uffizzi.com/
+          server: https://temp-2022-04.uffizzicloud.com/
           project: default
           password: ${{ secrets.UFFIZZI_PASSWORD }}
       - name: Check outputs

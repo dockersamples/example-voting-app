@@ -29,6 +29,6 @@ jobs:
         with:
           id: ${{ steps.preview.outputs.id }}
           username: user@uffizzi.com
-          server: https://temp-2022-04.uffizzi.com/
+          server: https://temp-2022-04.uffizzicloud.com/
           project: default
           password: ${{ secrets.UFFIZZI_PASSWORD }}
