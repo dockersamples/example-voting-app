@@ -24,3 +24,11 @@ jobs:
         run: 'echo ''${{ steps.find-comment.outputs.comment-body }}'' | sed -n "s/Uffizzi Preview ID: \`\(\S*\)\`/::set-output name=id::\1/p"'
       - name: DEBUG - Echo deployment ID
         run: 'echo ${{ steps.preview.outputs.id }}'
+      - name: Delete Preview from Uffizzi
+        uses: UffizziCloud/delete-preview-action@main
+        with:
+          id: ${{ steps.preview.outputs.id }}
+          username: admin@uffizzi.com
+          server: https://tmp-eks-2022-04.uffizzi.com/
+          project: default
+          password: ${{ secrets.UFFIZZI_PASSWORD }}
