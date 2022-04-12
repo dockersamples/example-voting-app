@@ -143,11 +143,11 @@ jobs:
           cat docker-compose.rendered.yml
       - name: Deploy preview
         id: preview
-        uses: UffizziCloud/preview-action@v1
+        uses: UffizziCloud/preview-action@master
         with:
           compose-file: 'docker-compose.rendered.yml'
-          username: admin@uffizzi.com
-          server: https://tmp-eks-2022-04.uffizzi.com/
+          username: user@uffizzi.com
+          server: https://temp-2022-04.uffizzicloud.com/
           project: default
           password: ${{ secrets.UFFIZZI_PASSWORD }}
       - name: Check outputs
