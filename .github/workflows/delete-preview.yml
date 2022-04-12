@@ -18,6 +18,9 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
           body-includes: Uffizzi Preview deployed
-      - name: DEBUG - Output deployment ID
+      - name: Output deployment ID
+        id: preview
         # voodoo
-        run: 'echo ''${{ steps.find-comment.outputs.comment-body }}'' | sed -n "s/Uffizzi Preview ID: \`\(\S*\)\`/\1/p"'
+        run: 'echo ''${{ steps.find-comment.outputs.comment-body }}'' | sed -n "s/Uffizzi Preview ID: \`\(\S*\)\`/::set-output name=id::\1/p"'
+      - name: DEBUG - Echo deployment ID
+        run: 'echo ${{ steps.preview.outputs.id }}'
