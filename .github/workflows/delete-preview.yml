@@ -19,5 +19,4 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: Uffizzi Preview deployed
       - name: DEBUG: Output deployment ID.
-        # voodoo
         runs: echo ${{ steps.find-comment.outputs.comment-body }} | sed -n "s/Uffizzi Preview ID: \`\(\S*\)\`/\1/p"
