@@ -1,0 +1,23 @@
+name: Delete Uffizzi Preview
+
+on:
+  pull_request:
+    types:
+      - closed 
+
+jobs:
+  delete-preview:
+    name: Delete Uffizzi Preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find comment for deployment URL
+        uses: peter-evans/find-comment@v2
+        id: find-comment
+        if: github.event_name == 'pull_request'
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Uffizzi Preview deployed
+      - name: DEBUG - Output deployment ID
+        # voodoo
+        run: 'echo ${{ steps.find-comment.outputs.comment-body }} | sed -n "s/Uffizzi Preview ID: \`\(\S*\)\`/\1/p"'

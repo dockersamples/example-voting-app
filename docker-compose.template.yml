@@ -1,0 +1,44 @@
+# Uffizzi extension
+x-uffizzi:
+  ingress:
+    service: loadbalancer
+    port: 8080  
+
+# Vote application
+services:
+  redis:
+    image: redis:latest
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  worker:
+    image: "${WORKER_IMAGE}"
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+
+  result:
+    image: "${RESULT_IMAGE}"
+    environment:
+      PORT: 8088
+
+  vote:
+    image: "${VOTE_IMAGE}"
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+    environment:
+      PORT: 8888
+
+  loadbalancer:
+    image: "${LOADBALANCER_IMAGE}"
+    deploy:
+      resources:
+        limits:
+          memory: 125M
