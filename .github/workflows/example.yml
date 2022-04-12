@@ -175,8 +175,5 @@ jobs:
             Uffizzi Preview deployed:
             ${{ steps.preview.outputs.url }}
 
-            Uffizzi Preview ID:
-            ```text
-            ${{ steps.preview.outputs.id }}
-            ```
+            Uffizzi Preview ID: `${{ steps.preview.outputs.id }}`
           edit-mode: replace
