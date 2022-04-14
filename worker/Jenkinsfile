@@ -1,7 +1,7 @@
 pipeline{ 
     agent{ 
       docker{ 
-        image 'maven:3.6.1-jdk-8-slim' 
+        image 'maven:3.8.5-jdk-11-slim' 
         args '-v $HOME/.m2:/root/.m2' 
       } 
     } 
@@ -36,7 +36,7 @@ pipeline{
             steps{ 
               echo 'Packaging worker app with docker' 
               script{
-                docker.withRegistry('https://index.docker.io/',  'dockerlogin') { 
+                docker.withRegistry('https://index.docker.io/v1/',  'dockerlogin') { 
                     def workerImage = docker.build('okapetanios/worker:v$ {env.BUILD_ID}', './worker') 
                     workerImage.push() 
                     workerImage.push("latest") 
