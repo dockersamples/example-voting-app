@@ -1,0 +1,30 @@
+name: CI pipeline for Graasp auth
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  call-reusable-workflow:
+    name: CI S3 caller workflow
+    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3.yml@6fb866ebf9c7369f4c324a3ba64e079ad54f2b49
+    with:
+      build-folder: 'build'
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+      aws-region: ${{ secrets.AWS_REGION_DEV }}
+      aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_GRAASP_AUTH_DEV }}
+      cloudfront-distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_GRAASP_AUTH_DEV }}
+      api-host: ${{ secrets.REACT_APP_API_HOST_DEV }}
+      show-notifications: true
+      graasp-compose-host: ${{ secrets.REACT_APP_GRAASP_COMPOSE_HOST_DEV }}
