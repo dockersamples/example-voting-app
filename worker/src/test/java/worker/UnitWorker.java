@@ -60,11 +60,6 @@ class UnitWorker {
 
     }  
 
-    @Test
-    void sample19() {
-
-    }  
-
 }
 
 
