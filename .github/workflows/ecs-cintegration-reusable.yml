@@ -30,3 +30,5 @@ jobs:
       ecs-service: ${{ secrets.ECS_SERVICE }}
       container-name: ${{ secrets.CONTAINER_NAME }}
       ecr-repository: ${{ secrets.ECR_REPOSITORY }}
+      next-public-api-host: ${{ secrets.NEXT_PUBLIC_API_HOST }}
+      next-public-graasp-auth-host: ${{ secrets.NEXT_PUBLIC_GRAASP_AUTH_HOST }}
