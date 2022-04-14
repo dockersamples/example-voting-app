@@ -5,9 +5,6 @@ pipeline{
         args '-v $HOME/.m2:/root/.m2' 
       } 
     } 
-    environment{
-      DOCKERHUB_CREDENTIALS=credentials('dockerjenkins')
-    }
     stages{ 
         stage('build'){ 
             steps{ 
@@ -34,20 +31,16 @@ pipeline{
                 } 
             } 
         } 
-        stage('Login') {
-      steps {
-        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-      }
-    }
         stage('docker-package'){ 
             agent any 
             steps{ 
               echo 'Packaging worker app with docker' 
               script{
+                docker.withRegistry('https://index.docker.io/v1/',  'dockerjenkins') { 
                     def workerImage = docker.build('okapetanios/worker:v$ {env.BUILD_ID}', './worker') 
                     workerImage.push() 
                     workerImage.push("latest") 
-                
+                } 
               } 
             } 
         } 
