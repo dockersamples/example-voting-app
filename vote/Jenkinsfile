@@ -1,15 +1,16 @@
 pipeline { 
-    agent{
-        docker{
-            image 'python:2.7.16-slim'
-            args '--user root'
-        }
-    }
+    agent none
     stages{ 
         stage(build){ 
             when{ 
                 changeset "**/vote/**" 
             }
+            agent{
+                docker{
+                    image 'python:2.7.16-slim'
+                    }
+                    }
+
             steps{ 
                 echo 'Compiling vote app..' 
                 dir('vote'){ 
@@ -20,7 +21,12 @@ pipeline {
         stage(test){ 
             when{ 
                 changeset "**/vote/**" 
-            } 
+                } 
+            agent {
+                docker{
+                    image 'python:2.7.16-slim'
+                    }
+                    }
             steps{ 
                 echo 'Running Unit Tests on vote app..' 
                 dir('vote'){ 
@@ -28,6 +34,26 @@ pipeline {
                 } 
             } 
         } 
+
+      stage('docker-package'){
+          agent any
+          when{
+            changeset "**/vote/**"
+            branch 'master'
+          }
+          steps{
+            echo 'Packaging worker app with docker'
+            script{
+              docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
+                  def voteImage = docker.build("okapetanios/vote:v${env.BUILD_ID}", "./vote")
+                  voteImage.push()
+                  voteImage.push("${env.BRANCH_NAME}")
+                  voteImage.push("latest")
+              }
+            }
+          }
+      }
+
     } 
     post {
         always{
@@ -36,3 +62,5 @@ pipeline {
     }
 
 } 
+
+
