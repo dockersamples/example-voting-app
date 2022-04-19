@@ -39,6 +39,7 @@ pipeline {
                     withEnv(['HOME=${env.WORKSPACE}']) {
                         sh "pip install -r requirements.txt --user"
                         sh 'pip show nose'
+                        sh 'export PATH=$PATH:/var/jenkins_home/workspace/instavote_vote-multipipe_master/vote/${env.WORKSPACE}/.local/lib/python2.7/site-packages'
                         sh 'nosetests -v'
                         }
                         
