@@ -38,7 +38,7 @@ pipeline {
                 dir('vote'){ 
                     withEnv(['HOME=${env.WORKSPACE}']) {
                         sh "pip install -r requirements.txt --user"
-                        sh 'find / -type f -name "nosetests*" -perm +111 -print -quit'
+                        sh 'cd /usr/bin'
                         sh 'easy_install nose'
                         sh 'nosetests -v'
                         }
