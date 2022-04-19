@@ -1,7 +1,7 @@
 pipeline { 
     agent none
     stages{ 
-        stage(build){ 
+        stage('build'){ 
             when{ 
                 changeset "**/vote/**" 
             }
@@ -15,14 +15,13 @@ pipeline {
             steps{ 
                 echo 'Compiling vote app.' 
                 dir('vote'){
-                    
             
                         sh "pip install -r requirements.txt"
 
                 } 
             } 
         } 
-        stage(test){ 
+        stage('test'){ 
             when{ 
                 changeset "**/vote/**" 
                 } 
