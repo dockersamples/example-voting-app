@@ -34,9 +34,12 @@ pipeline {
                     }
                     }
             steps{ 
-                echo 'Running Unit Tests on vote app..' 
+                echo 'Running Unit Tests on vote app.' 
                 dir('vote'){ 
-                    sh 'nosetests -v'
+                    withEnv(['HOME=${env.WORKSPACE}']) {
+                        sh "pip install -r requirements.txt --user"
+                        }
+                        sh 'nosetests -v'
                 } 
             } 
         } 
@@ -51,6 +54,7 @@ pipeline {
             echo 'Packaging wvoteorker app with docker'
             script{
               docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
+                  // ./vote is the path to the Dockerfile that Jenkins will find from the Github repo
                   def voteImage = docker.build("okapetanios/vote:v${env.BUILD_ID}", "./vote")
                   voteImage.push()
                   voteImage.push("${env.BRANCH_NAME}")
