@@ -14,13 +14,9 @@ pipeline {
 
             steps{ 
                 echo 'Compiling vote app.' 
-                dir('vote'){ 
-
-
+                dir('vote'){
             
                         sh "pip install -r requirements.txt"
-    
-
 
                 } 
             } 
