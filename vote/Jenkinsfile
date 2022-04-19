@@ -7,7 +7,7 @@ pipeline {
             }
             agent{
                 docker{
-                    image '2.7.18-alpine3.11'
+                    image 'python:2.7.18-alpine3.11'
                     }
                     }
 
@@ -24,7 +24,7 @@ pipeline {
                 } 
             agent {
                 docker{
-                    image '2.7.18-alpine3.11'
+                    image 'python:2.7.18-alpine3.11'
                     }
                     }
             steps{ 
