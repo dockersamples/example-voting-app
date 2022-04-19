@@ -14,8 +14,7 @@ pipeline {
             steps{ 
                 echo 'Compiling vote app..' 
                 dir('vote'){ 
-                    sh 'whoami'
-                    sh 'pip install -r requirements.txt --user' 
+                    sh 'pip install -r requirements.txt --user root' 
                 } 
             } 
         } 
