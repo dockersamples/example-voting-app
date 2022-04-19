@@ -18,7 +18,7 @@ pipeline {
 
 
             
-                        sh "pip install -r requirements.txt --user"
+                        sh "pip install -r requirements.txt"
     
 
 
@@ -39,7 +39,7 @@ pipeline {
                 echo 'Running Unit Tests on vote app.' 
                 dir('vote'){ 
                    
-                        sh "pip install -r requirements.txt --user"
+                        sh "pip install -r requirements.txt"
                         sh 'nosetests -v'
                         
                         
