@@ -1,4 +1,4 @@
 Flask
 Redis
 gunicorn
-nose2
+nose
