@@ -8,6 +8,7 @@ pipeline {
             agent{
                 docker{
                     image 'python:2.7.16-slim'
+                    args '--user root'
                     }
                     }
 
@@ -16,9 +17,9 @@ pipeline {
                 dir('vote'){ 
 
 
-                   withEnv(['HOME=${env.WORKSPACE}']) {
+            
                         sh "pip install -r requirements.txt --user"
-                        }
+    
 
 
                 } 
@@ -31,16 +32,16 @@ pipeline {
             agent {
                 docker{
                     image 'python:2.7.16-slim'
+                    args '--user root'
                     }
                     }
             steps{ 
                 echo 'Running Unit Tests on vote app.' 
                 dir('vote'){ 
-                    withEnv(['HOME=${env.WORKSPACE}', 'PATH=$PATH:/var/jenkins_home/workspace/instavote_vote-multipipe_master/vote/${env.WORKSPACE}/.local/lib/python2.7/site-packages']) {
+                   
                         sh "pip install -r requirements.txt --user"
-                        sh 'pip show nose'
                         sh 'nosetests -v'
-                        }
+                        
                         
                 } 
             } 
