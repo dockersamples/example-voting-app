@@ -8,7 +8,7 @@ services:
   vote:
     image: okapetanios/vote:latest
     ports:
-      - 5002:80
+      - 5000:80
     depends_on:
       - redis
     networks:
@@ -29,7 +29,7 @@ services:
   result:
     image: okapetanios/result:latest
     ports:
-      - 5003:4000
+      - 5001:4000
     depends_on:
       - db
     networks:

@@ -196,7 +196,7 @@ pipeline {
           }
       }
 
-      stage('deploy to dev'){ 
+    stage('deploy to dev'){ 
     agent any 
     when{ 
       branch 'master' 
