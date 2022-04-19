@@ -36,10 +36,9 @@ pipeline {
             steps{ 
                 echo 'Running Unit Tests on vote app.' 
                 dir('vote'){ 
-                    withEnv(['HOME=${env.WORKSPACE}']) {
+                    withEnv(['HOME=${env.WORKSPACE}', 'PATH=$PATH:/var/jenkins_home/workspace/instavote_vote-multipipe_master/vote/${env.WORKSPACE}/.local/lib/python2.7/site-packages']) {
                         sh "pip install -r requirements.txt --user"
                         sh 'pip show nose'
-                        sh 'export PATH=$PATH:/var/jenkins_home/workspace/instavote_vote-multipipe_master/vote/${env.WORKSPACE}/.local/lib/python2.7/site-packages'
                         sh 'nosetests -v'
                         }
                         
