@@ -12,7 +12,7 @@ pipeline {
                 }
         steps{ 
       echo 'Compiling result app..' 
-      dir('vote'){ 
+      dir('result'){ 
         sh 'npm install' 
       } 
     } 

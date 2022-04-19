@@ -14,7 +14,7 @@ pipeline {
             steps{ 
                 echo 'Compiling vote app..' 
                 dir('vote'){ 
-                    sh 'pip install -r requirements.txt' 
+                    sh 'pip install --upgrade pip -r requirements.txt' 
                 } 
             } 
         } 
@@ -42,7 +42,7 @@ pipeline {
             branch 'master'
           }
           steps{
-            echo 'Packaging worker app with docker'
+            echo 'Packaging wvoteorker app with docker'
             script{
               docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
                   def voteImage = docker.build("okapetanios/vote:v${env.BUILD_ID}", "./vote")
