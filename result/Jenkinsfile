@@ -1,64 +1,63 @@
-pipeline { 
+pipeline {
     agent none
-    stages{ 
-      stage(build){ 
-        when{ 
-            changeset "**/result/**" 
-          }
-	    agent{
-            docker{
-		        image 'node:8.16.0-alpine'
-                }
-                }
-        steps{ 
-      echo 'Compiling result app..' 
-      dir('result'){ 
-        sh 'npm install' 
-      } 
-    } 
-  } 
-  stage(test){ 
-    when{ 
-      changeset "**/result/**" 
-    } 
-agent{
-  docker{
-		image 'node:8.16.0-alpine'
+    stages {
+      stage(build) {
+        when {
+            changeset '**/result/**'
+        }
+        agent {
+            docker {
+          image 'node:8.16.0-alpine'
+            }
+        }
+        steps {
+        echo 'Compiling result app..'
+        dir('result') {
+          sh 'npm install'
+        }
+        }
+      }
+    stage(test) {
+      when {
+        changeset '**/result/**'
+      }
+      agent {
+        docker {
+          image 'node:8.16.0-alpine'
+        }
+      }
+
+      steps {
+        echo 'Running Unit Tests on result app..'
+        dir('result') {
+          sh 'npm install'
+          sh 'npm test'
+        }
+      }
     }
-  }
 
-    steps{ 
-      echo 'Running Unit Tests on result app..' 
-      dir('result'){ 
-        sh 'npm install' 
-        sh 'npm test' 
-       } 
-          } 
-      } 
-
-      stage('docker-package'){
+      stage('docker-package') {
           agent any
-          when{
-            changeset "**/result/**"
+          when {
+            changeset '**/result/**'
             branch 'master'
           }
-          steps{
+          steps {
             echo 'Packaging result app with docker'
-            script{
+            script {
               docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
-                  def resultImage = docker.build("okapetanios/result:v${env.BUILD_ID}", "./result")
-                  resultImage.push()
-                  resultImage.push("${env.BRANCH_NAME}")
-                  resultImage.push("latest")
+            def resultImage = docker.build("okapetanios/result:v${env.BUILD_ID}", './result')
+            resultImage.push()
+            resultImage.push("${env.BRANCH_NAME}")
+            resultImage.push('latest')
               }
             }
           }
       }
-
-  } 
+    }
   post {
-    always{
+    always {
       echo 'Pipeline for result is complete'
-      }
-      }
-      } 
+    }
+  }
+}
