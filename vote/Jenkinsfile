@@ -38,6 +38,7 @@ pipeline {
                 dir('vote'){ 
                     withEnv(['HOME=${env.WORKSPACE}']) {
                         sh "pip install -r requirements.txt --user"
+                        sh 'pip show nose'
                         sh 'nosetests -v'
                         }
                         
