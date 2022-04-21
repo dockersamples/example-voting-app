@@ -203,42 +203,33 @@ pipeline {
 
       }
     }
-///////////////////
 
-  stage('Sonarqube') {
+    stage('Sonarqube') {
       agent any
-      when{
+      when {
         branch 'master'
       }
-      // tools {
-      //   jdk "JDK11" // the name you have given the JDK installation in Global Tool Configuration
-      // }
-
-      environment{
-        sonarpath = tool 'SonarScanner'
+      environment {
+        sonarpath = 'SonarScanner'
       }
-
       steps {
-            echo 'Running Sonarqube Analysis..'
-            withSonarQubeEnv('sonar-instavote') {
-              sh "${sonarpath}/bin/sonar-scanner -Dproject.settings=sonar-project.properties -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.HEARTBEAT_CHECK_INTERVAL=86400"
-            }
+        echo 'Running Sonarqube Analysis..'
+        withSonarQubeEnv('sonar-instavote') {
+          sh "${sonarpath}/bin/sonar-scanner -Dproject.settings=sonar-project.properties -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.HEARTBEAT_CHECK_INTERVAL=86400"
+        }
+
       }
     }
 
-
-    stage("Quality Gate") {
-        steps {
-            timeout(time: 1, unit: 'HOURS') {
-                // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                // true = set pipeline to UNSTABLE, false = don't
-                waitForQualityGate abortPipeline: true
-            }
+    stage('Quality Gate') {
+      steps {
+        timeout(time: 1, unit: 'HOURS') {
+          waitForQualityGate true
         }
+
+      }
     }
 
-
-//////////////////
     stage('deploy to dev') {
       agent any
       when {
@@ -249,10 +240,6 @@ pipeline {
         sh 'docker-compose up -d'
       }
     }
-
-
-
-
 
   }
   post {
