@@ -218,7 +218,7 @@ pipeline {
       steps {
         echo 'Running Sonarqube Analysis..'
         // TODO: ?this must match sonar server
-        withSonarQubeEnv('example-voting-app') {
+        withSonarQubeEnv('sonar-example-voting-app') {
           sh "${sonarpath}/bin/sonar-scanner -Dproject.settings=sonar-project.properties -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.HEARTBEAT_CHECK_INTERVAL=86400"
         }
 
