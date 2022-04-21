@@ -17,6 +17,7 @@ services:
     image: redis:alpine
     networks:
       - instavote
+      
   db:
     image: postgres:9.4
     volumes:
