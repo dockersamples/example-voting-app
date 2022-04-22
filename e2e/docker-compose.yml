@@ -49,6 +49,10 @@ services:
 
   db:
     image: postgres:9.4
+    volumes: 
+      - db-data:/var/lib/postgresql/data
+    environment: 
+      POSTGRES_HOST_AUTH_METHOD: trust
     networks:
       - back-tier
 
