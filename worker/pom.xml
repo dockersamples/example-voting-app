@@ -23,11 +23,12 @@
         <scope>compile</scope>
     </dependency>
 
-    <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>9.4.1212.jre7</version>
-    </dependency>
+  	<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+	  <dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>42.2.13</version>
+	  </dependency>
   </dependencies>
 
   <build>
