@@ -12,13 +12,13 @@
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20140107</version>
+      <version>20210307</version>
     </dependency>
 
     <dependency>
         <groupId>redis.clients</groupId>
         <artifactId>jedis</artifactId>
-        <version>2.7.2</version>
+        <version>3.6.1</version>
         <type>jar</type>
         <scope>compile</scope>
     </dependency>
