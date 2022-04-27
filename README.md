@@ -98,3 +98,4 @@ The voting application only accepts one vote per client. It does not register vo
 This isn't an example of a properly architected perfectly designed distributed app... it's just a simple 
 example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to 
 deal with them in Docker at a basic level. 
+add line on Wed Apr 27 15:07:54 MST 2022
