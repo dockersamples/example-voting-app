@@ -1,6 +1,13 @@
 Example Voting App
 =========
 
+download the repo
+install docker
+insstall dockeer-compose
+
+run the docker-compose up
+if you will face any issues change the version to version = "2.1" as it supports depends_on feature
+
 A simple distributed application running across multiple Docker containers.
 
 Getting started
