@@ -17,7 +17,7 @@ The Linux stack uses Python, Node.js, .NET Core (or optionally Java), with Redis
 
 Run in this directory:
 ```
-docker-compose up
+docker compose up
 ```
 The app will be running at [http://localhost:5000](http://localhost:5000), and the results will be at [http://localhost:5001](http://localhost:5001).
 
@@ -37,13 +37,13 @@ An alternative version of the app uses Windows containers based on Nano Server. 
 You can build from source using:
 
 ```
-docker-compose -f docker-compose-windows.yml build
+docker compose -f docker-compose-windows.yml build
 ```
 
 Then run the app using:
 
 ```
-docker-compose -f docker-compose-windows.yml up -d
+docker compose -f docker-compose-windows.yml up -d
 ```
 
 > Or in a Windows swarm, run `docker stack deploy -c docker-stack-windows.yml vote`
