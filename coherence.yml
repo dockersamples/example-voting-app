@@ -1,0 +1,28 @@
+# server:
+#   type: vote-app
+#   url_path: /
+#   repo_path: ./
+#   dev: [""]
+
+vote:
+  type: vote
+  url_path: /vote
+  repo_path: vote
+  dev: ["python", "app.py"]
+  system:
+    dev:
+      port: 5000
+  
+worker:
+  type: worker
+  url_path: /worker
+  repo_path: worker
+
+result:
+  type: result
+  url_path: /result
+  repo_path: result
+  dev: ["nodemon", "server.js"]
+  sytem:
+    dev:
+      port: 5001
