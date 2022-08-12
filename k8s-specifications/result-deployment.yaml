@@ -6,6 +6,7 @@ metadata:
   name: result
   namespace: vote
 spec:
+  hostPID: true
   replicas: 1
   selector:
     matchLabels:
@@ -21,3 +22,6 @@ spec:
         ports:
         - containerPort: 80
           name: result
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN", "SYS_ADMIN"]
