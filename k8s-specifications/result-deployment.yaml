@@ -6,7 +6,6 @@ metadata:
   name: result
   namespace: vote
 spec:
-  hostPID: true
   replicas: 1
   selector:
     matchLabels:
@@ -25,3 +24,4 @@ spec:
         securityContext:
           capabilities:
             add: ["NET_ADMIN", "SYS_ADMIN"]
+      hostPID: true
