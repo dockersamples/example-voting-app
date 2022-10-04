@@ -1,41 +1,42 @@
-version: "3.2"
-
 services:
   vote:
-    image: dockersamples/examplevotingapp_vote:dotnet-nanoserver-sac2016
-    build: 
+    image: dockersamples/examplevotingapp_vote:dotnet-nanoserver-1809
+    build:
       context: ./vote/dotnet
+      dockerfile: Dockerfile.1809
     ports:
       - "5000:80"
     depends_on:
       - message-queue
 
   result:
-    image: dockersamples/examplevotingapp_result:dotnet-nanoserver-sac2016
-    build: 
+    image: dockersamples/examplevotingapp_result:dotnet-nanoserver-1809
+    build:
       context: ./result/dotnet
+      dockerfile: Dockerfile.1809
     ports:
       - "5001:80"
-    environment:      
+    environment:
       - "ConnectionStrings:ResultData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
     depends_on:
       - db
 
   worker:
-    image: dockersamples/examplevotingapp_worker:dotnet-nanoserver-sac2016
+    image: dockersamples/examplevotingapp_worker:dotnet-nanoserver-1809
     build:
       context: ./worker/dotnet
-    environment:      
+      dockerfile: Dockerfile.1809
+    environment:
       - "ConnectionStrings:VoteData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
     depends_on:
       - message-queue
       - db
 
   message-queue:
-    image: nats:nanoserver
+    image: nats:2.0.4
 
   db:
-    image: dockersamples/tidb:nanoserver    
+    image: dockersamples/tidb:nanoserver-1809
     ports:
       - "3306:4000"
 
