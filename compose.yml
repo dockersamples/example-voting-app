@@ -57,7 +57,7 @@ services:
       - back-tier
 
   db:
-    image: postgres:9.4
+    image: postgres:12.12-bullseye
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"

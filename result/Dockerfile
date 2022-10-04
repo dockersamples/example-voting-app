@@ -1,4 +1,4 @@
-FROM node:10-slim
+FROM node:18.0-bullseye-slim
 
 # add curl for healthcheck
 RUN apt-get update \
