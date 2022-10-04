@@ -1,4 +1,4 @@
-FROM maven:3.8.6-eclipse-temurin-19-focal AS build
+FROM --platform=$BUILDPLATFORM maven:3.8.6-eclipse-temurin-19-focal AS build
 
 WORKDIR /code
 

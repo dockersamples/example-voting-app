@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim as builder
+FROM --platform=$BUILDPLATFORM  mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim as builder
 
 WORKDIR /Worker
 COPY src/Worker/Worker.csproj .

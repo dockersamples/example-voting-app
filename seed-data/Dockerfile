@@ -1,4 +1,4 @@
-FROM python:3.10-bullseye
+FROM --platform=$BUILDPLATFORM python:3.10-bullseye
 
 # add apache bench (ab) tool
 RUN apt-get update \

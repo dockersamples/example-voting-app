@@ -1,5 +1,5 @@
 # Using official python runtime base image
-FROM python:3.10-bullseye
+FROM --platform=$BUILDPLATFORM python:3.10-bullseye
 
 # add curl for healthcheck
 RUN apt-get update \
