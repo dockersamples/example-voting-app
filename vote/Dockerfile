@@ -11,8 +11,10 @@ RUN apt-get update \
 WORKDIR /app
 
 # Install our requirements.txt
-COPY requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt
+
+RUN pip install -r Flask
+RUN pip install -r Redis
+RUN pip install -r gunicorn
 
 # Copy our code from the current folder to /app inside the container
 COPY . .
