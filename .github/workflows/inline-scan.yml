@@ -2,7 +2,7 @@ env:
     SYSDIG_SECURE_ENDPOINT: "https://eu1.app.sysdig.com"
     IMAGE_NAME: "app"
     IMAGE_TAG: "my-tag"
-    DOCKERFILE_CONTEXT: "{{defaultContext}}:vote"
+    DOCKERFILE_CONTEXT: "vote/"
   
 name: Container build, scan and push
 
