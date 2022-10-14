@@ -6,7 +6,7 @@ env:
   
 name: Container build, scan and push for VOTE
 
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
   build-scan-and-push:
