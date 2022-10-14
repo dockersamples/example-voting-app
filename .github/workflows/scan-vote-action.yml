@@ -4,7 +4,7 @@ env:
     IMAGE_TAG: "vote-1.0"
     DOCKERFILE_CONTEXT: "vote/"
   
-name: Container build, scan and push : VOTE
+name: Container build, scan and push for VOTE
 
 on: [push, pull_request]
 
