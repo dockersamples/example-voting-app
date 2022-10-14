@@ -14,15 +14,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       
-    - name: Get current time
-      uses: josStorer/get-current-time@v2.0.2
-      id: current-time
-      with:
-        format: YYYYMMDD-HH
-        utcOffset: "+08:00"
-        
     - name: Set Tags
-      run: echo "IMAGE_TAG=vote-${{ steps.current-time.outputs.time }}" >> $GITHUB_ENV
+      run: echo "IMAGE_TAG=vote-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
     
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
