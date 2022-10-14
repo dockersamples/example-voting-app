@@ -22,9 +22,7 @@ jobs:
         utcOffset: "+08:00"
         
     - name: Set Tags
-      env:
-        IMAGE_TAG: "vote-${{ steps.current-time.outputs.time }}"
-      run: echo $IMAGE_TAG >> $GITHUB_ENV
+      run: echo "IMAGE_TAG=vote-${{ steps.current-time.outputs.time }}" >> $GITHUB_ENV
     
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
