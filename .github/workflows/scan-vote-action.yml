@@ -1,12 +1,12 @@
 env:
     SYSDIG_SECURE_ENDPOINT: "https://eu1.app.sysdig.com"
     IMAGE_NAME: "app"
-    IMAGE_TAG: "vote-1.0"
+    IMAGE_TAG: "vote-${{ steps.current-time.outputs.time }}"
     DOCKERFILE_CONTEXT: "vote/"
   
 name: Container build, scan and push for VOTE
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build-scan-and-push:
