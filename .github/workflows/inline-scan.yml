@@ -1,6 +1,5 @@
 env:
     SYSDIG_SECURE_ENDPOINT: "https://eu1.app.sysdig.com"
-    REGISTRY_HOST: "hub.docker.com"
     IMAGE_NAME: "mytestimage"
     IMAGE_TAG: "my-tag"
     DOCKERFILE_CONTEXT: "{{defaultContext}}:vote"
@@ -23,7 +22,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: ${{ env.DOCKERFILE_CONTEXT }}
-        tags: ${{ env.REGISTRY_HOST }}/${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        tags: ${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         load: true
     
     - name: Setup cache
@@ -59,7 +58,6 @@ jobs:
     -  name: Login to the registry
        uses: docker/login-action@v2
        with:
-        registry: ${{ env.REGISTRY_HOST }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
@@ -68,4 +66,4 @@ jobs:
       with:
         context: ${{ env.DOCKERFILE_CONTEXT }}
         push: true
-        tags: ${{ env.REGISTRY_HOST }}/${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        tags: ${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
