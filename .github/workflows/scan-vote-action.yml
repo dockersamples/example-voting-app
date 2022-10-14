@@ -20,6 +20,7 @@ jobs:
       with:
         format: YYYYMMDD-HH
         utcOffset: "+08:00"
+        
     - name: Set Tags
       env:
         IMAGE_TAG: "vote-${{ steps.current-time.outputs.time }}" 
