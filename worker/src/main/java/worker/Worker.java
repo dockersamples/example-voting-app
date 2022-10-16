@@ -54,11 +54,11 @@ class Worker {
         break;
       } catch (JedisConnectionException e) {
         System.err.println("Waiting for redis");
-        sleep(1000);
+        sleep(1001);
       }
     }
 
-    System.err.println("Connected to redis");
+    System.err.println("Redis is connected successfully");
     return conn;
   }
 
@@ -88,7 +88,7 @@ class Worker {
       System.exit(1);
     }
 
-    System.err.println("Connected to db");
+    System.err.println("Connected to database db");
     return conn;
   }
 
