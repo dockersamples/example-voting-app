@@ -6,7 +6,7 @@ metadata:
   name: result
   namespace: vote
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: result
