@@ -6,7 +6,10 @@ env:
   
 name: Container build, scan and push for RESULT
 
-on: [pull_request]
+on: 
+  pull_request:
+    paths:
+    - 'result/**'
 
 jobs:
   build-scan-and-push:
