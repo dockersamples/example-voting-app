@@ -1,3 +1,4 @@
+#some Env variables
 env:
     SYSDIG_SECURE_ENDPOINT: "https://eu1.app.sysdig.com"
     IMAGE_NAME: "app"
@@ -9,14 +10,14 @@ on: [pull_request]
 
 jobs:
   build-scan-and-push:
-    if: github.repository == 'alpa-sysdig/example-voting-app/result'
+    if: github.repository == 'alpa-sysdig/example-voting-app/result' #conditions to trigger action only when modifying the DOCKERFILE related to image
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
       
-    - name: Set Tags
-      run: echo "IMAGE_TAG=result-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+    - name: Set Tags #New env varaibles to add tag based on date & hour for the new image
+      run: echo "IMAGE_TAG=result-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV 
     
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
