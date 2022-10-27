@@ -9,13 +9,13 @@ on: [pull_request]
 
 jobs:
   build-scan-and-push:
-    if: github.repository == 'alpa-sysdig/example-voting-app/vote'
+    if: github.repository == 'alpa-sysdig/example-voting-app/vote' #conditions to scan only when modifying the DOCKERFILE related to image
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
       
-    - name: Set Tags
+    - name: Set Tags #new env var for tagging image on dockerhub : date + hours
       run: echo "IMAGE_TAG=vote-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
     
     - name: Set up Docker Buildx
