@@ -7,7 +7,7 @@ name: Container build, scan and push for VOTE
 
 on: [pull_request]
   paths:
-      - 'vote/**'     #conditions to scan only when modifying the DOCKERFILE related to image
+  - 'vote/**'     #conditions to scan only when modifying the DOCKERFILE related to image
 
 jobs:
   build-scan-and-push:
