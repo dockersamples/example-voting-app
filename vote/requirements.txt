@@ -1,4 +1,3 @@
 Flask
 Redis
 gunicorn
-t
