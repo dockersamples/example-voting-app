@@ -9,6 +9,7 @@ on: [pull_request]
 
 jobs:
   build-scan-and-push:
+    if: github.repository == 'alpa-sysdig/example-voting-app/result'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
