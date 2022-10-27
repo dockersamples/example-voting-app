@@ -5,9 +5,10 @@ env:
   
 name: Container build, scan and push for VOTE
 
-on: [pull_request]
-  paths:
-  - 'vote/**'     #conditions to scan only when modifying the DOCKERFILE related to image
+on: 
+  pull_request:
+    paths:
+    - 'alpa-sysdig/example-voting-app/vote/**'     #conditions to scan only when modifying the DOCKERFILE related to image
 
 jobs:
   build-scan-and-push:
