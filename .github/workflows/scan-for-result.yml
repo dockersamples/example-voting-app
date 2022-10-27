@@ -9,11 +9,10 @@ name: Container build, scan and push for RESULT
 on: 
   pull_request:
     paths:
-    - 'result/**'
+    - 'result/**' #conditions to scan only when modifying the DOCKERFILE related to image
 
 jobs:
   build-scan-and-push:
-    if: github.repository == 'alpa-sysdig/example-voting-app/result' #conditions to trigger action only when modifying the DOCKERFILE related to image
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
