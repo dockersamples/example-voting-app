@@ -16,7 +16,7 @@ spec:
         app: result
     spec:
       containers:
-      - image: jasonumiker/examplevotingapp_result:latest
+      - image: jasonumiker/examplevotingapp_result_x64:latest
         name: result
         ports:
         - containerPort: 80
