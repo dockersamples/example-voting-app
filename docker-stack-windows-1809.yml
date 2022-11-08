@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   vote:
-    image: dockersamples/examplevotingapp_vote:dotnet-nanoserver-1809
+    image: dockersamples/votingapp_vote:dotnet-nanoserver-1809
     ports:
       - "5000:80"
     deploy:
@@ -13,7 +13,7 @@ services:
       - backend
 
   result:
-    image: dockersamples/examplevotingapp_result:dotnet-nanoserver-1809
+    image: dockersamples/votingapp_result:dotnet-nanoserver-1809
     environment:      
       - "ConnectionStrings:ResultData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
     ports:
@@ -23,7 +23,7 @@ services:
       - backend
 
   worker:
-    image: dockersamples/examplevotingapp_worker:dotnet-nanoserver-1809
+    image: dockersamples/votingapp_worker:dotnet-nanoserver-1809
     environment:      
       - "ConnectionStrings:VoteData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
     deploy:

@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   vote:
-    image: dockersamples/examplevotingapp_vote:dotnet-nanoserver-1809
+    image: dockersamples/votingapp_vote:dotnet-nanoserver-1809
     build:
       context: ./vote/dotnet
       dockerfile: Dockerfile.1809
@@ -12,7 +12,7 @@ services:
       - message-queue
 
   result:
-    image: dockersamples/examplevotingapp_result:dotnet-nanoserver-1809
+    image: dockersamples/votingapp_result:dotnet-nanoserver-1809
     build:
       context: ./result/dotnet
       dockerfile: Dockerfile.1809
@@ -24,7 +24,7 @@ services:
       - db
 
   worker:
-    image: dockersamples/examplevotingapp_worker:dotnet-nanoserver-1809
+    image: dockersamples/votingapp_worker:dotnet-nanoserver-1809
     build:
       context: ./worker/dotnet
       dockerfile: Dockerfile.1809

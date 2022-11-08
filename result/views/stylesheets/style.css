@@ -88,12 +88,12 @@ body{
   text-transform: uppercase;
 }
 
-#choice .choice.dogs{
+#choice .choice.cloudComputing{
   color: #00cbca;
   float: right;
 }
 
-#choice .choice.cats{
+#choice .choice.scalableServices{
   color: #2196f3;
   float: left;
 }

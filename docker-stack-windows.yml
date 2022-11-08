@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   vote:
-    image: dockersamples/examplevotingapp_vote:dotnet-nanoserver-sac2016
+    image: dockersamples/votingapp_vote:dotnet-nanoserver-sac2016
     ports:
       - mode: host
         target: 80
@@ -14,7 +14,7 @@ services:
       - backend
 
   result:
-    image: dockersamples/examplevotingapp_result:dotnet-nanoserver-sac2016
+    image: dockersamples/votingapp_result:dotnet-nanoserver-sac2016
     environment:      
       - "ConnectionStrings:ResultData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
     ports:
@@ -28,7 +28,7 @@ services:
       - backend
 
   worker:
-    image: dockersamples/examplevotingapp_worker:dotnet-nanoserver-sac2016
+    image: dockersamples/votingapp_worker:dotnet-nanoserver-sac2016
     environment:      
       - "ConnectionStrings:VoteData=Server=db;Port=4000;Database=votes;User=root;SslMode=None"
     deploy:
