@@ -1,5 +1,5 @@
  Voting App
-=========
+
 
 A simple distributed application running across multiple Docker containers.
 
@@ -94,7 +94,3 @@ Notes
 -----
 
 The voting application only accepts one vote per client. It does not register votes if a vote has already been submitted from a client.
-
-This isn't an  of a properly architected perfectly designed distributed app... it's just a simple 
- of the various types of pieces and languages you might see (queues, persistent data, etc), and how to 
-deal with them in Docker at a basic level. 
