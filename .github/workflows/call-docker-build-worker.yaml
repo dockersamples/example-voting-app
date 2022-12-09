@@ -21,9 +21,9 @@ on:
 jobs:
   call-docker-build:
 
-    name: Call Docker Build
+    name: Worker Call Docker Build
 
-    uses: dockersamples/.github/.github/workflows/reusable-docker-build.yaml@gha-reusable-init
+    uses: dockersamples/.github/.github/workflows/reusable-docker-build.yaml@main
 
     permissions:
       contents: read
