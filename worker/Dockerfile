@@ -1,16 +1,32 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder
+# because of dotnet, we always build on amd64, and target platforms in cli
+# dotnet doesn't support QEMU for building or running. 
+# (errors common in arm/v7 32bit) https://github.com/dotnet/dotnet-docker/issues/1537
+# https://hub.docker.com/_/microsoft-dotnet
+# hadolint ignore=DL3029
+FROM --platform=${BUILDPLATFORM} mcr.microsoft.com/dotnet/sdk:5.0 as build
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM"
 
-WORKDIR /Worker
-COPY src/Worker/Worker.csproj .
-RUN dotnet restore
+WORKDIR /source
+COPY *.csproj .
+RUN case ${TARGETPLATFORM} in \
+         "linux/amd64")  ARCH=x64  ;; \
+         "linux/arm64")  ARCH=arm64  ;; \
+         "linux/arm/v7") ARCH=arm  ;; \
+    esac \
+    && dotnet restore -r linux-${ARCH}
 
-COPY src/Worker/ .
-RUN dotnet publish -c Release -o /out Worker.csproj
+COPY . .
+RUN  case ${TARGETPLATFORM} in \
+         "linux/amd64")  ARCH=x64  ;; \
+         "linux/arm64")  ARCH=arm64  ;; \
+         "linux/arm/v7") ARCH=arm  ;; \
+    esac \
+    && dotnet publish -c release -o /app -r linux-${ARCH} --self-contained false --no-restore
 
 # app image
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1
-
+FROM mcr.microsoft.com/dotnet/runtime:5.0
 WORKDIR /app
+COPY --from=build /app .
 ENTRYPOINT ["dotnet", "Worker.dll"]
-
-COPY --from=builder /out .
