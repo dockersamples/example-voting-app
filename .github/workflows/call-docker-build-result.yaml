@@ -52,7 +52,7 @@ jobs:
       ### defaults to:
       image-names: |
         ghcr.io/dockersamples/example-voting-app-result
-      # dockersamples/examplevotingapp_result
+        dockersamples/examplevotingapp_result
       
       ### REQUIRED set rules for tagging images, based on special action syntax:
       ### https://github.com/docker/metadata-action#tags-input
@@ -60,9 +60,6 @@ jobs:
       tag-rules: |
         type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
         type=ref,event=pr
-        type=ref,event=branch
-        type=semver,pattern={{version}}
-        type=raw,value=gha-${{ github.run_id }}
       
       ### path to where docker should copy files into image
       ### defaults to root of repository (.)
