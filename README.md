@@ -30,26 +30,6 @@ Once you have your swarm, in this directory run:
 docker stack deploy --compose-file docker-stack.yml vote
 ```
 
-## Windows Containers
-
-An alternative version of the app uses Windows containers based on Nano Server. This stack runs on .NET Core, using [NATS](https://nats.io) for messaging and [TiDB](https://github.com/pingcap/tidb) for storage.
-
-You can build from source using:
-
-```
-docker compose -f docker-compose-windows.yml build
-```
-
-Then run the app using:
-
-```
-docker compose -f docker-compose-windows.yml up -d
-```
-
-> Or in a Windows swarm, run `docker stack deploy -c docker-stack-windows.yml vote`
-
-The app will be running at [http://localhost:5000](http://localhost:5000), and the results will be at [http://localhost:5001](http://localhost:5001).
-
 
 Run the app in Kubernetes
 -------------------------
