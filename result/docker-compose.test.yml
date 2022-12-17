@@ -41,7 +41,6 @@ services:
 
   redis:
     image: redis:alpine
-    ports: ["6379"]
     networks:
       - back-tier
 
