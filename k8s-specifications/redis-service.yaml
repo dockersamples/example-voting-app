@@ -4,7 +4,6 @@ metadata:
   labels:
     app: redis
   name: redis
-  namespace: vote
 spec:
   type: ClusterIP
   ports:

@@ -32,24 +32,13 @@ docker stack deploy --compose-file docker-stack.yml vote
 
 The folder k8s-specifications contains the YAML specifications of the Voting App's services.
 
-Run the following command to create the deployments and services objects in the vote namespace:
+Run the following command to create the deployments and services. Note it will create these resources in your current namespace (`default` if you haven't changed it.)
 
 ```shell
 kubectl create -f k8s-specifications/
-vote "vote" created
-deployment "db" created
-deployment "db" created
-service "db" created
-deployment "redis" created
-service "redis" created
-deployment "result" created
-service "result" created
-deployment "vote" created
-service "vote" created
-deployment "worker" created
 ```
 
-The vote interface is then available on port 31000 on each host of the cluster, the result one is available on port 31001.
+The `vote` web app is then available on port 31000 on each host of the cluster, the `result` web app is available on port 31001.
 
 ## Architecture
 
