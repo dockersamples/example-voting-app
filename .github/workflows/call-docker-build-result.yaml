@@ -59,6 +59,8 @@ jobs:
       ### defaults to:
       tag-rules: |
         type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+        type=raw,value=before,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+        type=raw,value=after,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
         type=ref,event=pr
       
       ### path to where docker should copy files into image
