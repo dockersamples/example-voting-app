@@ -1,9 +1,0 @@
-services:
-  seed:
-    build: ./seed-data
-    networks:
-      - front-tier
-    restart: "no"
-
-networks:
-  front-tier:

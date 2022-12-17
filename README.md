@@ -1,50 +1,43 @@
-Example Voting App
-=========
+# Example Voting App
 
 A simple distributed application running across multiple Docker containers.
 
-Getting started
----------------
+## Getting started
 
-Download [Docker Desktop](https://www.docker.com/products/docker-desktop) for Mac or Windows. [Docker Compose](https://docs.docker.com/compose) will be automatically installed. On Linux, make sure you have the latest version of [Compose](https://docs.docker.com/compose/install/). 
+Download [Docker Desktop](https://www.docker.com/products/docker-desktop) for Mac or Windows. [Docker Compose](https://docs.docker.com/compose) will be automatically installed. On Linux, make sure you have the latest version of [Compose](https://docs.docker.com/compose/install/).
 
+This solution uses Python, Node.js, .NET, with Redis for messaging and Postgres for storage.
 
-## Linux Containers
+Run in this directory to build and run the app:
 
-The Linux stack uses Python, Node.js, .NET Core, with Redis for messaging and Postgres for storage.
-
-> If you're using [Docker Desktop on Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows), you can run the Linux version by [switching to Linux containers](https://docs.docker.com/docker-for-windows/#switch-between-windows-and-linux-containers), or run the Windows containers version.
-
-Run in this directory:
-```
+```shell
 docker compose up
 ```
-The app will be running at [http://localhost:5000](http://localhost:5000), and the results will be at [http://localhost:5001](http://localhost:5001).
+
+The `vote` app will be running at [http://localhost:5000](http://localhost:5000), and the `results` will be at [http://localhost:5001](http://localhost:5001).
 
 Alternately, if you want to run it on a [Docker Swarm](https://docs.docker.com/engine/swarm/), first make sure you have a swarm. If you don't, run:
-```
+
+```shell
 docker swarm init
 ```
+
 Once you have your swarm, in this directory run:
-```
+
+```shell
 docker stack deploy --compose-file docker-stack.yml vote
 ```
 
+## Run the app in Kubernetes
 
-Run the app in Kubernetes
--------------------------
+The folder k8s-specifications contains the YAML specifications of the Voting App's services.
 
-The folder k8s-specifications contains the yaml specifications of the Voting App's services.
+Run the following command to create the deployments and services objects in the vote namespace:
 
-First create the vote namespace
-
-```
-$ kubectl create namespace vote
-```
-
-Run the following command to create the deployments and services objects:
-```
-$ kubectl create -f k8s-specifications/
+```shell
+kubectl create -f k8s-specifications/
+vote "vote" created
+deployment "db" created
 deployment "db" created
 service "db" created
 deployment "redis" created
@@ -58,23 +51,20 @@ deployment "worker" created
 
 The vote interface is then available on port 31000 on each host of the cluster, the result one is available on port 31001.
 
-Architecture
------
+## Architecture
 
 ![Architecture diagram](architecture.png)
 
-* A front-end web app in [Python](/vote) or [ASP.NET Core](/vote/dotnet) which lets you vote between two options
-* A [Redis](https://hub.docker.com/_/redis/) or [NATS](https://hub.docker.com/_/nats/) queue which collects new votes
-* A [.NET Core](/worker/) worker which consumes votes and stores them in…
-* A [Postgres](https://hub.docker.com/_/postgres/) or [TiDB](https://hub.docker.com/r/dockersamples/tidb/tags/) database backed by a Docker volume
-* A [Node.js](/result) or [ASP.NET Core SignalR](/result/dotnet) webapp which shows the results of the voting in real time
+* A front-end web app in [Python](/vote) which lets you vote between two options
+* A [Redis](https://hub.docker.com/_/redis/) which collects new votes
+* A [.NET](/worker/) worker which consumes votes and stores them in…
+* A [Postgres](https://hub.docker.com/_/postgres/) database backed by a Docker volume
+* A [Node.js](/result) web app which shows the results of the voting in real time
 
+## Notes
 
-Notes
------
+The voting application only accepts one vote per client browser. It does not register additional votes if a vote has already been submitted from a client.
 
-The voting application only accepts one vote per client. It does not register votes if a vote has already been submitted from a client.
-
-This isn't an example of a properly architected perfectly designed distributed app... it's just a simple 
-example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to 
-deal with them in Docker at a basic level. 
+This isn't an example of a properly architected perfectly designed distributed app... it's just a simple
+example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to
+deal with them in Docker at a basic level.
