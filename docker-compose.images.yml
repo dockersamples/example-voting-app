@@ -1,23 +1,15 @@
+# for running in docker compose with prebuilt images
+
 # version is now using "compose spec"
 # v2 and v3 are now combined!
 # docker-compose v1.27+ required
 
 services:
   vote:
-    build: ./vote
-    # use python rather than gunicorn for local dev
-    command: python app.py
+    image: dockersamples/examplevotingapp_vote
     depends_on:
       redis:
-        condition: service_healthy
-    healthcheck: 
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    volumes:
-     - ./vote:/app
+        condition: service_healthy 
     ports:
       - "5000:80"
     networks:
@@ -25,24 +17,18 @@ services:
       - back-tier
 
   result:
-    build: ./result
-    # use nodemon rather than node for local dev
-    entrypoint: nodemon server.js
+    image: dockersamples/examplevotingapp_result
     depends_on:
       db:
         condition: service_healthy 
-    volumes:
-      - ./result:/app
     ports:
       - "5001:80"
-      - "5858:5858"
     networks:
       - front-tier
       - back-tier
 
   worker:
-    build:
-      context: ./worker
+    image: dockersamples/examplevotingapp_worker
     depends_on:
       redis:
         condition: service_healthy 
@@ -75,19 +61,6 @@ services:
       interval: "5s"
     networks:
       - back-tier
-
-  # this service runs once to seed the database with votes
-  # it won't run unless you specify the "seed" profile
-  # docker compose --profile seed up -d
-  seed:
-    build: ./seed-data
-    profiles: ["seed"]
-    depends_on:
-      vote:
-        condition: service_healthy 
-    networks:
-      - front-tier
-    restart: "no"
 
 volumes:
   db-data:
