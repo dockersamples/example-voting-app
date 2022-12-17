@@ -40,6 +40,12 @@ kubectl create -f k8s-specifications/
 
 The `vote` web app is then available on port 31000 on each host of the cluster, the `result` web app is available on port 31001.
 
+To remove them, run:
+
+```shell
+kubectl delete -f k8s-specifications/
+```
+
 ## Architecture
 
 ![Architecture diagram](architecture.png)
