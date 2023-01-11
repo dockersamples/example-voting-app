@@ -1,4 +1,4 @@
-apiVersion: mohan
+apiVersion: mohan2
 kind: Service
 metadata:
   labels:
