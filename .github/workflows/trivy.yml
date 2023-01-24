@@ -3,7 +3,7 @@ env:
     IMAGE_NAME: "app"
     DOCKERFILE_CONTEXT: "result/"
   
-name: Container build, scan and push for RESULT : Trivy
+name: Container build, scan and push for RESULT Trivy
 
 on: 
   pull_request:
