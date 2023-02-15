@@ -1,0 +1,24 @@
+tasks:
+  - name: Build
+    init: |
+      docker-compose build
+    command: |
+      printf "Waiting for Voting App at $(gp url 5000) ..."
+      gp ports await 5000
+      gp open vote/app.py
+  - name: Run
+    command: docker-compose -f docker-compose.yml up
+    openMode: split-right
+
+ports:
+  - port: 5000
+    onOpen: open-preview
+  - port: 5001  # results
+    onOpen: ignore
+  - port: 5858
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - ms-azuretools.vscode-docker
+    - ms-python.python
