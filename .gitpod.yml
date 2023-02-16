@@ -3,9 +3,14 @@ tasks:
     init: |
       docker-compose build
     command: |
-      printf "Waiting for Voting App at $(gp url 5000) ..."
+      printf "Waiting for Voting App at $(gp url 5000) ...\n"
       gp ports await 5000
-      gp open vote/app.py
+      cat << EOF
+
+      Voting at $(gp url 5000)
+      Results at $(gp url 5001)
+
+      EOF
   - name: Run
     command: docker-compose -f docker-compose.yml up
     openMode: split-right
