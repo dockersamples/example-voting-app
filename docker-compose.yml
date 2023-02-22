@@ -1,12 +1,15 @@
 # version is now using "compose spec"
 # v2 and v3 are now combined!
 # docker-compose v1.27+ required
-
+env_file:
+  - development.env
 services:
   vote:
-    build: ./vote
-    # use python rather than gunicorn for local dev
-    command: python app.py
+    build:
+      context: ./vote
+      target: development
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
     depends_on:
       redis:
         condition: service_healthy
@@ -19,22 +22,22 @@ services:
     volumes:
      - ./vote:/app
     ports:
-      - "5000:80"
+      - "5001:80"
     networks:
       - front-tier
       - back-tier
 
   result:
-    build: ./result
-    # use nodemon rather than node for local dev
-    entrypoint: nodemon server.js
+    build:
+      context: ./result
+      target: development
     depends_on:
       db:
         condition: service_healthy 
     volumes:
       - ./result:/app
     ports:
-      - "5001:80"
+      - "5002:80"
       - "5858:5858"
     networks:
       - front-tier
@@ -43,6 +46,8 @@ services:
   worker:
     build:
       context: ./worker
+      args:
+        TARGETPLATFORM: "linux/amd64"
     depends_on:
       redis:
         condition: service_healthy 
@@ -64,8 +69,8 @@ services:
   db:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - "db-data:/var/lib/postgresql/data"
       - "./healthchecks:/healthchecks"

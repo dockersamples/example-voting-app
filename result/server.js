@@ -62,6 +62,8 @@ function getVotes(client) {
 function collectVotesFromResult(result) {
   var votes = {a: 0, b: 0};
 
+  //console.log("collecting votessss and I'm nicee and yuppyy")
+
   result.rows.forEach(function (row) {
     votes[row.vote] = parseInt(row.count);
   });

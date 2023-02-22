@@ -1,0 +1,46 @@
+apiVersion: skaffold/v4beta2
+kind: Config
+metadata:
+  name: example-voting-app
+build:
+  artifacts:
+  - image: examplevotingapp_result
+    context: result
+    sync:
+      infer:
+      - 'result/*.js'
+      - 'result/views/*.js'
+      - 'result/views/*.html'
+    docker:
+      dockerfile: Dockerfile
+      target: development
+  - image: examplevotingapp_vote
+    context: vote
+    sync:
+      infer:
+        - 'vote/*'
+    docker:
+      dockerfile: Dockerfile
+      target: development
+  - image: examplevotingapp_worker
+    context: worker
+    docker:
+      dockerfile: Dockerfile
+  - image: examplevotingapp_seed
+    context: seed-data
+    requires:
+      - image: examplevotingapp_result
+    docker:
+      dockerfile: Dockerfile
+manifests:
+  rawYaml:
+  - k8s-specifications/db-deployment.yaml
+  - k8s-specifications/db-service.yaml
+  - k8s-specifications/redis-deployment.yaml
+  - k8s-specifications/redis-service.yaml
+  - k8s-specifications/result-deployment.yaml
+  - k8s-specifications/result-service.yaml
+  - k8s-specifications/vote-deployment.yaml
+  - k8s-specifications/vote-service.yaml
+  - k8s-specifications/worker-deployment.yaml
+  - k8s-specifications/seed-deployment.yaml

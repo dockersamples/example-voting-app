@@ -8,6 +8,7 @@ import logging
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
+redis_host = os.getenv('REDIS_HOST', "redis")
 hostname = socket.gethostname()
 
 app = Flask(__name__)
@@ -18,7 +19,7 @@ app.logger.setLevel(logging.INFO)
 
 def get_redis():
     if not hasattr(g, 'redis'):
-        g.redis = Redis(host="redis", db=0, socket_timeout=5)
+        g.redis = Redis(host=redis_host, db=0, socket_timeout=5)
     return g.redis
 
 @app.route("/", methods=['POST','GET'])
@@ -28,6 +29,7 @@ def hello():
         voter_id = hex(random.getrandbits(64))[2:-1]
 
     vote = None
+    print("intru in functieeeeeiii")
 
     if request.method == 'POST':
         redis = get_redis()
@@ -35,6 +37,8 @@ def hello():
         app.logger.info('Received vote for %s', vote)
         data = json.dumps({'voter_id': voter_id, 'vote': vote})
         redis.rpush('votes', data)
+
+    print ("am primit requestuuuuuu")
 
     resp = make_response(render_template(
         'index.html',
