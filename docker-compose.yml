@@ -5,7 +5,7 @@ services:
   vote:
     build:
       context: ./vote
-      target: development
+      target: ${ENVIRONMENT}
     environment:
       - REDIS_HOST
     depends_on:
@@ -28,7 +28,7 @@ services:
   result:
     build:
       context: ./result
-      target: development
+      target: ${ENVIRONMENT}
     depends_on:
       db:
         condition: service_healthy 
