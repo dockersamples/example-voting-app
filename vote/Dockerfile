@@ -19,14 +19,11 @@ COPY . .
 # Make port 80 available for links and/or publish
 EXPOSE 80
 
-
-
 ###################### DEVELOPMENT #######################
 FROM base AS development
 
 # Define our command to be run when launching the container - watches file changes for dev
 CMD ["python", "app.py"]
-
 
 
 ###################### PRODUCTION #######################
