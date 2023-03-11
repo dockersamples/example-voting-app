@@ -2,7 +2,7 @@
 version: '2'
 services:
   vote:
-    image: ergotoro/examplevotingapp_vote
+    image: ergotoro/examplevotingapp_vote:v1
     ports:
       - "5000:80"
     networks:
@@ -10,7 +10,7 @@ services:
       - back-tier
 
   result:
-    image: ergotoro/examplevotingapp_result
+    image: ergotoro/examplevotingapp_result:v1
     ports:
       - "5001:80"
     networks:
@@ -18,7 +18,7 @@ services:
       - back-tier
 
   worker:
-    image: ergotoro/examplevotingapp_worker
+    image: ergotoro/examplevotingapp_worker:v1
     networks:
       - back-tier
 
