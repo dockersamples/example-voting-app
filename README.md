@@ -60,9 +60,12 @@ kubectl delete -f k8s-specifications/
 
 This project has been modified from the original with the following supports:
 1) Helm Chart package
+  
   helm folder is added with the required YAML and other dependents files
   altered for this demo
+
 2) kubernetes namespace creation and installation of Helm Chart
+  
   An shell script is added to perform these task so the Helm Chart is installed
   to the target kubernetes cluster. Still you need to configure the CLI so you
   can execute the kubectl commands.
