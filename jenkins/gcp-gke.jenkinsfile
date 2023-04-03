@@ -1,7 +1,7 @@
 pipeline {
 
-  # https://github.com/jenkinsci/google-kubernetes-engine-plugin/blob/develop/docs/Home.md
-  # Details is explained in this URL above
+  //# https://github.com/jenkinsci/google-kubernetes-engine-plugin/blob/develop/docs/Home.md
+  //# Details is explained in this URL above
 
   agent any
   environment {
