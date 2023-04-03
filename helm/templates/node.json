@@ -1,0 +1,1164 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "metadata": {
+                "annotations": {
+                    "container.googleapis.com/instance_id": "4629514989148273650",
+                    "csi.volume.kubernetes.io/nodeid": "{\"pd.csi.storage.gke.io\":\"projects/luiz-gcp-gke/zones/us-central1-c/instances/gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-0c6cefd6-wfhj\"}",
+                    "node.alpha.kubernetes.io/ttl": "0",
+                    "node.gke.io/last-applied-node-labels": "cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=1,cloud.google.com/gke-logging-variant=DEFAULT,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-nodepool=luiz-gcp-gke-k8s,cloud.google.com/gke-os-distribution=cos,cloud.google.com/machine-family=n1,cloud.google.com/private-node=false,env=luiz-gcp-gke",
+                    "node.gke.io/last-applied-node-taints": "",
+                    "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+                },
+                "creationTimestamp": "2023-04-03T12:23:23Z",
+                "labels": {
+                    "beta.kubernetes.io/arch": "amd64",
+                    "beta.kubernetes.io/instance-type": "n1-standard-1",
+                    "beta.kubernetes.io/os": "linux",
+                    "cloud.google.com/gke-boot-disk": "pd-balanced",
+                    "cloud.google.com/gke-container-runtime": "containerd",
+                    "cloud.google.com/gke-cpu-scaling-level": "1",
+                    "cloud.google.com/gke-logging-variant": "DEFAULT",
+                    "cloud.google.com/gke-max-pods-per-node": "110",
+                    "cloud.google.com/gke-nodepool": "luiz-gcp-gke-k8s",
+                    "cloud.google.com/gke-os-distribution": "cos",
+                    "cloud.google.com/machine-family": "n1",
+                    "cloud.google.com/private-node": "false",
+                    "env": "luiz-gcp-gke",
+                    "failure-domain.beta.kubernetes.io/region": "us-central1",
+                    "failure-domain.beta.kubernetes.io/zone": "us-central1-c",
+                    "kubernetes.io/arch": "amd64",
+                    "kubernetes.io/hostname": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-0c6cefd6-wfhj",
+                    "kubernetes.io/os": "linux",
+                    "node.kubernetes.io/instance-type": "n1-standard-1",
+                    "topology.gke.io/zone": "us-central1-c",
+                    "topology.kubernetes.io/region": "us-central1",
+                    "topology.kubernetes.io/zone": "us-central1-c"
+                },
+                "name": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-0c6cefd6-wfhj",
+                "resourceVersion": "106311",
+                "uid": "e1970295-afa6-4fb2-86b4-767ec62a9cea"
+            },
+            "spec": {
+                "podCIDR": "10.220.5.0/24",
+                "podCIDRs": [
+                    "10.220.5.0/24"
+                ],
+                "providerID": "gce://luiz-gcp-gke/us-central1-c/gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-0c6cefd6-wfhj"
+            },
+            "status": {
+                "addresses": [
+                    {
+                        "address": "10.10.0.19",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "107.178.212.160",
+                        "type": "ExternalIP"
+                    },
+                    {
+                        "address": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-0c6cefd6-wfhj.us-central1-c.c.luiz-gcp-gke.internal",
+                        "type": "InternalDNS"
+                    },
+                    {
+                        "address": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-0c6cefd6-wfhj.us-central1-c.c.luiz-gcp-gke.internal",
+                        "type": "Hostname"
+                    }
+                ],
+                "allocatable": {
+                    "attachable-volumes-gce-pd": "127",
+                    "cpu": "940m",
+                    "ephemeral-storage": "47060071478",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "2682664Ki",
+                    "pods": "110"
+                },
+                "capacity": {
+                    "attachable-volumes-gce-pd": "127",
+                    "cpu": "1",
+                    "ephemeral-storage": "98831908Ki",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "3768104Ki",
+                    "pods": "110"
+                },
+                "conditions": [
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:46Z",
+                        "lastTransitionTime": "2023-04-03T12:23:23Z",
+                        "message": "node is functioning properly",
+                        "reason": "NoFrequentUnregisterNetDevice",
+                        "status": "False",
+                        "type": "FrequentUnregisterNetDevice"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:46Z",
+                        "lastTransitionTime": "2023-04-03T12:23:23Z",
+                        "message": "kubelet is functioning properly",
+                        "reason": "NoFrequentKubeletRestart",
+                        "status": "False",
+                        "type": "FrequentKubeletRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:46Z",
+                        "lastTransitionTime": "2023-04-03T12:23:23Z",
+                        "message": "docker is functioning properly",
+                        "reason": "NoFrequentDockerRestart",
+                        "status": "False",
+                        "type": "FrequentDockerRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:46Z",
+                        "lastTransitionTime": "2023-04-03T12:23:23Z",
+                        "message": "containerd is functioning properly",
+                        "reason": "NoFrequentContainerdRestart",
+                        "status": "False",
+                        "type": "FrequentContainerdRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:46Z",
+                        "lastTransitionTime": "2023-04-03T12:23:23Z",
+                        "message": "kernel has no deadlock",
+                        "reason": "KernelHasNoDeadlock",
+                        "status": "False",
+                        "type": "KernelDeadlock"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:46Z",
+                        "lastTransitionTime": "2023-04-03T12:23:23Z",
+                        "message": "Filesystem is not read-only",
+                        "reason": "FilesystemIsNotReadOnly",
+                        "status": "False",
+                        "type": "ReadonlyFilesystem"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:46Z",
+                        "lastTransitionTime": "2023-04-03T12:23:23Z",
+                        "message": "docker overlay2 is functioning properly",
+                        "reason": "NoCorruptDockerOverlay2",
+                        "status": "False",
+                        "type": "CorruptDockerOverlay2"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T12:23:32Z",
+                        "lastTransitionTime": "2023-04-03T12:23:32Z",
+                        "message": "RouteController created a route",
+                        "reason": "RouteCreated",
+                        "status": "False",
+                        "type": "NetworkUnavailable"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:25:37Z",
+                        "lastTransitionTime": "2023-04-03T12:23:22Z",
+                        "message": "kubelet has sufficient memory available",
+                        "reason": "KubeletHasSufficientMemory",
+                        "status": "False",
+                        "type": "MemoryPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:25:37Z",
+                        "lastTransitionTime": "2023-04-03T12:23:22Z",
+                        "message": "kubelet has no disk pressure",
+                        "reason": "KubeletHasNoDiskPressure",
+                        "status": "False",
+                        "type": "DiskPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:25:37Z",
+                        "lastTransitionTime": "2023-04-03T12:23:22Z",
+                        "message": "kubelet has sufficient PID available",
+                        "reason": "KubeletHasSufficientPID",
+                        "status": "False",
+                        "type": "PIDPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:25:37Z",
+                        "lastTransitionTime": "2023-04-03T12:23:23Z",
+                        "message": "kubelet is posting ready status. AppArmor enabled",
+                        "reason": "KubeletReady",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "daemonEndpoints": {
+                    "kubeletEndpoint": {
+                        "Port": 10250
+                    }
+                },
+                "images": [
+                    {
+                        "names": [
+                            "gke.gcr.io/kube-proxy-amd64:v1.24.9-gke.3200",
+                            "k8s.gcr.io/kube-proxy-amd64:v1.24.9-gke.3200"
+                        ],
+                        "sizeBytes": 114141215
+                    },
+                    {
+                        "names": [
+                            "docker.io/library/postgres@sha256:ab88acc4edfbd7c728ad0fa741139b6cc830bd85138a40848672b784aab57306",
+                            "docker.io/library/postgres:15-alpine"
+                        ],
+                        "sizeBytes": 94108296
+                    },
+                    {
+                        "names": [
+                            "docker.io/dockersamples/examplevotingapp_result@sha256:313ce8b6e98d02254f84aa2193c9b3a45b8d6ab16aeb966aa680d373ebda4e70",
+                            "docker.io/dockersamples/examplevotingapp_result:latest"
+                        ],
+                        "sizeBytes": 84064076
+                    },
+                    {
+                        "names": [
+                            "docker.io/dockersamples/examplevotingapp_worker@sha256:f18b7101161761584e8dd659b481e27c9ffb3ce7ede9882fa29542e7c74c2ea0",
+                            "docker.io/dockersamples/examplevotingapp_worker:latest"
+                        ],
+                        "sizeBytes": 80283532
+                    },
+                    {
+                        "names": [
+                            "docker.io/dockersamples/examplevotingapp_vote@sha256:a4f71a32837ac3c5bd06ddda91b7093429c6bc5f04732451bd90c1c2f15dde8e",
+                            "docker.io/dockersamples/examplevotingapp_vote:latest"
+                        ],
+                        "sizeBytes": 54395418
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/event-exporter@sha256:34b034af960047020f4674151bbb2b55878f82a0b76dabca81b518e9fe82180d",
+                            "eu.gcr.io/gke-release-staging/event-exporter@sha256:34b034af960047020f4674151bbb2b55878f82a0b76dabca81b518e9fe82180d",
+                            "gcr.io/gke-release-staging/event-exporter@sha256:34b034af960047020f4674151bbb2b55878f82a0b76dabca81b518e9fe82180d",
+                            "asia.gcr.io/gke-release-staging/event-exporter:v0.3.4-gke.0",
+                            "eu.gcr.io/gke-release-staging/event-exporter:v0.3.4-gke.0"
+                        ],
+                        "sizeBytes": 48883002
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/prometheus-to-sd@sha256:e739643c3939ba0b161425f45a1989eedfc4a3b166db9a7100863296b4c70510",
+                            "eu.gcr.io/gke-release-staging/prometheus-to-sd@sha256:e739643c3939ba0b161425f45a1989eedfc4a3b166db9a7100863296b4c70510",
+                            "gcr.io/gke-release-staging/prometheus-to-sd@sha256:e739643c3939ba0b161425f45a1989eedfc4a3b166db9a7100863296b4c70510",
+                            "asia.gcr.io/gke-release-staging/prometheus-to-sd:v0.11.1-gke.1",
+                            "eu.gcr.io/gke-release-staging/prometheus-to-sd:v0.11.1-gke.1"
+                        ],
+                        "sizeBytes": 48742184
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/fluent-bit@sha256:c739802603065c0bcb56fe50537fd7f2ad17c718a0111c3db8bd614bffceb410"
+                        ],
+                        "sizeBytes": 44749545
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/gcp-compute-persistent-disk-csi-driver@sha256:b23592d15c081fa5add1432e5773f743e926bd70433d74fdf47a8e2309862a83"
+                        ],
+                        "sizeBytes": 44211966
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/gke-metrics-agent@sha256:a3f58fef8d60a20540fc58d85cf08c08e9884115ff69beb8a49380e299357980",
+                            "gke.gcr.io/gke-metrics-agent:1.8.3-gke.2"
+                        ],
+                        "sizeBytes": 27266228
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/metrics-server-amd64@sha256:f813a4f5306c7b7ef55a57c60f61bb1f6c89fea41e166d7727db10b225575954",
+                            "eu.gcr.io/gke-release-staging/metrics-server-amd64@sha256:f813a4f5306c7b7ef55a57c60f61bb1f6c89fea41e166d7727db10b225575954",
+                            "gcr.io/gke-release-staging/metrics-server-amd64@sha256:f813a4f5306c7b7ef55a57c60f61bb1f6c89fea41e166d7727db10b225575954",
+                            "asia.gcr.io/gke-release-staging/metrics-server-amd64:v0.5.2-gke.0",
+                            "eu.gcr.io/gke-release-staging/metrics-server-amd64:v0.5.2-gke.0"
+                        ],
+                        "sizeBytes": 26022476
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/fluent-bit-gke-exporter@sha256:89bf6f01430e2b2568a32a42b403a7c43a05878a76e71bb8d7ca23f15f4cfc99",
+                            "gke.gcr.io/fluent-bit-gke-exporter:v0.22.0-gke.0"
+                        ],
+                        "sizeBytes": 19369317
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/gke-distroless/bash@sha256:ae3ca4f02f34781b65402d399ce64e48ee7dd756e901676fca17c25178db4049",
+                            "gke.gcr.io/gke-distroless/bash:20220419"
+                        ],
+                        "sizeBytes": 17341961
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler@sha256:0f232ba18b63363e33f205d0242ef98324fb388434f8598c2fc8e967dca146bc",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler@sha256:0f232ba18b63363e33f205d0242ef98324fb388434f8598c2fc8e967dca146bc",
+                            "gcr.io/gke-release-staging/cluster-proportional-autoscaler@sha256:0f232ba18b63363e33f205d0242ef98324fb388434f8598c2fc8e967dca146bc",
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler:1.8.4-gke.1",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler:1.8.4-gke.1"
+                        ],
+                        "sizeBytes": 16830362
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64@sha256:e3f48b3d1e49cfa3e7f002020769c9cd01cd0e77bbc99dc133c7ab0f8097e989",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64@sha256:e3f48b3d1e49cfa3e7f002020769c9cd01cd0e77bbc99dc133c7ab0f8097e989",
+                            "gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64@sha256:e3f48b3d1e49cfa3e7f002020769c9cd01cd0e77bbc99dc133c7ab0f8097e989",
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64:1.7.1-gke.0",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64:1.7.1-gke.0"
+                        ],
+                        "sizeBytes": 16572417
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cpvpa-amd64@sha256:b802d79f207ea9cbc996cc208781ea34715fe796be68e5250da37b2ae73d42a6",
+                            "eu.gcr.io/gke-release-staging/cpvpa-amd64@sha256:b802d79f207ea9cbc996cc208781ea34715fe796be68e5250da37b2ae73d42a6",
+                            "gcr.io/gke-release-staging/cpvpa-amd64@sha256:b802d79f207ea9cbc996cc208781ea34715fe796be68e5250da37b2ae73d42a6",
+                            "asia.gcr.io/gke-release-staging/cpvpa-amd64:v0.8.3-gke.0",
+                            "eu.gcr.io/gke-release-staging/cpvpa-amd64:v0.8.3-gke.0"
+                        ],
+                        "sizeBytes": 16376177
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent@sha256:176958be940010847e1d7d92ea38cba9755ed9a88830986b994b947e7c23ff04",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent@sha256:176958be940010847e1d7d92ea38cba9755ed9a88830986b994b947e7c23ff04",
+                            "gcr.io/gke-release-staging/ip-masq-agent@sha256:176958be940010847e1d7d92ea38cba9755ed9a88830986b994b947e7c23ff04",
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent:v2.8.0",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent:v2.8.0"
+                        ],
+                        "sizeBytes": 14490309
+                    },
+                    {
+                        "names": [
+                            "docker.io/htmlprogrammer2001/simple-db-app-migration@sha256:74c6d2c679eddcfff844e8defc00748d1e2bd2afafd203e547fc14fa74d528eb",
+                            "docker.io/htmlprogrammer2001/simple-db-app-migration:1.0"
+                        ],
+                        "sizeBytes": 10659809
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/addon-resizer@sha256:21a03d42d90d7a2539c3eab02ff0ed96eb5ae45fba013deb3b46dfa9b7fd8d8d",
+                            "eu.gcr.io/gke-release-staging/addon-resizer@sha256:21a03d42d90d7a2539c3eab02ff0ed96eb5ae45fba013deb3b46dfa9b7fd8d8d",
+                            "gcr.io/gke-release-staging/addon-resizer@sha256:21a03d42d90d7a2539c3eab02ff0ed96eb5ae45fba013deb3b46dfa9b7fd8d8d",
+                            "asia.gcr.io/gke-release-staging/addon-resizer:1.8.14-gke.0",
+                            "eu.gcr.io/gke-release-staging/addon-resizer:1.8.14-gke.0"
+                        ],
+                        "sizeBytes": 10452458
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/csi-node-driver-registrar@sha256:bc39ac85d1b4de9070d512557e9c6b1ffeb4f85577fe4cf89053e686e72a51e8",
+                            "gke.gcr.io/csi-node-driver-registrar:v2.5.1-gke.1"
+                        ],
+                        "sizeBytes": 9150173
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "eu.gcr.io/gke-release-staging/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "gcr.io/gke-release-staging/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "gke.gcr.io/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "asia.gcr.io/gke-release-staging/pause:3.6"
+                        ],
+                        "sizeBytes": 305230
+                    }
+                ],
+                "nodeInfo": {
+                    "architecture": "amd64",
+                    "bootID": "bcfb6943-8622-4019-b2c9-16f2a20eb708",
+                    "containerRuntimeVersion": "containerd://1.6.9",
+                    "kernelVersion": "5.10.161+",
+                    "kubeProxyVersion": "v1.24.9-gke.3200",
+                    "kubeletVersion": "v1.24.9-gke.3200",
+                    "machineID": "a9bb9302f3aa81e8ca46ccd76919f522",
+                    "operatingSystem": "linux",
+                    "osImage": "Container-Optimized OS from Google",
+                    "systemUUID": "a9bb9302-f3aa-81e8-ca46-ccd76919f522"
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "metadata": {
+                "annotations": {
+                    "container.googleapis.com/instance_id": "47544316138585059",
+                    "csi.volume.kubernetes.io/nodeid": "{\"pd.csi.storage.gke.io\":\"projects/luiz-gcp-gke/zones/us-central1-f/instances/gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-189abf0f-2qj3\"}",
+                    "node.alpha.kubernetes.io/ttl": "0",
+                    "node.gke.io/last-applied-node-labels": "cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=1,cloud.google.com/gke-logging-variant=DEFAULT,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-nodepool=luiz-gcp-gke-k8s,cloud.google.com/gke-os-distribution=cos,cloud.google.com/machine-family=n1,cloud.google.com/private-node=false,env=luiz-gcp-gke",
+                    "node.gke.io/last-applied-node-taints": "",
+                    "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+                },
+                "creationTimestamp": "2023-04-03T12:23:06Z",
+                "labels": {
+                    "beta.kubernetes.io/arch": "amd64",
+                    "beta.kubernetes.io/instance-type": "n1-standard-1",
+                    "beta.kubernetes.io/os": "linux",
+                    "cloud.google.com/gke-boot-disk": "pd-balanced",
+                    "cloud.google.com/gke-container-runtime": "containerd",
+                    "cloud.google.com/gke-cpu-scaling-level": "1",
+                    "cloud.google.com/gke-logging-variant": "DEFAULT",
+                    "cloud.google.com/gke-max-pods-per-node": "110",
+                    "cloud.google.com/gke-nodepool": "luiz-gcp-gke-k8s",
+                    "cloud.google.com/gke-os-distribution": "cos",
+                    "cloud.google.com/machine-family": "n1",
+                    "cloud.google.com/private-node": "false",
+                    "env": "luiz-gcp-gke",
+                    "failure-domain.beta.kubernetes.io/region": "us-central1",
+                    "failure-domain.beta.kubernetes.io/zone": "us-central1-f",
+                    "kubernetes.io/arch": "amd64",
+                    "kubernetes.io/hostname": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-189abf0f-2qj3",
+                    "kubernetes.io/os": "linux",
+                    "node.kubernetes.io/instance-type": "n1-standard-1",
+                    "topology.gke.io/zone": "us-central1-f",
+                    "topology.kubernetes.io/region": "us-central1",
+                    "topology.kubernetes.io/zone": "us-central1-f"
+                },
+                "name": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-189abf0f-2qj3",
+                "resourceVersion": "105213",
+                "uid": "ea3ca6d2-8c16-4fab-8741-eeac6b5dbbe8"
+            },
+            "spec": {
+                "podCIDR": "10.220.3.0/24",
+                "podCIDRs": [
+                    "10.220.3.0/24"
+                ],
+                "providerID": "gce://luiz-gcp-gke/us-central1-f/gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-189abf0f-2qj3"
+            },
+            "status": {
+                "addresses": [
+                    {
+                        "address": "10.10.0.17",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "35.223.98.212",
+                        "type": "ExternalIP"
+                    },
+                    {
+                        "address": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-189abf0f-2qj3.us-central1-f.c.luiz-gcp-gke.internal",
+                        "type": "InternalDNS"
+                    },
+                    {
+                        "address": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-189abf0f-2qj3.us-central1-f.c.luiz-gcp-gke.internal",
+                        "type": "Hostname"
+                    }
+                ],
+                "allocatable": {
+                    "attachable-volumes-gce-pd": "127",
+                    "cpu": "940m",
+                    "ephemeral-storage": "47060071478",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "2682664Ki",
+                    "pods": "110"
+                },
+                "capacity": {
+                    "attachable-volumes-gce-pd": "127",
+                    "cpu": "1",
+                    "ephemeral-storage": "98831908Ki",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "3768104Ki",
+                    "pods": "110"
+                },
+                "conditions": [
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:38Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "kernel has no deadlock",
+                        "reason": "KernelHasNoDeadlock",
+                        "status": "False",
+                        "type": "KernelDeadlock"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:38Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "Filesystem is not read-only",
+                        "reason": "FilesystemIsNotReadOnly",
+                        "status": "False",
+                        "type": "ReadonlyFilesystem"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:38Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "node is functioning properly",
+                        "reason": "NoFrequentUnregisterNetDevice",
+                        "status": "False",
+                        "type": "FrequentUnregisterNetDevice"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:38Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "kubelet is functioning properly",
+                        "reason": "NoFrequentKubeletRestart",
+                        "status": "False",
+                        "type": "FrequentKubeletRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:38Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "docker is functioning properly",
+                        "reason": "NoFrequentDockerRestart",
+                        "status": "False",
+                        "type": "FrequentDockerRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:38Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "containerd is functioning properly",
+                        "reason": "NoFrequentContainerdRestart",
+                        "status": "False",
+                        "type": "FrequentContainerdRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:38Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "docker overlay2 is functioning properly",
+                        "reason": "NoCorruptDockerOverlay2",
+                        "status": "False",
+                        "type": "CorruptDockerOverlay2"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T12:23:24Z",
+                        "lastTransitionTime": "2023-04-03T12:23:24Z",
+                        "message": "RouteController created a route",
+                        "reason": "RouteCreated",
+                        "status": "False",
+                        "type": "NetworkUnavailable"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:22:56Z",
+                        "lastTransitionTime": "2023-04-03T12:23:06Z",
+                        "message": "kubelet has sufficient memory available",
+                        "reason": "KubeletHasSufficientMemory",
+                        "status": "False",
+                        "type": "MemoryPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:22:56Z",
+                        "lastTransitionTime": "2023-04-03T12:23:06Z",
+                        "message": "kubelet has no disk pressure",
+                        "reason": "KubeletHasNoDiskPressure",
+                        "status": "False",
+                        "type": "DiskPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:22:56Z",
+                        "lastTransitionTime": "2023-04-03T12:23:06Z",
+                        "message": "kubelet has sufficient PID available",
+                        "reason": "KubeletHasSufficientPID",
+                        "status": "False",
+                        "type": "PIDPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:22:56Z",
+                        "lastTransitionTime": "2023-04-03T12:23:07Z",
+                        "message": "kubelet is posting ready status. AppArmor enabled",
+                        "reason": "KubeletReady",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "daemonEndpoints": {
+                    "kubeletEndpoint": {
+                        "Port": 10250
+                    }
+                },
+                "images": [
+                    {
+                        "names": [
+                            "gke.gcr.io/kube-proxy-amd64:v1.24.9-gke.3200",
+                            "k8s.gcr.io/kube-proxy-amd64:v1.24.9-gke.3200"
+                        ],
+                        "sizeBytes": 114141215
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/event-exporter@sha256:34b034af960047020f4674151bbb2b55878f82a0b76dabca81b518e9fe82180d",
+                            "eu.gcr.io/gke-release-staging/event-exporter@sha256:34b034af960047020f4674151bbb2b55878f82a0b76dabca81b518e9fe82180d",
+                            "gcr.io/gke-release-staging/event-exporter@sha256:34b034af960047020f4674151bbb2b55878f82a0b76dabca81b518e9fe82180d",
+                            "asia.gcr.io/gke-release-staging/event-exporter:v0.3.4-gke.0",
+                            "eu.gcr.io/gke-release-staging/event-exporter:v0.3.4-gke.0"
+                        ],
+                        "sizeBytes": 48883002
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/prometheus-to-sd@sha256:e739643c3939ba0b161425f45a1989eedfc4a3b166db9a7100863296b4c70510",
+                            "eu.gcr.io/gke-release-staging/prometheus-to-sd@sha256:e739643c3939ba0b161425f45a1989eedfc4a3b166db9a7100863296b4c70510",
+                            "gcr.io/gke-release-staging/prometheus-to-sd@sha256:e739643c3939ba0b161425f45a1989eedfc4a3b166db9a7100863296b4c70510",
+                            "asia.gcr.io/gke-release-staging/prometheus-to-sd:v0.11.1-gke.1",
+                            "eu.gcr.io/gke-release-staging/prometheus-to-sd:v0.11.1-gke.1"
+                        ],
+                        "sizeBytes": 48742184
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/prometheus-to-sd@sha256:39fef38cc66dbf89af3df1e5f963bb5ce435148e60a3549683e60c444a894f7b",
+                            "gke.gcr.io/prometheus-to-sd:v0.11.3-gke.0"
+                        ],
+                        "sizeBytes": 48053500
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/fluent-bit@sha256:c739802603065c0bcb56fe50537fd7f2ad17c718a0111c3db8bd614bffceb410"
+                        ],
+                        "sizeBytes": 44749545
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/gcp-compute-persistent-disk-csi-driver@sha256:b23592d15c081fa5add1432e5773f743e926bd70433d74fdf47a8e2309862a83"
+                        ],
+                        "sizeBytes": 44211966
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/k8s-dns-dnsmasq-nanny@sha256:bb7a46a59bd49084b619d53cbb1b5201595f3d43984aad7c042e57c0ab515b86",
+                            "gke.gcr.io/k8s-dns-dnsmasq-nanny:1.22.12-gke.0"
+                        ],
+                        "sizeBytes": 29084729
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/gke-metrics-agent@sha256:a3f58fef8d60a20540fc58d85cf08c08e9884115ff69beb8a49380e299357980",
+                            "gke.gcr.io/gke-metrics-agent:1.8.3-gke.2"
+                        ],
+                        "sizeBytes": 27266228
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/metrics-server@sha256:1d20492ca374191e5b6ff4b7712b62b41ab75ce226424974356dc266e6e99e83",
+                            "gke.gcr.io/metrics-server:v0.5.2-gke.3"
+                        ],
+                        "sizeBytes": 26915699
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/metrics-server-amd64@sha256:f813a4f5306c7b7ef55a57c60f61bb1f6c89fea41e166d7727db10b225575954",
+                            "eu.gcr.io/gke-release-staging/metrics-server-amd64@sha256:f813a4f5306c7b7ef55a57c60f61bb1f6c89fea41e166d7727db10b225575954",
+                            "gcr.io/gke-release-staging/metrics-server-amd64@sha256:f813a4f5306c7b7ef55a57c60f61bb1f6c89fea41e166d7727db10b225575954",
+                            "asia.gcr.io/gke-release-staging/metrics-server-amd64:v0.5.2-gke.0",
+                            "eu.gcr.io/gke-release-staging/metrics-server-amd64:v0.5.2-gke.0"
+                        ],
+                        "sizeBytes": 26022476
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/k8s-dns-kube-dns@sha256:b18b51683f6633979434a24ca2341e3b6bab8af0167b1be6b43f901aa615b38e",
+                            "gke.gcr.io/k8s-dns-kube-dns:1.22.12-gke.0"
+                        ],
+                        "sizeBytes": 25176400
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/event-exporter@sha256:d2666b4eb58b9cf6814f3a2b4c4391b821ec58be547221fc4b2000dbe71c4184",
+                            "gke.gcr.io/event-exporter:v0.4.1-gke.0"
+                        ],
+                        "sizeBytes": 22242662
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/k8s-dns-sidecar@sha256:92aa53b2cde450a93ad283ccac66cf193ffce425c0717b330b790b1364b40e9d",
+                            "gke.gcr.io/k8s-dns-sidecar:1.22.12-gke.0"
+                        ],
+                        "sizeBytes": 21977081
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/fluent-bit-gke-exporter@sha256:89bf6f01430e2b2568a32a42b403a7c43a05878a76e71bb8d7ca23f15f4cfc99",
+                            "gke.gcr.io/fluent-bit-gke-exporter:v0.22.0-gke.0"
+                        ],
+                        "sizeBytes": 19369317
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/gke-distroless/bash@sha256:ae3ca4f02f34781b65402d399ce64e48ee7dd756e901676fca17c25178db4049",
+                            "gke.gcr.io/gke-distroless/bash:20220419"
+                        ],
+                        "sizeBytes": 17341961
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler@sha256:0f232ba18b63363e33f205d0242ef98324fb388434f8598c2fc8e967dca146bc",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler@sha256:0f232ba18b63363e33f205d0242ef98324fb388434f8598c2fc8e967dca146bc",
+                            "gcr.io/gke-release-staging/cluster-proportional-autoscaler@sha256:0f232ba18b63363e33f205d0242ef98324fb388434f8598c2fc8e967dca146bc",
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler:1.8.4-gke.1",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler:1.8.4-gke.1"
+                        ],
+                        "sizeBytes": 16830362
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64@sha256:e3f48b3d1e49cfa3e7f002020769c9cd01cd0e77bbc99dc133c7ab0f8097e989",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64@sha256:e3f48b3d1e49cfa3e7f002020769c9cd01cd0e77bbc99dc133c7ab0f8097e989",
+                            "gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64@sha256:e3f48b3d1e49cfa3e7f002020769c9cd01cd0e77bbc99dc133c7ab0f8097e989",
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64:1.7.1-gke.0",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64:1.7.1-gke.0"
+                        ],
+                        "sizeBytes": 16572417
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cpvpa-amd64@sha256:b802d79f207ea9cbc996cc208781ea34715fe796be68e5250da37b2ae73d42a6",
+                            "eu.gcr.io/gke-release-staging/cpvpa-amd64@sha256:b802d79f207ea9cbc996cc208781ea34715fe796be68e5250da37b2ae73d42a6",
+                            "gcr.io/gke-release-staging/cpvpa-amd64@sha256:b802d79f207ea9cbc996cc208781ea34715fe796be68e5250da37b2ae73d42a6",
+                            "asia.gcr.io/gke-release-staging/cpvpa-amd64:v0.8.3-gke.0",
+                            "eu.gcr.io/gke-release-staging/cpvpa-amd64:v0.8.3-gke.0"
+                        ],
+                        "sizeBytes": 16376177
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent@sha256:176958be940010847e1d7d92ea38cba9755ed9a88830986b994b947e7c23ff04",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent@sha256:176958be940010847e1d7d92ea38cba9755ed9a88830986b994b947e7c23ff04",
+                            "gcr.io/gke-release-staging/ip-masq-agent@sha256:176958be940010847e1d7d92ea38cba9755ed9a88830986b994b947e7c23ff04",
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent:v2.8.0",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent:v2.8.0"
+                        ],
+                        "sizeBytes": 14490309
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/proxy-agent@sha256:54927d5677ff4cf4db546c201eb4ae15591fb6bc5c7563aa05dd440b35f1f400"
+                        ],
+                        "sizeBytes": 10608426
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/addon-resizer@sha256:7314ad83deab6db447d078f55b44e8e7f412ed9ef0d8d399d9a11a9e2d323c19",
+                            "gke.gcr.io/addon-resizer:1.8.14-gke.3"
+                        ],
+                        "sizeBytes": 10607451
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/addon-resizer@sha256:21a03d42d90d7a2539c3eab02ff0ed96eb5ae45fba013deb3b46dfa9b7fd8d8d",
+                            "eu.gcr.io/gke-release-staging/addon-resizer@sha256:21a03d42d90d7a2539c3eab02ff0ed96eb5ae45fba013deb3b46dfa9b7fd8d8d",
+                            "gcr.io/gke-release-staging/addon-resizer@sha256:21a03d42d90d7a2539c3eab02ff0ed96eb5ae45fba013deb3b46dfa9b7fd8d8d",
+                            "asia.gcr.io/gke-release-staging/addon-resizer:1.8.14-gke.0",
+                            "eu.gcr.io/gke-release-staging/addon-resizer:1.8.14-gke.0"
+                        ],
+                        "sizeBytes": 10452458
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/csi-node-driver-registrar@sha256:bc39ac85d1b4de9070d512557e9c6b1ffeb4f85577fe4cf89053e686e72a51e8",
+                            "gke.gcr.io/csi-node-driver-registrar:v2.5.1-gke.1"
+                        ],
+                        "sizeBytes": 9150173
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/ingress-gce-404-server-with-metrics@sha256:183dee42ea6bca468ab1ef9a1143f46400fc7443ff59e58f17c842af3113d3b5",
+                            "gke.gcr.io/ingress-gce-404-server-with-metrics:v1.16.1"
+                        ],
+                        "sizeBytes": 6552738
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "eu.gcr.io/gke-release-staging/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "gcr.io/gke-release-staging/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "gke.gcr.io/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "asia.gcr.io/gke-release-staging/pause:3.6"
+                        ],
+                        "sizeBytes": 305230
+                    }
+                ],
+                "nodeInfo": {
+                    "architecture": "amd64",
+                    "bootID": "fac5c390-4408-4bd6-8d9c-6bf384c9fe5a",
+                    "containerRuntimeVersion": "containerd://1.6.9",
+                    "kernelVersion": "5.10.161+",
+                    "kubeProxyVersion": "v1.24.9-gke.3200",
+                    "kubeletVersion": "v1.24.9-gke.3200",
+                    "machineID": "03c7d1feee65baafe567e0a51b410df6",
+                    "operatingSystem": "linux",
+                    "osImage": "Container-Optimized OS from Google",
+                    "systemUUID": "03c7d1fe-ee65-baaf-e567-e0a51b410df6"
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "metadata": {
+                "annotations": {
+                    "container.googleapis.com/instance_id": "5642748437708897250",
+                    "csi.volume.kubernetes.io/nodeid": "{\"pd.csi.storage.gke.io\":\"projects/luiz-gcp-gke/zones/us-central1-b/instances/gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-d1ba7149-x6t2\"}",
+                    "node.alpha.kubernetes.io/ttl": "0",
+                    "node.gke.io/last-applied-node-labels": "cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=1,cloud.google.com/gke-logging-variant=DEFAULT,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-nodepool=luiz-gcp-gke-k8s,cloud.google.com/gke-os-distribution=cos,cloud.google.com/machine-family=n1,cloud.google.com/private-node=false,env=luiz-gcp-gke",
+                    "node.gke.io/last-applied-node-taints": "",
+                    "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+                },
+                "creationTimestamp": "2023-04-03T12:23:12Z",
+                "labels": {
+                    "beta.kubernetes.io/arch": "amd64",
+                    "beta.kubernetes.io/instance-type": "n1-standard-1",
+                    "beta.kubernetes.io/os": "linux",
+                    "cloud.google.com/gke-boot-disk": "pd-balanced",
+                    "cloud.google.com/gke-container-runtime": "containerd",
+                    "cloud.google.com/gke-cpu-scaling-level": "1",
+                    "cloud.google.com/gke-logging-variant": "DEFAULT",
+                    "cloud.google.com/gke-max-pods-per-node": "110",
+                    "cloud.google.com/gke-nodepool": "luiz-gcp-gke-k8s",
+                    "cloud.google.com/gke-os-distribution": "cos",
+                    "cloud.google.com/machine-family": "n1",
+                    "cloud.google.com/private-node": "false",
+                    "env": "luiz-gcp-gke",
+                    "failure-domain.beta.kubernetes.io/region": "us-central1",
+                    "failure-domain.beta.kubernetes.io/zone": "us-central1-b",
+                    "kubernetes.io/arch": "amd64",
+                    "kubernetes.io/hostname": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-d1ba7149-x6t2",
+                    "kubernetes.io/os": "linux",
+                    "node.kubernetes.io/instance-type": "n1-standard-1",
+                    "topology.gke.io/zone": "us-central1-b",
+                    "topology.kubernetes.io/region": "us-central1",
+                    "topology.kubernetes.io/zone": "us-central1-b"
+                },
+                "name": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-d1ba7149-x6t2",
+                "resourceVersion": "106258",
+                "uid": "3e5fe404-91b2-4d91-b32c-cae844084a12"
+            },
+            "spec": {
+                "podCIDR": "10.220.4.0/24",
+                "podCIDRs": [
+                    "10.220.4.0/24"
+                ],
+                "providerID": "gce://luiz-gcp-gke/us-central1-b/gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-d1ba7149-x6t2"
+            },
+            "status": {
+                "addresses": [
+                    {
+                        "address": "10.10.0.18",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "23.236.58.242",
+                        "type": "ExternalIP"
+                    },
+                    {
+                        "address": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-d1ba7149-x6t2.us-central1-b.c.luiz-gcp-gke.internal",
+                        "type": "InternalDNS"
+                    },
+                    {
+                        "address": "gke-luiz-gcp-gke-k8s-luiz-gcp-gke-k8s-d1ba7149-x6t2.us-central1-b.c.luiz-gcp-gke.internal",
+                        "type": "Hostname"
+                    }
+                ],
+                "allocatable": {
+                    "attachable-volumes-gce-pd": "127",
+                    "cpu": "940m",
+                    "ephemeral-storage": "47060071478",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "2682664Ki",
+                    "pods": "110"
+                },
+                "capacity": {
+                    "attachable-volumes-gce-pd": "127",
+                    "cpu": "1",
+                    "ephemeral-storage": "98831908Ki",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "3768104Ki",
+                    "pods": "110"
+                },
+                "conditions": [
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:34Z",
+                        "lastTransitionTime": "2023-04-03T12:23:12Z",
+                        "message": "Filesystem is not read-only",
+                        "reason": "FilesystemIsNotReadOnly",
+                        "status": "False",
+                        "type": "ReadonlyFilesystem"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:34Z",
+                        "lastTransitionTime": "2023-04-03T12:23:12Z",
+                        "message": "docker overlay2 is functioning properly",
+                        "reason": "NoCorruptDockerOverlay2",
+                        "status": "False",
+                        "type": "CorruptDockerOverlay2"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:34Z",
+                        "lastTransitionTime": "2023-04-03T12:23:12Z",
+                        "message": "node is functioning properly",
+                        "reason": "NoFrequentUnregisterNetDevice",
+                        "status": "False",
+                        "type": "FrequentUnregisterNetDevice"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:34Z",
+                        "lastTransitionTime": "2023-04-03T12:23:12Z",
+                        "message": "kubelet is functioning properly",
+                        "reason": "NoFrequentKubeletRestart",
+                        "status": "False",
+                        "type": "FrequentKubeletRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:34Z",
+                        "lastTransitionTime": "2023-04-03T12:23:12Z",
+                        "message": "docker is functioning properly",
+                        "reason": "NoFrequentDockerRestart",
+                        "status": "False",
+                        "type": "FrequentDockerRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:34Z",
+                        "lastTransitionTime": "2023-04-03T12:23:12Z",
+                        "message": "containerd is functioning properly",
+                        "reason": "NoFrequentContainerdRestart",
+                        "status": "False",
+                        "type": "FrequentContainerdRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:23:34Z",
+                        "lastTransitionTime": "2023-04-03T12:23:12Z",
+                        "message": "kernel has no deadlock",
+                        "reason": "KernelHasNoDeadlock",
+                        "status": "False",
+                        "type": "KernelDeadlock"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T12:23:24Z",
+                        "lastTransitionTime": "2023-04-03T12:23:24Z",
+                        "message": "RouteController created a route",
+                        "reason": "RouteCreated",
+                        "status": "False",
+                        "type": "NetworkUnavailable"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:25:32Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "kubelet has sufficient memory available",
+                        "reason": "KubeletHasSufficientMemory",
+                        "status": "False",
+                        "type": "MemoryPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:25:32Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "kubelet has no disk pressure",
+                        "reason": "KubeletHasNoDiskPressure",
+                        "status": "False",
+                        "type": "DiskPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:25:32Z",
+                        "lastTransitionTime": "2023-04-03T12:23:11Z",
+                        "message": "kubelet has sufficient PID available",
+                        "reason": "KubeletHasSufficientPID",
+                        "status": "False",
+                        "type": "PIDPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2023-04-03T15:25:32Z",
+                        "lastTransitionTime": "2023-04-03T12:23:12Z",
+                        "message": "kubelet is posting ready status. AppArmor enabled",
+                        "reason": "KubeletReady",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "daemonEndpoints": {
+                    "kubeletEndpoint": {
+                        "Port": 10250
+                    }
+                },
+                "images": [
+                    {
+                        "names": [
+                            "docker.io/htmlprogrammer2001/simple-db-app@sha256:a7e0a233a9bc67ee876a8640f5736761fa6c4539c1722a2bbba820ab38d4ceec",
+                            "docker.io/htmlprogrammer2001/simple-db-app:1.0"
+                        ],
+                        "sizeBytes": 366806605
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/kube-proxy-amd64:v1.24.9-gke.3200",
+                            "k8s.gcr.io/kube-proxy-amd64:v1.24.9-gke.3200"
+                        ],
+                        "sizeBytes": 114141215
+                    },
+                    {
+                        "names": [
+                            "docker.io/library/postgres@sha256:ab88acc4edfbd7c728ad0fa741139b6cc830bd85138a40848672b784aab57306",
+                            "docker.io/library/postgres:15-alpine"
+                        ],
+                        "sizeBytes": 94108296
+                    },
+                    {
+                        "names": [
+                            "docker.io/dockersamples/examplevotingapp_vote@sha256:a4f71a32837ac3c5bd06ddda91b7093429c6bc5f04732451bd90c1c2f15dde8e",
+                            "docker.io/dockersamples/examplevotingapp_vote:latest"
+                        ],
+                        "sizeBytes": 54395418
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/event-exporter@sha256:34b034af960047020f4674151bbb2b55878f82a0b76dabca81b518e9fe82180d",
+                            "eu.gcr.io/gke-release-staging/event-exporter@sha256:34b034af960047020f4674151bbb2b55878f82a0b76dabca81b518e9fe82180d",
+                            "gcr.io/gke-release-staging/event-exporter@sha256:34b034af960047020f4674151bbb2b55878f82a0b76dabca81b518e9fe82180d",
+                            "asia.gcr.io/gke-release-staging/event-exporter:v0.3.4-gke.0",
+                            "eu.gcr.io/gke-release-staging/event-exporter:v0.3.4-gke.0"
+                        ],
+                        "sizeBytes": 48883002
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/prometheus-to-sd@sha256:e739643c3939ba0b161425f45a1989eedfc4a3b166db9a7100863296b4c70510",
+                            "eu.gcr.io/gke-release-staging/prometheus-to-sd@sha256:e739643c3939ba0b161425f45a1989eedfc4a3b166db9a7100863296b4c70510",
+                            "gcr.io/gke-release-staging/prometheus-to-sd@sha256:e739643c3939ba0b161425f45a1989eedfc4a3b166db9a7100863296b4c70510",
+                            "asia.gcr.io/gke-release-staging/prometheus-to-sd:v0.11.1-gke.1",
+                            "eu.gcr.io/gke-release-staging/prometheus-to-sd:v0.11.1-gke.1"
+                        ],
+                        "sizeBytes": 48742184
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/fluent-bit@sha256:c739802603065c0bcb56fe50537fd7f2ad17c718a0111c3db8bd614bffceb410"
+                        ],
+                        "sizeBytes": 44749545
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/gcp-compute-persistent-disk-csi-driver@sha256:b23592d15c081fa5add1432e5773f743e926bd70433d74fdf47a8e2309862a83"
+                        ],
+                        "sizeBytes": 44211966
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/gke-metrics-agent@sha256:a3f58fef8d60a20540fc58d85cf08c08e9884115ff69beb8a49380e299357980",
+                            "gke.gcr.io/gke-metrics-agent:1.8.3-gke.2"
+                        ],
+                        "sizeBytes": 27266228
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/metrics-server-amd64@sha256:f813a4f5306c7b7ef55a57c60f61bb1f6c89fea41e166d7727db10b225575954",
+                            "eu.gcr.io/gke-release-staging/metrics-server-amd64@sha256:f813a4f5306c7b7ef55a57c60f61bb1f6c89fea41e166d7727db10b225575954",
+                            "gcr.io/gke-release-staging/metrics-server-amd64@sha256:f813a4f5306c7b7ef55a57c60f61bb1f6c89fea41e166d7727db10b225575954",
+                            "asia.gcr.io/gke-release-staging/metrics-server-amd64:v0.5.2-gke.0",
+                            "eu.gcr.io/gke-release-staging/metrics-server-amd64:v0.5.2-gke.0"
+                        ],
+                        "sizeBytes": 26022476
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/fluent-bit-gke-exporter@sha256:89bf6f01430e2b2568a32a42b403a7c43a05878a76e71bb8d7ca23f15f4cfc99",
+                            "gke.gcr.io/fluent-bit-gke-exporter:v0.22.0-gke.0"
+                        ],
+                        "sizeBytes": 19369317
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/gke-distroless/bash@sha256:ae3ca4f02f34781b65402d399ce64e48ee7dd756e901676fca17c25178db4049",
+                            "gke.gcr.io/gke-distroless/bash:20220419"
+                        ],
+                        "sizeBytes": 17341961
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler@sha256:0f232ba18b63363e33f205d0242ef98324fb388434f8598c2fc8e967dca146bc",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler@sha256:0f232ba18b63363e33f205d0242ef98324fb388434f8598c2fc8e967dca146bc",
+                            "gcr.io/gke-release-staging/cluster-proportional-autoscaler@sha256:0f232ba18b63363e33f205d0242ef98324fb388434f8598c2fc8e967dca146bc",
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler:1.8.4-gke.1",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler:1.8.4-gke.1"
+                        ],
+                        "sizeBytes": 16830362
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64@sha256:e3f48b3d1e49cfa3e7f002020769c9cd01cd0e77bbc99dc133c7ab0f8097e989",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64@sha256:e3f48b3d1e49cfa3e7f002020769c9cd01cd0e77bbc99dc133c7ab0f8097e989",
+                            "gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64@sha256:e3f48b3d1e49cfa3e7f002020769c9cd01cd0e77bbc99dc133c7ab0f8097e989",
+                            "asia.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64:1.7.1-gke.0",
+                            "eu.gcr.io/gke-release-staging/cluster-proportional-autoscaler-amd64:1.7.1-gke.0"
+                        ],
+                        "sizeBytes": 16572417
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cpvpa-amd64@sha256:b802d79f207ea9cbc996cc208781ea34715fe796be68e5250da37b2ae73d42a6",
+                            "eu.gcr.io/gke-release-staging/cpvpa-amd64@sha256:b802d79f207ea9cbc996cc208781ea34715fe796be68e5250da37b2ae73d42a6",
+                            "gcr.io/gke-release-staging/cpvpa-amd64@sha256:b802d79f207ea9cbc996cc208781ea34715fe796be68e5250da37b2ae73d42a6",
+                            "asia.gcr.io/gke-release-staging/cpvpa-amd64:v0.8.3-gke.0",
+                            "eu.gcr.io/gke-release-staging/cpvpa-amd64:v0.8.3-gke.0"
+                        ],
+                        "sizeBytes": 16376177
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent@sha256:176958be940010847e1d7d92ea38cba9755ed9a88830986b994b947e7c23ff04",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent@sha256:176958be940010847e1d7d92ea38cba9755ed9a88830986b994b947e7c23ff04",
+                            "gcr.io/gke-release-staging/ip-masq-agent@sha256:176958be940010847e1d7d92ea38cba9755ed9a88830986b994b947e7c23ff04",
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent:v2.8.0",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent:v2.8.0"
+                        ],
+                        "sizeBytes": 14490309
+                    },
+                    {
+                        "names": [
+                            "docker.io/library/redis@sha256:221f7fa5b4c563971358755893263d64b0b52e9798f6320f2898be499fb3b6b6",
+                            "docker.io/library/redis:alpine"
+                        ],
+                        "sizeBytes": 12406238
+                    },
+                    {
+                        "names": [
+                            "docker.io/htmlprogrammer2001/simple-db-app-migration@sha256:74c6d2c679eddcfff844e8defc00748d1e2bd2afafd203e547fc14fa74d528eb",
+                            "docker.io/htmlprogrammer2001/simple-db-app-migration:1.0"
+                        ],
+                        "sizeBytes": 10659809
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/addon-resizer@sha256:21a03d42d90d7a2539c3eab02ff0ed96eb5ae45fba013deb3b46dfa9b7fd8d8d",
+                            "eu.gcr.io/gke-release-staging/addon-resizer@sha256:21a03d42d90d7a2539c3eab02ff0ed96eb5ae45fba013deb3b46dfa9b7fd8d8d",
+                            "gcr.io/gke-release-staging/addon-resizer@sha256:21a03d42d90d7a2539c3eab02ff0ed96eb5ae45fba013deb3b46dfa9b7fd8d8d",
+                            "asia.gcr.io/gke-release-staging/addon-resizer:1.8.14-gke.0",
+                            "eu.gcr.io/gke-release-staging/addon-resizer:1.8.14-gke.0"
+                        ],
+                        "sizeBytes": 10452458
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/csi-node-driver-registrar@sha256:bc39ac85d1b4de9070d512557e9c6b1ffeb4f85577fe4cf89053e686e72a51e8",
+                            "gke.gcr.io/csi-node-driver-registrar:v2.5.1-gke.1"
+                        ],
+                        "sizeBytes": 9150173
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "eu.gcr.io/gke-release-staging/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "gcr.io/gke-release-staging/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "gke.gcr.io/pause@sha256:10008c36b4611b44db1229451675d5d7d86c7ddf4ef00f883d806a01547203f6",
+                            "asia.gcr.io/gke-release-staging/pause:3.6"
+                        ],
+                        "sizeBytes": 305230
+                    }
+                ],
+                "nodeInfo": {
+                    "architecture": "amd64",
+                    "bootID": "466dac99-920f-4b3c-892d-8fb41b83e7da",
+                    "containerRuntimeVersion": "containerd://1.6.9",
+                    "kernelVersion": "5.10.161+",
+                    "kubeProxyVersion": "v1.24.9-gke.3200",
+                    "kubeletVersion": "v1.24.9-gke.3200",
+                    "machineID": "d5cfb755260a5ed13c305253599d34e2",
+                    "operatingSystem": "linux",
+                    "osImage": "Container-Optimized OS from Google",
+                    "systemUUID": "d5cfb755-260a-5ed1-3c30-5253599d34e2"
+                }
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
