@@ -45,6 +45,9 @@ To remove them, run:
 ```shell
 kubectl delete -f k8s-specifications/
 ```
+## Deploying the app with Jenkins on GKE
+
+Jenkins support deployment on Google Kubernetes Engine (GKE) with the [Google Kubernetes Engine Plugin](https://plugins.jenkins.io/google-kubernetes-engine/). Following the instrucution provided, there is a Jenkinsfile created to demonstrate the deployment of the target application with Jenkins on GKE. Please check the jenkins/gcp-gke.jenkinsfile for the actual steps performed by Jenkins.
 
 ## Architecture
 
