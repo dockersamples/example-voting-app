@@ -21,6 +21,90 @@ pipeline {
         manifestPattern: './k8s-specifications/db-deployment.yaml',
         credentialsId: env.CREDENTIALS_ID,
         verifyDeployments: true])
+        
+        step([
+        $class: 'KubernetesEngineBuilder',
+        projectId: env.PROJECT_ID,
+        clusterName: env.CLUSTER_NAME,
+        location: env.LOCATION,
+        manifestPattern: './k8s-specifications/db-service.yaml',
+        credentialsId: env.CREDENTIALS_ID,
+        verifyDeployments: true])
+      }
+    }
+    stage('Redis') {
+      steps {
+        step([
+        $class: 'KubernetesEngineBuilder',
+        projectId: env.PROJECT_ID,
+        clusterName: env.CLUSTER_NAME,
+        location: env.LOCATION,
+        manifestPattern: './k8s-specifications/redis-deployment.yaml',
+        credentialsId: env.CREDENTIALS_ID,
+        verifyDeployments: true])
+        
+        step([
+        $class: 'KubernetesEngineBuilder',
+        projectId: env.PROJECT_ID,
+        clusterName: env.CLUSTER_NAME,
+        location: env.LOCATION,
+        manifestPattern: './k8s-specifications/redis-service.yaml',
+        credentialsId: env.CREDENTIALS_ID,
+        verifyDeployments: true])
+      }
+    }
+    stage('Result') {
+      steps {
+        step([
+        $class: 'KubernetesEngineBuilder',
+        projectId: env.PROJECT_ID,
+        clusterName: env.CLUSTER_NAME,
+        location: env.LOCATION,
+        manifestPattern: './k8s-specifications/result-deployment.yaml',
+        credentialsId: env.CREDENTIALS_ID,
+        verifyDeployments: true])
+        
+        step([
+        $class: 'KubernetesEngineBuilder',
+        projectId: env.PROJECT_ID,
+        clusterName: env.CLUSTER_NAME,
+        location: env.LOCATION,
+        manifestPattern: './k8s-specifications/result-service.yaml',
+        credentialsId: env.CREDENTIALS_ID,
+        verifyDeployments: true])
+      }
+    }
+    stage('Vote') {
+      steps {
+        step([
+        $class: 'KubernetesEngineBuilder',
+        projectId: env.PROJECT_ID,
+        clusterName: env.CLUSTER_NAME,
+        location: env.LOCATION,
+        manifestPattern: './k8s-specifications/vote-deployment.yaml',
+        credentialsId: env.CREDENTIALS_ID,
+        verifyDeployments: true])
+        
+        step([
+        $class: 'KubernetesEngineBuilder',
+        projectId: env.PROJECT_ID,
+        clusterName: env.CLUSTER_NAME,
+        location: env.LOCATION,
+        manifestPattern: './k8s-specifications/vote-service.yaml',
+        credentialsId: env.CREDENTIALS_ID,
+        verifyDeployments: true])
+      }
+    }
+    stage('Worker') {
+      steps {
+        step([
+        $class: 'KubernetesEngineBuilder',
+        projectId: env.PROJECT_ID,
+        clusterName: env.CLUSTER_NAME,
+        location: env.LOCATION,
+        manifestPattern: './k8s-specifications/worker-deployment.yaml',
+        credentialsId: env.CREDENTIALS_ID,
+        verifyDeployments: true])
       }
     }
   }
