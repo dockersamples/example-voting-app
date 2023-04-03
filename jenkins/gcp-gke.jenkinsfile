@@ -18,7 +18,8 @@ pipeline {
         projectId: env.PROJECT_ID,
         clusterName: env.CLUSTER_NAME,
         location: env.LOCATION,
-        manifestPattern: 'manifest.yaml',
+        //manifestPattern: 'manifest.yaml',
+        manifestPattern: './helm/*.yaml',
         credentialsId: env.CREDENTIALS_ID,
         verifyDeployments: true])
       }
