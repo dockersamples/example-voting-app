@@ -11,15 +11,14 @@ pipeline {
     CREDENTIALS_ID = 'luiz-gcp-gke'
   }
   stages {
-    stage('') {
+    stage('DB') {
       steps {
         step([
         $class: 'KubernetesEngineBuilder',
         projectId: env.PROJECT_ID,
         clusterName: env.CLUSTER_NAME,
         location: env.LOCATION,
-        //manifestPattern: 'manifest.yaml',
-        manifestPattern: './helm/*.yaml',
+        manifestPattern: './k8s-specifications/db-deployment.yaml',
         credentialsId: env.CREDENTIALS_ID,
         verifyDeployments: true])
       }
