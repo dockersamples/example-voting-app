@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: db
-  name: db-{{ .Release.Name }}
+  name: db
 spec:
   type: ClusterIP
   ports:

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: vote
-  name: vote-{{ .Release.Name }}
+  name: vote
 spec:
   type: NodePort
   ports:

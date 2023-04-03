@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: result
-  name: result-{{ .Release.Name }}
+  name: result
 spec:
   type: NodePort
   ports:

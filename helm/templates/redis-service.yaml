@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: redis
-  name: redis-{{ .Release.Name }}
+  name: redis
 spec:
   type: ClusterIP
   ports:
