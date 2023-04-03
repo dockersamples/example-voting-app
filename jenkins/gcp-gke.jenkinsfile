@@ -8,7 +8,7 @@ pipeline {
     PROJECT_ID = 'luiz-gcp-gke'
     CLUSTER_NAME = 'luiz-gcp-gke-k8s'
     LOCATION = 'us-central1'
-    CREDENTIALS_ID = 'jenkins credential ID'
+    CREDENTIALS_ID = 'luiz-gcp-gke'
   }
   stages {
     stage('') {
