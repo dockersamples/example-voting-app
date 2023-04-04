@@ -1,6 +1,9 @@
 #helm install --dry-run woven-challenge helm -n challenge
 #kubectl create namespace challenge
 
+kubectl config view
+kubectl config current-context
+
 # Check previous installation
 PREVIOUS_INSTALLED=$(helm list | wc -l)
 echo $PREVIOUS_INSTALLED
