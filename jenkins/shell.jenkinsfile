@@ -16,11 +16,17 @@ pipeline {
     stage('Run script') {
       steps {
         sh '''
-          chmod +x -R ${env.WORKSPACE}
           /var/lib/jenkins/workspace/scripts/showenv.sh
           pwd
           ls -al
         '''
+      }
+    }
+
+    stage('Istall App') {
+      steps {
+        sh "chmod +x -R ${env.WORKSPACE}"
+        sh './jenkins/helloworld.sh'
       }
     }
   }
