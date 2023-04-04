@@ -16,10 +16,14 @@ pipeline {
     stage('Run script') {
       steps {
         sh '''
+          echo 'Your target GCP Project is ${PROJECT_ID}'
+          echo 'Your target kubernetes cluster is ${CLUSTER_NAME}'
+
+          chmod +x -R ${env.WORKSPACE}
           /var/lib/jenkins/workspace/scripts/showenv.sh
           pwd
           ls -al
-          sudo ./jenkins/helloworld.sh
+          ./jenkins/helloworld.sh
         '''
       }
     }
