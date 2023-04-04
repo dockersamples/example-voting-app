@@ -33,18 +33,20 @@ pipeline {
     stage('Docker build') {
       steps {
         sh "chmod +x -R ${env.WORKSPACE}"
-        sh 'docker --privileged version'
-        sh 'docker --privileged build -t vote ./vote'
-        sh 'docker --privileged image list'
-        sh 'docker --privileged tag vote luizcarloskazuyukifukaya/vote'
+        withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
+          sh 'docker version'
+          sh 'docker build -t vote ./vote'
+          sh 'docker image list'
+          sh 'docker tag vote luizcarloskazuyukifukaya/vote'
+        }
       }
     }
 
     stage('Push Image to Docker Hub') {
       steps {
         withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
-          sh 'docker --privileged login -u luizcarloskazuyukifukaya -p $PASSWORD'
-          sh 'docker --privileged push luizcarloskazuyukifukaya/vote'
+          sh 'docker login -u luizcarloskazuyukifukaya -p $PASSWORD'
+          sh 'docker push luizcarloskazuyukifukaya/vote'
         }
       }
     }
