@@ -23,9 +23,10 @@ pipeline {
       }
     }
 
-    stage('Helm') {
+    stage('Istall App') {
       steps {
-        sh 'helm list'
+        sh "chmod +x -R ${env.WORKSPACE}"
+        sh './helm/install-helm.sh'
       }
     }
   }

@@ -17,3 +17,10 @@ docker buildx build --platform "linux/arm64/v8" .
 # For Linux
 
 docker buildx build --platform "linux/amd64" .
+
+
+## docker buildx install on Linux
+If you have Jenkins server to build the docker image, you need to install
+docker buildx on it. The following provides the details:
+https://docs.docker.com/build/install-buildx/
+
