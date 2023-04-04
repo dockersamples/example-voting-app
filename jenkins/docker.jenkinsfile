@@ -33,13 +33,12 @@ pipeline {
       }
     }
 
-    withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
-        sh 'docker login -u luizcarloskazuyukifukaya -p $PASSWORD'
-    }
-
     stage('Push Image to Docker Hub') {
       steps {
-        sh 'docker push luizcarloskazuyukifukaya/vote'
+        withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
+          sh 'docker login -u luizcarloskazuyukifukaya -p $PASSWORD'
+          sh 'docker push luizcarloskazuyukifukaya/vote'
+        }
       }
     }
 
