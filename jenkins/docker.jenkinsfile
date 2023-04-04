@@ -35,7 +35,7 @@ pipeline {
           sh 'docker tag vote ${DOCKER_USER}/vote'
           sh 'docker build -t result ./result'
           sh 'docker tag result ${DOCKER_USER}/result'
-          sh 'docker buildx build -t worker ./worker'
+          sh 'docker buildx build ./worker --tag worker'
           sh 'docker tag worker ${DOCKER_USER}/worker'
           sh 'docker image list'
         }
