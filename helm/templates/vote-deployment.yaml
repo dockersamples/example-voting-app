@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: vote
-  name: vote-{{ .Release.Name }}
+  name: vote
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: vote
@@ -15,8 +15,9 @@ spec:
         app: vote
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_vote
-        name: vote-{{ .Chart.Name }}
+      #- image: dockersamples/examplevotingapp_vote
+      - image: luizcarloskazuyukifukaya/vote
+        name: vote
         ports:
         - containerPort: 80
           name: vote

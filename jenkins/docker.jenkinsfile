@@ -36,11 +36,10 @@ pipeline {
         withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
           sh 'docker version'
           sh 'docker build -t vote ./vote'
-          sh 'docker image list'
           sh 'docker tag vote luizcarloskazuyukifukaya/vote'
           sh 'docker build -t result ./result'
-          sh 'docker image list'
           sh 'docker tag result luizcarloskazuyukifukaya/result'
+          sh 'docker image list'
         }
       }
     }

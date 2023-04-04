@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: worker
-  name: worker-{{ .Release.Name }}
+  name: worker
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: worker
@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
       - image: dockersamples/examplevotingapp_worker
-        name: worker-{{ .Chart.Name }}
+        name: worker

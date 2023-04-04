@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: result
-  name: result-{{ .Release.Name }}
+  name: result
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: result
@@ -15,8 +15,9 @@ spec:
         app: result
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_result
-        name: result-{{ .Chart.Name }}
+      #- image: dockersamples/examplevotingapp_result
+      - image: luizcarloskazuyukifukaya/result
+        name: result
         ports:
         - containerPort: 80
           name: result

@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: redis
-  name: redis-{{ .Release.Name }}
+  name: redis
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: redis
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - image: redis:alpine
-        name: redis-{{ .Chart.Name }}
+        name: redis
         ports:
         - containerPort: 6379
           name: redis

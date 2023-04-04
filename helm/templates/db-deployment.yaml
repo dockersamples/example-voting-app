@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: db
-  name: db-{{ .Release.Name }}
+  name: db
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: db
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - image: postgres:15-alpine
-        name: postgres-{{ .Chart.Name }}
+        name: postgres
         env:
         - name: POSTGRES_USER
           value: postgres
