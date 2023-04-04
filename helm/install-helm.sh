@@ -1,6 +1,8 @@
 #helm install --dry-run woven-challenge helm -n challenge
 #kubectl create namespace challenge
 
+whoami
+
 kubectl config view
 kubectl config current-context
 
