@@ -5,11 +5,18 @@ pipeline {
 
   agent any
 
+  tools {
+    // https://plugins.jenkins.io/docker-commons/
+    'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09'
+  }
+
   environment {
     PROJECT_ID = 'luiz-gcp-gke'
     CLUSTER_NAME = 'luiz-gcp-gke-k8s'
     LOCATION = 'us-central1'
     CREDENTIALS_ID = 'luiz-gcp-gke'
+
+    DOCKER_CERT_PATH = credentials('DOCKER_HUB_PASSWORD')
   }
 
   stages {
