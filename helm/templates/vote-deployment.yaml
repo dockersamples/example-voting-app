@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: vote
-  name: vote
+  name: vote-{{ .Release.Name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: vote

@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: redis
-  name: redis
+  name: redis-{{ .Release.Name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: redis

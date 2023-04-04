@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: worker
-  name: worker
+  name: worker-{{ .Release.Name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }
   selector:
     matchLabels:
       app: worker
