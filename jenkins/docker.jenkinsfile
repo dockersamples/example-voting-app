@@ -5,10 +5,10 @@ pipeline {
 
   agent any
 
-  tools {
+  //tools {
     // https://plugins.jenkins.io/docker-commons/
-    'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09'
-  }
+    //'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09'
+  //}
 
   environment {
     PROJECT_ID = 'luiz-gcp-gke'
@@ -33,18 +33,18 @@ pipeline {
     stage('Docker build') {
       steps {
         sh "chmod +x -R ${env.WORKSPACE}"
-        sh 'docker version'
-        sh 'docker build -t vote ./vote'
-        sh 'docker image list'
-        sh 'docker tag vote luizcarloskazuyukifukaya/vote'
+        sh 'docker --privileged version'
+        sh 'docker --privileged build -t vote ./vote'
+        sh 'docker --privileged image list'
+        sh 'docker --privileged tag vote luizcarloskazuyukifukaya/vote'
       }
     }
 
     stage('Push Image to Docker Hub') {
       steps {
         withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
-          sh 'docker login -u luizcarloskazuyukifukaya -p $PASSWORD'
-          sh 'docker push luizcarloskazuyukifukaya/vote'
+          sh 'docker --privileged login -u luizcarloskazuyukifukaya -p $PASSWORD'
+          sh 'docker --privileged push luizcarloskazuyukifukaya/vote'
         }
       }
     }
