@@ -15,8 +15,11 @@ pipeline {
   stages {
     stage('Run script') {
       steps {
-        sh '/var/lib/jenkins/workspace/scripts/showenv.sh'
-        pwd
+        sh '''
+          /var/lib/jenkins/workspace/scripts/showenv.sh'
+          pwd
+          ls -al
+        '''
       }
     }
   }
