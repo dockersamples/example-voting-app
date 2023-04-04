@@ -5,7 +5,7 @@ metadata:
     app: worker
   name: worker-{{ .Release.Name }}
 spec:
-  replicas: {{ .Values.replicaCount }
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: worker
