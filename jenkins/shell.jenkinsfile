@@ -19,6 +19,7 @@ pipeline {
           /var/lib/jenkins/workspace/scripts/showenv.sh
           pwd
           ls -al
+          ./jenkins/helloworld.sh
         '''
       }
     }
