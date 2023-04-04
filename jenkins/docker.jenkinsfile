@@ -5,11 +5,6 @@ pipeline {
 
   agent any
 
-  //tools {
-    // https://plugins.jenkins.io/docker-commons/
-    //'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09'
-  //}
-
   environment {
     PROJECT_ID = 'luiz-gcp-gke'
     CLUSTER_NAME = 'luiz-gcp-gke-k8s'
@@ -17,6 +12,7 @@ pipeline {
     CREDENTIALS_ID = 'luiz-gcp-gke'
 
     DOCKER_CERT_PATH = credentials('DOCKER_HUB_PASSWORD')
+    DOCKER_USER = 'luizcarloskazuyukifukaya'
   }
 
   stages {
@@ -36,9 +32,11 @@ pipeline {
         withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
           sh 'docker version'
           sh 'docker build -t vote ./vote'
-          sh 'docker tag vote luizcarloskazuyukifukaya/vote'
+          sh 'docker tag vote ${DOCKER_USER}/vote'
           sh 'docker build -t result ./result'
-          sh 'docker tag result luizcarloskazuyukifukaya/result'
+          sh 'docker tag result ${DOCKER_USER}/result'
+          sh 'docker buildx build -t worker ./worker'
+          sh 'docker tag worker ${DOCKER_USER}/worker'
           sh 'docker image list'
         }
       }
@@ -47,15 +45,14 @@ pipeline {
     stage('Push Image to Docker Hub') {
       steps {
         withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
-          sh 'docker login -u luizcarloskazuyukifukaya -p $PASSWORD'
-          sh 'docker push luizcarloskazuyukifukaya/vote'
-          sh 'docker login -u luizcarloskazuyukifukaya -p $PASSWORD'
-          sh 'docker push luizcarloskazuyukifukaya/result'
+          sh 'docker login -u ${DOCKER_USER} -p $PASSWORD'
+          sh 'docker push ${DOCKER_USER}/vote'
+          sh 'docker push ${DOCKER_USER}/result'
+          sh 'docker push ${DOCKER_USER}/worker'
         }
       }
     }
 
-  
   }
 
 }
