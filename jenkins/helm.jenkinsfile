@@ -25,9 +25,15 @@ pipeline {
       }
     }
 
-    stage('Helm') {
+    stage('Helm authentication') {
       steps {
         sh 'helm list'
+      }
+    }
+
+    stage('Helm Chart Install with script') {
+      steps {
+        sh './helm/install-helm.sh'
       }
     }
   }
