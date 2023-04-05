@@ -27,8 +27,8 @@ fi
 #show current directory
 pwd
 
-#helm install woven-challenge . -n challenge
-helm install woven-challenge .
+#helm install woven-challenge ./helm -n challenge
+helm install woven-challenge ./helm
 
 # list installed helm chart
 #helm list -n challenge
