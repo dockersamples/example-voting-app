@@ -20,8 +20,12 @@ else
 
   # Uninstall previous Helm Chart
   helm uninstall woven-challenge
+  helm list
 
 fi
+
+#show current directory
+pwd
 
 #helm install woven-challenge . -n challenge
 helm install woven-challenge .
