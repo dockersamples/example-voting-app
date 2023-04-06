@@ -2,6 +2,30 @@
 
 A simple distributed application running across multiple Docker containers.
 
+(note) This documentation is altered from the original public release and
+includes some comments which is based on the changes made to the application
+for the purpose of the demo to the Home Technical Challenge.
+
+## DISCLAIMER 
+The changes to the original release are as the followings:
+- Use of the docker image published by luizcarloskazuyukifukaya (Kazuyuki
+  Fukaya)
+- Helm Charts support so the application can be installed with helm command
+
+The following aspect for the enhancement of the microservices architecture are
+not included in the application design/implementation/release:
+- statefull services (database) high availability - in the current
+  implementation, the database data lifecycle is not managed separatly from the pod that host the database service itself. Thus, when updating the application, the data is lost. Database data persistance design should be incorporated into the design so the application can be updated with the data being persistent.
+- Application Update - When updating the application, it is important to
+  consider deployment with Blue Green or/and Canary deployment, but the current
+  proposed CI/CD flow is not including the details on how this can be achieved.
+  This details is to be considered for future implementation.
+
+(note) It is highly recommended to follow the best practices for microservices
+architecture proposed by Martin Fowler. Please refer to the [Microservices
+Guide](https://martinfowler.com/microservices/) for more details.
+
+
 ## Getting started
 
 Download [Docker Desktop](https://www.docker.com/products/docker-desktop) for Mac or Windows. [Docker Compose](https://docs.docker.com/compose) will be automatically installed. On Linux, make sure you have the latest version of [Compose](https://docs.docker.com/compose/install/).
@@ -75,6 +99,4 @@ This project has been modified from the original with the following supports:
 
 The voting application only accepts one vote per client browser. It does not register additional votes if a vote has already been submitted from a client.
 
-This isn't an example of a properly architected perfectly designed distributed app... it's just a simple
-example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to
-deal with them in Docker at a basic level.
+This isn't an example of a properly architected perfectly designed distributed app... it's just a simple example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to deal with them in Docker at a basic level.
