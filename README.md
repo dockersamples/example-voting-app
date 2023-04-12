@@ -73,6 +73,18 @@ kubectl delete -f k8s-specifications/
 
 Jenkins support deployment on Google Kubernetes Engine (GKE) with the [Google Kubernetes Engine Plugin](https://plugins.jenkins.io/google-kubernetes-engine/). Following the instrucution provided, there is a Jenkinsfile created to demonstrate the deployment of the target application with Jenkins on GKE. Please check the jenkins/gcp-gke.jenkinsfile for the actual steps performed by Jenkins.
 
+## Building and Deploying the app with GitHub Actions
+
+To reduce effort in building the Jenkins server for the CI/CD Pipeline
+management, we are introducing support for GitHub Actions so the automation can
+be realized without building the infrastructure needed.
+
+The GitHub Actions workflow is configured to work with the <b>"dev" branch</b> only.
+This is to avoid conflict with the automation implemented with Jenkins, where the "main" branch is used.
+
+If you are new to GitHub Actions, please refer to the [Understanding GitHub Actions](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions).
+
+
 ## Architecture
 
 ![Architecture diagram](architecture.excalidraw.png)
