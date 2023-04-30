@@ -6,8 +6,8 @@ import random
 import json
 import logging
 
-option_a = os.getenv('OPTION_A', "Cats")
-option_b = os.getenv('OPTION_B', "Dogs")
+option_a = os.getenv('OPTION_A', "johannes")
+option_b = os.getenv('OPTION_B', "k8s")
 redis_host = os.getenv('REDIS_HOST', "redis")
 hostname = socket.gethostname()
 
@@ -29,16 +29,13 @@ def hello():
         voter_id = hex(random.getrandbits(64))[2:-1]
 
     vote = None
-    print("intru in functieeeeeiii")
 
     if request.method == 'POST':
         redis = get_redis()
         vote = request.form['vote']
-        app.logger.info('Received vote for %s', vote)
+        app.logger.info('Received vote for %s from %s', vote, voter_id)
         data = json.dumps({'voter_id': voter_id, 'vote': vote})
         redis.rpush('votes', data)
-
-    print ("am primit requestuuuuuu")
 
     resp = make_response(render_template(
         'index.html',
