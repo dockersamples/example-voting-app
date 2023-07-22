@@ -62,7 +62,7 @@ services:
       - back-tier
 
   db:
-    image: postgres:15-alpine
+    image: postgres:9.4
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
