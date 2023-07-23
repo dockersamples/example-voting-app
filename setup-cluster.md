@@ -8,15 +8,15 @@ sudo apt-get update -y && sudo apt-get upgrade -y
 
 #### run in master node
 ```bash
-sudo hostnamectl set-hostname "master.bondhan.local"
+sudo hostnamectl set-hostname "master.lab.local"
 ```
 #### run in node1 node
 ```bash
-sudo hostnamectl set-hostname "node1.bondhan.local"
+sudo hostnamectl set-hostname "node1.lab.local"
 ```
 #### run in node2 node
 ```bash
-sudo hostnamectl set-hostname "node2.bondhan.local"
+sudo hostnamectl set-hostname "node2.lab.local"
 ```
 
 #### run below commands in all vms
@@ -25,9 +25,9 @@ sudo nano /etc/hosts
 ```
 #### add below value
 ```bash
-192.168.100.10 master.bondhan.local master
-192.168.100.11 node1.bondhan.local node1
-192.168.100.12 node2.bondhan.local node2
+192.168.100.10 master.lab.local master
+192.168.100.11 node1.lab.local node1
+192.168.100.12 node2.lab.local node2
 ```
 #### save and exit
 ```bash
@@ -103,7 +103,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ```bash
 sudo kubeadm init \
 --pod-network-cidr=10.10.0.0/16 \
---control-plane-endpoint=master.bondhan.local
+--control-plane-endpoint=master.lab.local
 ```
 #### above command will return the join, write it down and run in worker nodes
 
@@ -114,7 +114,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 #### run the join command in worker node
 ```bash
-sudo kubeadm join master.bondhan.local:6443 --token 9s75m6.jdx1hmb64as6f3f2 \
+sudo kubeadm join master.lab.local:6443 --token 9s75m6.jdx1hmb64as6f3f2 \
         --discovery-token-ca-cert-hash sha256:d544199c1a0307b12df0d1766d199ec325f34896e2e64d9e34c8b97c9f80bf00 
 ```
 
@@ -131,7 +131,7 @@ curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/ca
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 
-bondhan@BONDHAN-RYZEN5700G:~/workspace/github/dashboard$ cat admin-user.yaml
+lab@lab-RYZEN5700G:~/workspace/github/dashboard$ cat admin-user.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -139,7 +139,7 @@ metadata:
   namespace: kubernetes-dashboard
 
 
-bondhan@BONDHAN-RYZEN5700G:~/workspace/github/dashboard$ cat role.yaml
+lab@lab-RYZEN5700G:~/workspace/github/dashboard$ cat role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
