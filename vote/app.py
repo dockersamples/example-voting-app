@@ -6,8 +6,8 @@ import random
 import json
 import logging
 
-option_a = os.getenv('OPTION_A', "Star Trek")
-option_b = os.getenv('OPTION_B', "StarWars")
+option_a = os.getenv('OPTION_A', "🖖🏼 Star Trek")
+option_b = os.getenv('OPTION_B', "⚔️ Star Wars")
 hostname = socket.gethostname()
 
 app = Flask(__name__)

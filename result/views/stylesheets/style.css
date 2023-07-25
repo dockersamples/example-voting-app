@@ -62,10 +62,10 @@ body{
   background:#fff;
   box-shadow: 10px 0 0 #fff, -10px 0 0 #fff;
   vertical-align:middle;
-  font-size:40px;
+  font-size:36px;
   font-weight: 600;
-  width: 450px;
-  height: 200px;
+  width: 550px;
+  height: 300px;
 }
 #choice a{
   text-decoration:none;
