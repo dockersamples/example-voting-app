@@ -1,65 +1,21 @@
-# Example Voting App
+![Gitpod Logo](https://www.gitpod.io/images/media-kit/logo-dark-theme.png)
 
-A simple distributed application running across multiple Docker containers.
+# Always ready-to-code 🍊
+Gitpod is the developer platform for on-demand Cloud Development Environments (CDEs). Say goodbye to slow onboarding and unmanageable dev environments. Gitpod removes pain and frustration from your developer experience, helps you deliver software faster, and makes you more secure and compliant.
 
-## Getting started
+## Why Gitpod?
+Here are some of the reasons devops, security, and finance teams love Gitpod:
 
-Download [Docker Desktop](https://www.docker.com/products/docker-desktop) for Mac or Windows. [Docker Compose](https://docs.docker.com/compose) will be automatically installed. On Linux, make sure you have the latest version of [Compose](https://docs.docker.com/compose/install/).
+👩🏻‍💻 Faster developer onboarding  
+⚙️ Eliminate software dependency issues  
+🤝 Collaborate async or in real time  
+☁️ Utilize the compute power of the cloud  
+💰 Save money on hardware and virtual infrastructure  
+🔐 Secure and protect your code and dev environments
 
-This solution uses Python, Node.js, .NET, with Redis for messaging and Postgres for storage.
+## Gitpod Demo
+This repo contains a simple voting application that can be launched in Docker compose. You can try it yourself right now! Simply click the link below to launch a new Gitpod workspace where you can play with the voting application in any web browser. No extra software is required, all you need is a free Gitpod account:
 
-Run in this directory to build and run the app:
+https://gitpod.io/#https://github.com/gitpod-demos/voting-app
 
-```shell
-docker compose up
-```
-
-The `vote` app will be running at [http://localhost:5000](http://localhost:5000), and the `results` will be at [http://localhost:5001](http://localhost:5001).
-
-Alternately, if you want to run it on a [Docker Swarm](https://docs.docker.com/engine/swarm/), first make sure you have a swarm. If you don't, run:
-
-```shell
-docker swarm init
-```
-
-Once you have your swarm, in this directory run:
-
-```shell
-docker stack deploy --compose-file docker-stack.yml vote
-```
-
-## Run the app in Kubernetes
-
-The folder k8s-specifications contains the YAML specifications of the Voting App's services.
-
-Run the following command to create the deployments and services. Note it will create these resources in your current namespace (`default` if you haven't changed it.)
-
-```shell
-kubectl create -f k8s-specifications/
-```
-
-The `vote` web app is then available on port 31000 on each host of the cluster, the `result` web app is available on port 31001.
-
-To remove them, run:
-
-```shell
-kubectl delete -f k8s-specifications/
-```
-
-## Architecture
-
-![Architecture diagram](architecture.excalidraw.png)
-
-* A front-end web app in [Python](/vote) which lets you vote between two options
-* A [Redis](https://hub.docker.com/_/redis/) which collects new votes
-* A [.NET](/worker/) worker which consumes votes and stores them in…
-* A [Postgres](https://hub.docker.com/_/postgres/) database backed by a Docker volume
-* A [Node.js](/result) web app which shows the results of the voting in real time
-
-## Notes
-
-The voting application only accepts one vote per client browser. It does not register additional votes if a vote has already been submitted from a client.
-
-This isn't an example of a properly architected perfectly designed distributed app... it's just a simple
-example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to
-deal with them in Docker at a basic level.
+You can also use the [Gitpod browser extension](https://chrome.google.com/webstore/detail/gitpod-always-ready-to-co/dodmmooeoklaejobgleioelladacbeki) to launch a workspace from *any* Github repo of your choice!
