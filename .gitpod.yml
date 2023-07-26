@@ -18,9 +18,9 @@ tasks:
 
 ports:
   - port: 5000
-    onOpen: open-preview
-  - port: 5001  # results
     onOpen: ignore
+  - port: 5001  # results
+    onOpen: open-preview
   - port: 5858
     onOpen: ignore
 
