@@ -1,14 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFrameworks>net7.0</TargetFrameworks>
+    <RuntimeIdentifiers>linux-arm64</RuntimeIdentifiers>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
-    <PackageReference Include="Npgsql" Version="4.1.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Npgsql" Version="5.0.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.2.3" />
   </ItemGroup>
-
 </Project>
