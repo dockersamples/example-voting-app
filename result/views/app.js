@@ -1,5 +1,5 @@
 var app = angular.module('catsvsdogs', []);
-var socket = io.connect({transports:['polling']});
+var socket = io.connect();
 
 var bg1 = document.getElementById('background-stats-1');
 var bg2 = document.getElementById('background-stats-2');
