@@ -27,7 +27,7 @@ services:
   result:
     build: ./result
     # use nodemon rather than node for local dev
-    entrypoint: nodemon --inspect-brk=0.0.0.0 server.js
+    entrypoint: nodemon --inspect=0.0.0.0 server.js
     depends_on:
       db:
         condition: service_healthy 
@@ -35,7 +35,7 @@ services:
       - ./result:/app
     ports:
       - "5001:80"
-      - "9229:9229"
+      - "127.0.0.1:9229:9229"
     networks:
       - front-tier
       - back-tier
