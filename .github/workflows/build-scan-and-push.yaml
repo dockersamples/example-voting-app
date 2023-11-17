@@ -1,6 +1,6 @@
 env:
     SYSDIG_SECURE_ENDPOINT: "https://us2.app.sysdig.com"
-    REGISTRY_HOST: "quay.io"
+    REGISTRY_HOST: "quay.io/limber1/test"
     IMAGE_NAME: "mytestimage"
     IMAGE_TAG: "my-tag"
     DOCKERFILE_CONTEXT: "github/"
