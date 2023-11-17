@@ -3,7 +3,7 @@ env:
     REGISTRY_HOST: "quay.io"
     IMAGE_NAME: "mytestimage"
     IMAGE_TAG: "my-tag"
-    DOCKERFILE_CONTEXT: "github/k8s-specifications"
+    DOCKERFILE_CONTEXT: "k8s-specifications/"
 name: Container build, scan and push
 on: [push, pull_request]
 
