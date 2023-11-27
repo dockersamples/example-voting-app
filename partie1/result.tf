@@ -21,7 +21,7 @@ resource "docker_container" "result" {
   entrypoint = ["nodemon", "--inspect=0.0.0.0", "server.js"]
 
   volumes {
-    host_path      = "/result"
+    host_path      = "${abspath(path.root)}/result"
     container_path = "/usr/local/app"
   }
 

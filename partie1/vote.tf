@@ -28,7 +28,7 @@ resource "docker_container" "vote" {
   }
 
   volumes {
-    host_path      = "/vote"
+    host_path      = "${abspath(path.root)}/vote"
     container_path = "/usr/local/app"
   }
 
