@@ -1,6 +1,8 @@
 # Example Voting App
 
-A simple distributed application running across multiple Docker containers.
+A simple distributed application running across multiple Docker containers. 
+
+***Note: This is a forked repository from the original repository https://github.com/dockersamples/example-voting-app.git, which belongs to Sysdig. It is intended solely for lab-testing purposes.***
 
 ## Getting started
 
