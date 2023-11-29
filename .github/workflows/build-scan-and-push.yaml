@@ -3,7 +3,7 @@ env:
     REGISTRY_HOST: "ghcr.io"
     IMAGE_NAME: "dockersamples"
     IMAGE_TAG: "latest"
-    DOCKERFILE_CONTEXT: "github.com/DannyJS-933/example-voting-app/vote"
+    DOCKERFILE_CONTEXT: "github.com/DannyJS-933/example-voting-app/tree/main/vote"
   
 name: Container build, scan and push
 
