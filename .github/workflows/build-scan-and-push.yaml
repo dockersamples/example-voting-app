@@ -3,7 +3,7 @@ env:
     REGISTRY_HOST: "ghcr.io"
     IMAGE_NAME: "dockersamples"
     IMAGE_TAG: "latest"
-    DOCKERFILE_CONTEXT: "github/new-scan-engine"
+    DOCKERFILE_CONTEXT: "github.com/DannyJS-933"
   
 name: Container build, scan and push
 
