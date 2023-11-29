@@ -3,7 +3,7 @@ env:
     REGISTRY_HOST: "ghcr.io"
     IMAGE_NAME: "dockersamples"
     IMAGE_TAG: "latest"
-    DOCKERFILE_CONTEXT: "github.com/DannyJS-933/example-voting-app/tree/main/vote"
+    DOCKERFILE_CONTEXT: "github.com/DannyJS-933/example-voting-app"
   
 name: Container build, scan and push
 
@@ -22,7 +22,7 @@ jobs:
     - name: Build and save
       uses: docker/build-push-action@v3
       with:
-        context: ${{ env.DOCKERFILE_CONTEXT }}
+        context: ${{ env.DOCKERFILE_CONTEXT }}:tree/main/vote
         tags: ${{ env.REGISTRY_HOST }}/${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         load: true
     
