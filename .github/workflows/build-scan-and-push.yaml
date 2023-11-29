@@ -1,7 +1,7 @@
 env:
     SYSDIG_SECURE_ENDPOINT: "https://app.us4.sysdig.com/"
     REGISTRY_HOST: "ghcr.io"
-    IMAGE_NAME: "dockersamples/examplevotingapp"
+    IMAGE_NAME: "dockersamples"
     IMAGE_TAG: "latest"
     DOCKERFILE_CONTEXT: "github/new-scan-engine"
   
