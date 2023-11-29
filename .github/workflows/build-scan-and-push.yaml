@@ -1,8 +1,8 @@
 env:
     SYSDIG_SECURE_ENDPOINT: "https://app.us4.sysdig.com/"
-    REGISTRY_HOST: "quay.io"
-    IMAGE_NAME: "mytestimage"
-    IMAGE_TAG: "my-tag"
+    REGISTRY_HOST: "ghcr.io"
+    IMAGE_NAME: "dockersamples/examplevotingapp"
+    IMAGE_TAG: "latest"
     DOCKERFILE_CONTEXT: "github/new-scan-engine"
   
 name: Container build, scan and push
