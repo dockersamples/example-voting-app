@@ -2,7 +2,7 @@ env:
     SYSDIG_SECURE_ENDPOINT: "https://app.us4.sysdig.com/"
     REGISTRY_HOST: "ghcr.io"
     IMAGE_NAME: "dockersamples"
-    IMAGE_TAG: "latest"
+    IMAGE_TAG: "vote"
     DOCKERFILE_CONTEXT: "https://github.com/DannyJS-933/example-voting-app.git#main:vote"
   
 name: Container build, scan and push
@@ -64,7 +64,7 @@ jobs:
         password: ${{ secrets.REGISTRY_TOKEN }}
 
     - name: Push
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v3
       with:
         context: ${{ env.DOCKERFILE_CONTEXT }}
         push: true
