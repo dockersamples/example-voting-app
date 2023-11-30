@@ -60,7 +60,7 @@ jobs:
        uses: docker/login-action@v2
        with:
         registry: ${{ env.REGISTRY_HOST }}
-        username: ${{ secrets.REGISTRY_TOKEN }}
+        username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
     - name: Push
@@ -68,4 +68,4 @@ jobs:
       with:
         context: ${{ env.DOCKERFILE_CONTEXT }}
         push: true
-        tags: ${{ env.REGISTRY_HOST }}/${{ secrets.REGISTRY_TOKEN }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        tags: ${{ env.REGISTRY_HOST }}/${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
