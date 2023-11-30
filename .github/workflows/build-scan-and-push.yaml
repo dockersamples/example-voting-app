@@ -64,7 +64,7 @@ jobs:
         password: ${{ secrets.REGISTRY_TOKEN }}
 
     - name: Push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: ${{ env.DOCKERFILE_CONTEXT }}
         push: true
