@@ -60,7 +60,7 @@ jobs:
        uses: docker/login-action@v2
        with:
         registry: ${{ env.REGISTRY_HOST }}
-        username: ${{ secrets.REGISTRY_USER }}
+        username: ${{ secrets.REGISTRY_TOKEN }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
     - name: Push
