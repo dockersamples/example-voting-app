@@ -61,7 +61,7 @@ jobs:
        with:
         registry: ${{ env.REGISTRY_HOST }}
         username: ${{ secrets.REGISTRY_USER }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
 
     - name: Push
       uses: docker/build-push-action@v3
