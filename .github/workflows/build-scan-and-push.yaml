@@ -3,7 +3,7 @@ env:
     REGISTRY_HOST: "quay.io"
     IMAGE_NAME: "mytestimage"
     IMAGE_TAG: "my-tag"
-    DOCKERFILE_CONTEXT: "github/new-scan-engine"
+    DOCKERFILE_CONTEXT: "github/"
   
 name: Container build, scan and push
 
