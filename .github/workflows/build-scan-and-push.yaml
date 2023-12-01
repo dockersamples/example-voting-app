@@ -1,0 +1,25 @@
+env:
+    SYSDIG_SECURE_ENDPOINT: "https://eu1.app.sysdig.com"
+    REGISTRY_HOST: "quay.io"
+    IMAGE_NAME: "mytestimage"
+    IMAGE_TAG: "my-tag"
+    DOCKERFILE_CONTEXT: "github/"
+name: Container build, scan and push
+on: [push, pull_request]
+
+jobs:
+  build-scan-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build and save
+      uses: docker/build-push-action@v3
+      with:
+        context: ${{ env.DOCKERFILE_CONTEXT }}
+        tags: ${{ env.REGISTRY_HOST }}/${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        load: true
