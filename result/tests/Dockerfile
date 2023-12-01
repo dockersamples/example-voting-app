@@ -1,5 +1,5 @@
 FROM node:8.9-slim
-
+MAINTAINER josep
 RUN apt-get update -qq && apt-get install -qy \ 
     ca-certificates \
     bzip2 \
