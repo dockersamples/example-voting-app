@@ -1,11 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
+  annotations: 
+    metallb.universe.tf/ip-allocated-from-pool: first-pool
   labels:
     app: result
   name: result
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - name: "result-service"
     port: 5001
