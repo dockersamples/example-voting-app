@@ -42,11 +42,11 @@ jobs:
           sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update
 
-      - name: Configure AWS credentials from Test account
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::377348602056:role/image-build-ecr
-          aws-region: us-east-2
+      # - name: Configure AWS credentials from Test account
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: arn:aws:iam::377348602056:role/image-build-ecr
+      #     aws-region: us-east-2
         
       - name: Log in to Amazon ECR
         run: |
