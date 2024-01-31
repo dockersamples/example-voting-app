@@ -12,9 +12,19 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEV_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_SECRET }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: configureawscredentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::377348602056:role/github-actions-role
+          role-session-name: samplerolesession
+          aws-region: us-east-2
 
       - name: Install Docker
         run: |
