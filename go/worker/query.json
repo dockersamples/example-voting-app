@@ -1,0 +1,11 @@
+{
+    "filter": {
+        "EQ": { "type": "vote" }
+    },
+    "sort": [
+        {
+            "key": "type",
+            "order": "DESC"
+        }
+    ]
+}
