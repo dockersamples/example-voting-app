@@ -51,7 +51,7 @@ jobs:
 
       - name: Log in to Amazon ECR
         run: |
-         repo_info=$(aws ecr describe-repositories --repository-names test 2>/dev/null)
+         repo_info=$(aws ecr describe-repositories --repository-names test 2>/dev/null) | \
          if [ -z "$repo_info" ]; then aws ecr create-repository --repository-name test --image-scanning-configuration scanOnPush=true; else echo "ECR repository already exists: test"; fi
 
 
