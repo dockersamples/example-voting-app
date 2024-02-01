@@ -19,12 +19,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: configureawscredentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::377348602056:role/github-actions-role
-          role-session-name: samplerolesession
-          aws-region: us-east-2
+        
+      # - name: configureawscredentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     role-to-assume: arn:aws:iam::377348602056:role/github-actions-role
+      #     role-session-name: samplerolesession
+      #     aws-region: us-east-2
 
       - name: Install Docker
         run: |
@@ -48,34 +49,36 @@ jobs:
       #     role-to-assume: arn:aws:iam::377348602056:role/image-build-ecr
       #     aws-region: us-east-2
         
-      - name: Log in to Amazon ECR
-        run: |
-          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 377348602056.dkr.ecr.us-east-2.amazonaws.com
+      # - name: Log in to Amazon ECR
+      #   run: |
+      #     aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 377348602056.dkr.ecr.us-east-2.amazonaws.com
           
 
       - name: Build and Push Docker Images
         run: |
-          docker-compose build
+          # docker-compose build
+            docker buildx build vote -t vote:oldnew
+            docker images
 
           
-      - name: Build and Push Docker Images
-        run: |
-          # Assuming SERVICE_NAMES is defined as an array
-          SERVICE_NAMES=("vote" "result" "worker" "redis" "db")
-          for SERVICE_NAME in "${SERVICE_NAMES[@]}"; do
-              ECR_REPO_NAME="example-voting-app-dcompose_$SERVICE_NAME"
+      # - name: Build and Push Docker Images
+      #   run: |
+      #     # Assuming SERVICE_NAMES is defined as an array
+      #     SERVICE_NAMES=("vote" "result" "worker" "redis" "db")
+      #     for SERVICE_NAME in "${SERVICE_NAMES[@]}"; do
+      #         ECR_REPO_NAME="example-voting-app-dcompose_$SERVICE_NAME"
           
-              # Check if the repository already exists
-              repo_info=$(aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" 2>/dev/null)
+      #         # Check if the repository already exists
+      #         repo_info=$(aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" 2>/dev/null)
           
-              # If the repository does not exist, create it
-              if [ -z "$repo_info" ]; then
-                  echo "Creating ECR repository: $ECR_REPO_NAME"
-                  aws ecr create-repository \
-                      --repository-name "$ECR_REPO_NAME" \
-                      --image-scanning-configuration scanOnPush=true
-              else
-                  echo "ECR repository already exists: $ECR_REPO_NAME"
-              fi
-          done
+      #         # If the repository does not exist, create it
+      #         if [ -z "$repo_info" ]; then
+      #             echo "Creating ECR repository: $ECR_REPO_NAME"
+      #             aws ecr create-repository \
+      #                 --repository-name "$ECR_REPO_NAME" \
+      #                 --image-scanning-configuration scanOnPush=true
+      #         else
+      #             echo "ECR repository already exists: $ECR_REPO_NAME"
+      #         fi
+      #     done
           
