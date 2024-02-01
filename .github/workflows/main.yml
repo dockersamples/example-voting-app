@@ -56,4 +56,26 @@ jobs:
       - name: Build and Push Docker Images
         run: |
           docker-compose build
+
+          
+      - name: Build and Push Docker Images
+        run: |
+          # Assuming SERVICE_NAMES is defined as an array
+          SERVICE_NAMES=("vote" "result" "worker" "redis" "db")
+          for SERVICE_NAME in "${SERVICE_NAMES[@]}"; do
+              ECR_REPO_NAME="example-voting-app-dcompose_$SERVICE_NAME"
+          
+              # Check if the repository already exists
+              repo_info=$(aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" 2>/dev/null)
+          
+              # If the repository does not exist, create it
+              if [ -z "$repo_info" ]; then
+                  echo "Creating ECR repository: $ECR_REPO_NAME"
+                  aws ecr create-repository \
+                      --repository-name "$ECR_REPO_NAME" \
+                      --image-scanning-configuration scanOnPush=true
+              else
+                  echo "ECR repository already exists: $ECR_REPO_NAME"
+              fi
+          done
           
