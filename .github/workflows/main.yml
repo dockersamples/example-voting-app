@@ -29,7 +29,7 @@ jobs:
           
       - name: copying-files-to-s3-bucket
         run: |
-          aws s3 sync vote/ s3://febbuctoday
+          aws s3 sync result/views s3://febbuctoday
 
       # - name: Install Docker
       #   run: |
