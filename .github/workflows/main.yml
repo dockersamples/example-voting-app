@@ -26,66 +26,70 @@ jobs:
           role-to-assume: arn:aws:iam::377348602056:role/github-actions-role
           role-session-name: samplerolesession
           aws-region: us-east-2
-
-      - name: Install Docker
+          
+      - name: copying-files-to-s3-bucket
         run: |
-          # Install Docker
-          # Add Docker's official GPG key:
-          sudo apt-get update
-          sudo apt-get install ca-certificates curl
-          sudo install -m 0755 -d /etc/apt/keyrings
-          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-          sudo chmod a+r /etc/apt/keyrings/docker.asc
-          # Add the repository to Apt sources:
-          echo \
-            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-              $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          sudo apt-get update
+          aws s3 sync vote/ s3://febbuctoday
 
-      # - name: Configure AWS credentials from Test account
-      #   uses: aws-actions/configure-aws-credentials@v4
-      #   with:
-      #     role-to-assume: arn:aws:iam::377348602056:role/image-build-ecr
-      #     aws-region: us-east-2
+      # - name: Install Docker
+      #   run: |
+      #     # Install Docker
+      #     # Add Docker's official GPG key:
+      #     sudo apt-get update
+      #     sudo apt-get install ca-certificates curl
+      #     sudo install -m 0755 -d /etc/apt/keyrings
+      #     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+      #     sudo chmod a+r /etc/apt/keyrings/docker.asc
+      #     # Add the repository to Apt sources:
+      #     echo \
+      #       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      #         $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      #     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      #     sudo apt-get update
 
-      - name: Log in to Amazon ECR
-        run: |
-         repo_info=$(aws ecr describe-repositories --repository-names test 2>/dev/null) | \
-         if [ -z "$repo_info" ]; then aws ecr create-repository --repository-name test --image-scanning-configuration scanOnPush=true; else echo "ECR repository already exists: test"; fi
+      # # - name: Configure AWS credentials from Test account
+      # #   uses: aws-actions/configure-aws-credentials@v4
+      # #   with:
+      # #     role-to-assume: arn:aws:iam::377348602056:role/image-build-ecr
+      # #     aws-region: us-east-2
+
+      # - name: Log in to Amazon ECR
+      #   run: |
+      #    repo_info=$(aws ecr describe-repositories --repository-names test 2>/dev/null) | \
+      #    if [ -z "$repo_info" ]; then aws ecr create-repository --repository-name test --image-scanning-configuration scanOnPush=true; else echo "ECR repository already exists: test"; fi
 
 
         
-      # - name: Log in to Amazon ECR
-      #   run: |
-      #     aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 377348602056.dkr.ecr.us-east-2.amazonaws.com
+      # # - name: Log in to Amazon ECR
+      # #   run: |
+      # #     aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 377348602056.dkr.ecr.us-east-2.amazonaws.com
           
 
-      - name: Build and Push Docker Images
-        run: |
-          # docker-compose build
-            docker buildx build vote -t vote:oldnew
-            docker images
-
-          
       # - name: Build and Push Docker Images
       #   run: |
-      #     # Assuming SERVICE_NAMES is defined as an array
-      #     SERVICE_NAMES=("vote" "result" "worker" "redis" "db")
-      #     for SERVICE_NAME in "${SERVICE_NAMES[@]}"; do
-      #         ECR_REPO_NAME="example-voting-app-dcompose_$SERVICE_NAME"
+      #     # docker-compose build
+      #       docker buildx build vote -t vote:oldnew
+      #       docker images
+
           
-      #         # Check if the repository already exists
-      #         repo_info=$(aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" 2>/dev/null)
+      # # - name: Build and Push Docker Images
+      # #   run: |
+      # #     # Assuming SERVICE_NAMES is defined as an array
+      # #     SERVICE_NAMES=("vote" "result" "worker" "redis" "db")
+      # #     for SERVICE_NAME in "${SERVICE_NAMES[@]}"; do
+      # #         ECR_REPO_NAME="example-voting-app-dcompose_$SERVICE_NAME"
           
-      #         # If the repository does not exist, create it
-      #         if [ -z "$repo_info" ]; then
-      #             echo "Creating ECR repository: $ECR_REPO_NAME"
-      #             aws ecr create-repository \
-      #                 --repository-name "$ECR_REPO_NAME" \
-      #                 --image-scanning-configuration scanOnPush=true
-      #         else
-      #             echo "ECR repository already exists: $ECR_REPO_NAME"
-      #         fi
-      #     done
+      # #         # Check if the repository already exists
+      # #         repo_info=$(aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" 2>/dev/null)
+          
+      # #         # If the repository does not exist, create it
+      # #         if [ -z "$repo_info" ]; then
+      # #             echo "Creating ECR repository: $ECR_REPO_NAME"
+      # #             aws ecr create-repository \
+      # #                 --repository-name "$ECR_REPO_NAME" \
+      # #                 --image-scanning-configuration scanOnPush=true
+      # #         else
+      # #             echo "ECR repository already exists: $ECR_REPO_NAME"
+      # #         fi
+      # #     done
           
