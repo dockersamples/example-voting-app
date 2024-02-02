@@ -26,10 +26,26 @@ jobs:
           role-to-assume: arn:aws:iam::377348602056:role/github-actions-role
           role-session-name: samplerolesession
           aws-region: us-east-2
-          
-      - name: copying-files-to-s3-bucket
+
+      - name: Check if ECS repository exists
+        id: check_repo
         run: |
-          aws s3 sync seed-data s3://febbuctoday
+          repo_name="test"
+          aws ecr describe-repositories --repository-names $repo_name >/dev/null 2>&1 || echo "::set-output name=repo_exists::false"
+
+      - name: Create ECS repository if it doesn't exist
+        if: steps.check_repo.outputs.repo_exists == 'false'
+        run: |
+          repo_name="test"
+          aws ecr create-repository --repository-name $repo_name
+
+      - name: Use ECS repository (or skip if already exists)
+        if: steps.check_repo.outputs.repo_exists == 'true'
+        run: echo "ECS repository already exists, skipping creation"
+
+      # - name: copying-files-to-s3-bucket
+      #   run: |
+      #     aws s3 sync seed-data s3://febbuctoday
 
       # - name: Install Docker
       #   run: |
