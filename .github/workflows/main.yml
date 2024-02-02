@@ -30,13 +30,13 @@ jobs:
       - name: Check if ECS repository exists
         id: check_repo
         run: |
-          repo_name="test"
+          repo_name="test01"
           aws ecr describe-repositories --repository-names $repo_name >/dev/null 2>&1 || echo "::set-output name=repo_exists::false"
 
       - name: Create ECS repository if it doesn't exist
         if: steps.check_repo.outputs.repo_exists == 'false'
         run: |
-          repo_name="test"
+          repo_name="test01"
           aws ecr create-repository --repository-name $repo_name
 
       - name: Use ECS repository (or skip if already exists)
