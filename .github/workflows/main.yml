@@ -37,7 +37,7 @@ jobs:
         if: steps.check_repo.outputs.repo_exists == 'false'
         run: |
           repo_name="test01"
-          aws ecr create-repository --repository-name $repo_name --encryption-configuration { "encryptionType":"KMS"}
+          aws ecr create-repository --repository-name $repo_name --encryption-configuration encryptionType=KMS
 
       - name: Use ECS repository (or skip if already exists)
         if: steps.check_repo.outputs.repo_exists == 'true'
