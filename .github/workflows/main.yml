@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main
-
+permissions:
+  id-token: write
+  contents: read
 jobs:
   terraform_plan:
     # environment:
@@ -18,7 +20,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+      - name: configureawscredentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::377348602056:role/github-actions-role
+          role-session-name: samplerolesession
+          aws-region: us-east-2
       - name: Set up Terraform
         run: |
          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
