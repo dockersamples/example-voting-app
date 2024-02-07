@@ -27,21 +27,34 @@ jobs:
           role-session-name: samplerolesession
           aws-region: us-east-2
 
-      - name: Check if ECS repository exists
-        id: check_repo
+      - name: Set up Terraform
         run: |
-          repo_name="test01"
-          aws ecr describe-repositories --repository-names $repo_name >/dev/null 2>&1 || echo "::set-output name=repo_exists::false"
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install terraform
 
-      - name: Create ECS repository if it doesn't exist
-        if: steps.check_repo.outputs.repo_exists == 'false'
-        run: |
-          repo_name="test01"
-          aws ecr create-repository --repository-name $repo_name --encryption-configuration encryptionType=KMS
+      - name: Terraform Init
+        run: terraform init
+  
+      - name: Terraform Plan
+        run: terraform plan
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.merged_by.login == 'iam-aravind'
+        
+      # - name: Check if ECS repository exists
+      #   id: check_repo
+      #   run: |
+      #     repo_name="test01"
+      #     aws ecr describe-repositories --repository-names $repo_name >/dev/null 2>&1 || echo "::set-output name=repo_exists::false"
 
-      - name: Use ECS repository (or skip if already exists)
-        if: steps.check_repo.outputs.repo_exists == 'true'
-        run: echo "ECS repository already exists, skipping creation"
+      # - name: Create ECS repository if it doesn't exist
+      #   if: steps.check_repo.outputs.repo_exists == 'false'
+      #   run: |
+      #     repo_name="test01"
+      #     aws ecr create-repository --repository-name $repo_name --encryption-configuration encryptionType=KMS
+
+      # - name: Use ECS repository (or skip if already exists)
+      #   if: steps.check_repo.outputs.repo_exists == 'true'
+      #   run: echo "ECS repository already exists, skipping creation"
 
       # - name: copying-files-to-s3-bucket
       #   run: |
