@@ -1,6 +1,5 @@
 # Example Voting App
 
-test
 A simple distributed application running across multiple Docker containers.
 
 ## Getting started
