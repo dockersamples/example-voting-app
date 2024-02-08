@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vote
+  name: vote
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vote
+  template:
+    metadata:
+      annotations:  
+        dapr.io/app-id: vote
+        dapr.io/app-port: "3000"
+        dapr.io/enabled: "true"
+      labels:
+        app: vote
+    spec:
+      containers:
+      - image: salaboy/examplevotingapp_vote
+        name: vote
+        ports:
+        - containerPort: 3000
+          name: vote

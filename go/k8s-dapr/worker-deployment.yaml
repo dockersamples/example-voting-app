@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: worker
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      annotations:  
+        dapr.io/app-id: worker
+        dapr.io/app-port: "3000"
+        dapr.io/enabled: "true"
+      labels:
+        app: worker
+    spec:
+      containers:
+      - image: salaboy/examplevotingapp_worker
+        name: worker
