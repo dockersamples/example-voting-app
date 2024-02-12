@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Worker", "worker\Worker.csproj", "{B3BB5AC6-48AB-49AB-9AF3-B8CAB176FDB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotnet", "dotnet", "{4E82DDAB-75CE-46F9-9795-3C80487CDF61}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Worker", "dotnet\worker\Worker.csproj", "{5F2E99FB-3101-4005-849B-21C584CCF4C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3BB5AC6-48AB-49AB-9AF3-B8CAB176FDB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3BB5AC6-48AB-49AB-9AF3-B8CAB176FDB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3BB5AC6-48AB-49AB-9AF3-B8CAB176FDB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3BB5AC6-48AB-49AB-9AF3-B8CAB176FDB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F2E99FB-3101-4005-849B-21C584CCF4C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F2E99FB-3101-4005-849B-21C584CCF4C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F2E99FB-3101-4005-849B-21C584CCF4C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F2E99FB-3101-4005-849B-21C584CCF4C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5F2E99FB-3101-4005-849B-21C584CCF4C0} = {4E82DDAB-75CE-46F9-9795-3C80487CDF61}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C6D40AE7-B905-4807-AE7F-33A1B08AE295}
+	EndGlobalSection
+EndGlobal
