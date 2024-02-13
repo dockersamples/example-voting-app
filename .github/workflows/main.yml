@@ -9,8 +9,8 @@ permissions:
   contents: read
 jobs:
   terraform_plan:
-    # environment:
-    #   name: plan
+    environment:
+      name: plan
     runs-on: ubuntu-latest
 
     env:
