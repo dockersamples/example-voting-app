@@ -24,9 +24,10 @@ jobs:
       - name: configureawscredentials
         uses: aws-actions/configure-aws-credentials@main
         with:
-          role-to-assume: arn:aws:iam::377348602056:role/github-actions-role
+          role-to-assume: ${{ secrets.AWS_ROLE_ID }}
           role-session-name: samplerolesession
           aws-region: us-east-2
+          
       - name: Set up Terraform
         run: |
          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
