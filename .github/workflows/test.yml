@@ -1,0 +1,201 @@
+name: Terraform Deployment
+
+on:
+  push:
+    branches:
+      - main
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  terraform_plan:
+    environment:
+      name: plan
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEV_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_SECRET }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: configureawscredentials
+        uses: aws-actions/configure-aws-credentials@main
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ID }}
+          role-session-name: samplerolesession
+          aws-region: us-east-2
+          
+      - name: Set up Terraform
+        run: |
+         curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+         sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+         sudo apt-get update && sudo apt-get install terraform
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan 
+
+  terraform_apply:
+    environment:
+      name: plan
+    needs: terraform_plan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: configureawscredentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::377348602056:role/github-actions-role
+          role-session-name: samplerolesession
+          aws-region: us-east-2
+          
+      - name: Set up Terraform
+        run: |
+         curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+         sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+         sudo apt-get update && sudo apt-get install terraform
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+
+###############################################################################################################
+# name: Build and Push Docker Images
+
+# on: 
+#   push:
+#     branches:
+#       - main
+# permissions:
+#   id-token: write
+#   contents: read
+      
+# jobs:
+# #   build:
+# #     runs-on: ubuntu-latest
+#  staging:
+#    environment:
+#        name: plan
+#    runs-on: ubuntu-latest
+
+#    env:
+#      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEV_KEY_ID }}
+#      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_SECRET }}
+
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+       
+#      - name: configureawscredentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          role-to-assume: arn:aws:iam::377348602056:role/github-actions-role
+#          role-session-name: samplerolesession
+#          aws-region: us-east-2
+
+#      - name: Set up Terraform
+#        run: |
+#          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+#          sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+#          sudo apt-get update && sudo apt-get install terraform
+
+#      - name: Terraform Init
+#        run: terraform init
+
+#      - name: Terraform Plan
+#        run: terraform plan
+        
+        
+      # - name: Check if ECS repository exists
+      #   id: check_repo
+      #   run: |
+      #     repo_name="test01"
+      #     aws ecr describe-repositories --repository-names $repo_name >/dev/null 2>&1 || echo "::set-output name=repo_exists::false"
+
+      # - name: Create ECS repository if it doesn't exist
+      #   if: steps.check_repo.outputs.repo_exists == 'false'
+      #   run: |
+      #     repo_name="test01"
+      #     aws ecr create-repository --repository-name $repo_name --encryption-configuration encryptionType=KMS
+
+      # - name: Use ECS repository (or skip if already exists)
+      #   if: steps.check_repo.outputs.repo_exists == 'true'
+      #   run: echo "ECS repository already exists, skipping creation"
+
+      # - name: copying-files-to-s3-bucket
+      #   run: |
+      #     aws s3 sync seed-data s3://febbuctoday
+
+      # - name: Install Docker
+      #   run: |
+      #     # Install Docker
+      #     # Add Docker's official GPG key:
+      #     sudo apt-get update
+      #     sudo apt-get install ca-certificates curl
+      #     sudo install -m 0755 -d /etc/apt/keyrings
+      #     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+      #     sudo chmod a+r /etc/apt/keyrings/docker.asc
+      #     # Add the repository to Apt sources:
+      #     echo \
+      #       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      #         $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      #     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      #     sudo apt-get update
+
+      # # - name: Configure AWS credentials from Test account
+      # #   uses: aws-actions/configure-aws-credentials@v4
+      # #   with:
+      # #     role-to-assume: arn:aws:iam::377348602056:role/image-build-ecr
+      # #     aws-region: us-east-2
+
+      # - name: Log in to Amazon ECR
+      #   run: |
+      #    repo_info=$(aws ecr describe-repositories --repository-names test 2>/dev/null) | \
+      #    if [ -z "$repo_info" ]; then aws ecr create-repository --repository-name test --image-scanning-configuration scanOnPush=true; else echo "ECR repository already exists: test"; fi
+
+
+        
+      # # - name: Log in to Amazon ECR
+      # #   run: |
+      # #     aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 377348602056.dkr.ecr.us-east-2.amazonaws.com
+          
+
+      # - name: Build and Push Docker Images
+      #   run: |
+      #     # docker-compose build
+      #       docker buildx build vote -t vote:oldnew
+      #       docker images
+
+          
+      # # - name: Build and Push Docker Images
+      # #   run: |
+      # #     # Assuming SERVICE_NAMES is defined as an array
+      # #     SERVICE_NAMES=("vote" "result" "worker" "redis" "db")
+      # #     for SERVICE_NAME in "${SERVICE_NAMES[@]}"; do
+      # #         ECR_REPO_NAME="example-voting-app-dcompose_$SERVICE_NAME"
+          
+      # #         # Check if the repository already exists
+      # #         repo_info=$(aws ecr describe-repositories --repository-names "$ECR_REPO_NAME" 2>/dev/null)
+          
+      # #         # If the repository does not exist, create it
+      # #         if [ -z "$repo_info" ]; then
+      # #             echo "Creating ECR repository: $ECR_REPO_NAME"
+      # #             aws ecr create-repository \
+      # #                 --repository-name "$ECR_REPO_NAME" \
+      # #                 --image-scanning-configuration scanOnPush=true
+      # #         else
+      # #             echo "ECR repository already exists: $ECR_REPO_NAME"
+      # #         fi
+      # #     done
+          
