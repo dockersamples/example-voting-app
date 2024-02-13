@@ -9,8 +9,8 @@ permissions:
   contents: read
 jobs:
   terraform_plan:
-    # environment:
-    #   name: staging
+    environment:
+      name: plan
     runs-on: ubuntu-latest
 
     env:
