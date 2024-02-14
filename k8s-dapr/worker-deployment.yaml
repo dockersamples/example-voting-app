@@ -13,11 +13,13 @@ spec:
     metadata:
       annotations:  
         dapr.io/app-id: worker
-        dapr.io/app-port: "3000"
         dapr.io/enabled: "true"
+        dapr.io/sidecar-image: "docker.io/daprio/daprd:1.13.0-rc.2" 
+        dapr.io/log-level: "debug"
       labels:
         app: worker
     spec:
       containers:
-      - image: salaboy/examplevotingapp_worker
+      - image: salaboy/examplevotingapp_worker:dotnet
         name: worker
+        imagePullPolicy: Always

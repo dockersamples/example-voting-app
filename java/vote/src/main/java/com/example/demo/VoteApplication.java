@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -19,21 +20,23 @@ import io.dapr.client.DaprClient;
 import io.dapr.client.DaprClientBuilder;
 import io.dapr.client.domain.SaveStateRequest;
 import io.dapr.client.domain.State;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 @SpringBootApplication
 @Controller
-public class DemoApplication {
+public class VoteApplication {
 
-
-	private String STATESTORE_NAME = "statestore";
+	@Value("${VOTE_STATESTORE:votes-statestore}")
+	private String STATESTORE_NAME;
 	public record Vote(String type, String voterId, String option){}
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(VoteApplication.class, args);
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String getExampleHTML(Model model) throws UnknownHostException {
+	public String renderHTML(Model model) throws UnknownHostException {
 		System.out.println("GET");
 		model.addAttribute("option_a", "Cats");
 		model.addAttribute("option_b", "Dogs");
@@ -43,7 +46,7 @@ public class DemoApplication {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public String getExampleHTML2(Model model, @RequestBody MultiValueMap<String, String> formData, @CookieValue("voter_id") String voterId) throws UnknownHostException {
+	public String vote(Model model, @RequestBody MultiValueMap<String, String> formData, @CookieValue(value = "voter_id", required = false) String voterId, HttpServletResponse response) throws UnknownHostException {
 		
 		if (voterId == null || voterId.equals("")){
 			voterId = UUID.randomUUID().toString().substring(0, 10);
@@ -64,6 +67,8 @@ public class DemoApplication {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+
+		response.addCookie(new Cookie("voter_id", voterId));
 
 		model.addAttribute("option_a", "Cats");
 		model.addAttribute("option_b", "Dogs");

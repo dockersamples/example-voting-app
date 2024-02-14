@@ -15,12 +15,15 @@ spec:
         dapr.io/app-id: result
         dapr.io/app-port: "3000"
         dapr.io/enabled: "true"
+        dapr.io/sidecar-image: "docker.io/daprio/daprd:1.13.0-rc.2" 
+        dapr.io/log-level: "debug"
       labels:
         app: result
     spec:
       containers:
-      - image: salaboy/examplevotingapp_result
+      - image: salaboy/examplevotingapp_result:go
         name: result
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
           name: result

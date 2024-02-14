@@ -13,14 +13,17 @@ spec:
     metadata:
       annotations:  
         dapr.io/app-id: vote
-        dapr.io/app-port: "3000"
+        dapr.io/app-port: "8080"
         dapr.io/enabled: "true"
+        dapr.io/sidecar-image: "docker.io/daprio/daprd:1.13.0-rc.2" 
+        dapr.io/log-level: "debug"
       labels:
         app: vote
     spec:
       containers:
-      - image: salaboy/examplevotingapp_vote
+      - image: salaboy/examplevotingapp_vote:java
         name: vote
+        imagePullPolicy: Always
         ports:
-        - containerPort: 3000
+        - containerPort: 8080
           name: vote

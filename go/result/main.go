@@ -14,8 +14,7 @@ import (
 )
 
 var (
-	STATESTORE_VOTES_NAME   = "statestore"
-	STATESTORE_RESULTS_NAME = "results"
+	STATESTORE_RESULTS_NAME = "results-statestore"
 )
 var conns = []socketio.Conn{}
 
@@ -89,11 +88,10 @@ func getVotes() {
 	for {
 		time.Sleep(1 * time.Second)
 		log.Printf("Getting votes... ")
-		resultsState, err := daprClient.GetState(ctx, STATESTORE_VOTES_NAME, "results", map[string]string{
-			"contentType": "application/json",
-		})
+		resultsState, err := daprClient.GetState(ctx, STATESTORE_RESULTS_NAME, "results", nil)
 		if err != nil {
 			log.Printf("An error occured while getting the results: %v", err)
+			continue
 		}
 		results := &Data{}
 		err = json.Unmarshal(resultsState.Value, results)
