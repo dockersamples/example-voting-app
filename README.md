@@ -1,4 +1,4 @@
-![Gitpod Logo](https://www.gitpod.io/images/media-kit/logo-dark-theme.png)
+<img src="https://www.gitpod.io/images/media-kit/logo-dark-theme.png" width="250">
 
 # Always ready-to-code 🍊
 Gitpod is the developer platform for on-demand Cloud Development Environments (CDEs). Say goodbye to slow onboarding and unmanageable dev environments. Gitpod removes pain and frustration from your developer experience, helps you deliver software faster, and makes you more secure and compliant.
