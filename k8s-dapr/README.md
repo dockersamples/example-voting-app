@@ -1,9 +1,9 @@
 # Installing the voting app with Dapr
 
 The Dapr-ized version of the application uses the following projects
-- Vote Service: `java/vote` ()
-- Worker Service: `dotnet/worker`
-- Results Service: `go/result`
+- Vote Service: [`java/vote`](../java/vote/)
+- Worker Service: [`dotnet/worker`](../dotnet/worker/)
+- Results Service: [`go/result`](../go/result/)
 
 It also uses two statestores one for Votes (Redis) and one for the Results (PostgreSQL)
 
