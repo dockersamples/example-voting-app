@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: worker
   namespace: default
+  label: 
+    networking.knative.dev/visibility=cluster-local
 spec:
   template:
     metadata:
