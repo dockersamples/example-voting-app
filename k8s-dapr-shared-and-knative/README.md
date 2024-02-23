@@ -103,20 +103,12 @@ Now install the application, from the `k8s-dapr-shared-and-knative` directory:
 kubectl apply -f .
 ```
 
-Once all the pods are up and running you can use `kubectl port-forward` to access the vote and result user interfaces.
-In a new terminal run: 
-
+Once all the pods are up and running you can point your browser to the Knative Services:
 ```
-kubectl port-forward svc/vote 4000:6000
+kubectl get ksvc
 ```
 
-In another terminal run: 
+You can point your browser to [http://vote.default.127.0.0.1.sslip.io](http://vote.default.127.0.0.1.sslip.io) to cast your vote. 
 
-```
-kubectl port-forward svc/result 3000:5001
-```
-
-You can point your browser to [http://localhost:4000](http://localhost:4000) to cast your vote. 
-
-To see the results in real time you can point your browser to [http://localhost:3000](http://localhost:3000).
+To see the results in real time you can point your browser to [http://result.default.127.0.0.1.sslip.io](http://result.default.127.0.0.1.sslip.io).
 
