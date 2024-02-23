@@ -1,5 +1,6 @@
 var app = angular.module('catsvsdogs', []);
-var socket = io.connect("http://localhost:3000", {
+console.log("Location Host: " + location.host);
+var socket = io.connect("http://" + location.host, {
   transports: ['websocket'],
   path: '/socket.io/'
 });
