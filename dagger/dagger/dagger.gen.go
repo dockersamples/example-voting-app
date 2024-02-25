@@ -217,6 +217,9 @@ type Void string
 // The `VoteID` scalar type represents an identifier for an object of type Vote.
 type VoteID string
 
+// The `WorkerID` scalar type represents an identifier for an object of type Worker.
+type WorkerID string
+
 // Key value object that represents a build argument.
 type BuildArg struct {
 	// The build argument name.
@@ -5838,6 +5841,17 @@ func (r *Client) LoadVoteFromID(id VoteID) *Vote {
 	}
 }
 
+// Load a Worker from its ID.
+func (r *Client) LoadWorkerFromID(id WorkerID) *Worker {
+	q := r.Query.Select("loadWorkerFromID")
+	q = q.Arg("id", id)
+
+	return &Worker{
+		Query:  q,
+		Client: r.Client,
+	}
+}
+
 // Create a new module.
 func (r *Client) Module() *Module {
 	q := r.Query.Select("module")
@@ -6009,6 +6023,15 @@ func (r *Client) Vote() *Vote {
 	q := r.Query.Select("vote")
 
 	return &Vote{
+		Query:  q,
+		Client: r.Client,
+	}
+}
+
+func (r *Client) Worker() *Worker {
+	q := r.Query.Select("worker")
+
+	return &Worker{
 		Query:  q,
 		Client: r.Client,
 	}
@@ -6841,6 +6864,88 @@ func (r *Vote) Run(dir *Directory, opts ...VoteRunOpts) *Service {
 		}
 	}
 	q = q.Arg("dir", dir)
+
+	return &Service{
+		Query:  q,
+		Client: r.Client,
+	}
+}
+
+type Worker struct {
+	Query  *querybuilder.Selection
+	Client graphql.Client
+
+	id *WorkerID
+}
+
+// A unique identifier for this Worker.
+func (r *Worker) ID(ctx context.Context) (WorkerID, error) {
+	if r.id != nil {
+		return *r.id, nil
+	}
+	q := r.Query.Select("id")
+
+	var response WorkerID
+
+	q = q.Bind(&response)
+	return response, q.Execute(ctx, r.Client)
+}
+
+// XXX_GraphQLType is an internal function. It returns the native GraphQL type name
+func (r *Worker) XXX_GraphQLType() string {
+	return "Worker"
+}
+
+// XXX_GraphQLIDType is an internal function. It returns the native GraphQL type name for the ID of this object
+func (r *Worker) XXX_GraphQLIDType() string {
+	return "WorkerID"
+}
+
+// XXX_GraphQLID is an internal function. It returns the underlying type ID
+func (r *Worker) XXX_GraphQLID(ctx context.Context) (string, error) {
+	id, err := r.ID(ctx)
+	if err != nil {
+		return "", err
+	}
+	return string(id), nil
+}
+
+func (r *Worker) MarshalJSON() ([]byte, error) {
+	id, err := r.ID(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(id)
+}
+func (r *Worker) UnmarshalJSON(bs []byte) error {
+	var id string
+	err := json.Unmarshal(bs, &id)
+	if err != nil {
+		return err
+	}
+	*r = *dag.LoadWorkerFromID(WorkerID(id))
+	return nil
+}
+
+// WorkerRunOpts contains options for Worker.Run
+type WorkerRunOpts struct {
+	ComponentsPath *Directory
+}
+
+func (r *Worker) Run(dir *Directory, redisSvc *Service, postgresSvc *Service, opts ...WorkerRunOpts) *Service {
+	assertNotNil("dir", dir)
+	assertNotNil("redisSvc", redisSvc)
+	assertNotNil("postgresSvc", postgresSvc)
+	q := r.Query.Select("run")
+	for i := len(opts) - 1; i >= 0; i-- {
+		// `componentsPath` optional argument
+		if !querybuilder.IsZeroValue(opts[i].ComponentsPath) {
+			q = q.Arg("componentsPath", opts[i].ComponentsPath)
+		}
+	}
+	q = q.Arg("dir", dir)
+	q = q.Arg("redisSvc", redisSvc)
+	q = q.Arg("postgresSvc", postgresSvc)
 
 	return &Service{
 		Query:  q,

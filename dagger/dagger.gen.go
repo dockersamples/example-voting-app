@@ -128,6 +128,9 @@ type Void = dagger.Void
 // The `VoteID` scalar type represents an identifier for an object of type Vote.
 type VoteID = dagger.VoteID
 
+// The `WorkerID` scalar type represents an identifier for an object of type Worker.
+type WorkerID = dagger.WorkerID
+
 // Key value object that represents a build argument.
 type BuildArg = dagger.BuildArg
 
@@ -419,6 +422,11 @@ type Vote = dagger.Vote
 // VoteRunOpts contains options for Vote.Run
 type VoteRunOpts = dagger.VoteRunOpts
 
+type Worker = dagger.Worker
+
+// WorkerRunOpts contains options for Worker.Run
+type WorkerRunOpts = dagger.WorkerRunOpts
+
 // Sharing mode of the cache volume.
 type CacheSharingMode = dagger.CacheSharingMode
 
@@ -608,7 +616,14 @@ func invoke(ctx context.Context, parentJSON []byte, parentName string, fnName st
 					panic(fmt.Errorf("%s: %w", "failed to unmarshal input arg dir", err))
 				}
 			}
-			return (*Voteapp).VoteApp(&parent, dir), nil
+			var svc []string
+			if inputArgs["svc"] != nil {
+				err = json.Unmarshal([]byte(inputArgs["svc"]), &svc)
+				if err != nil {
+					panic(fmt.Errorf("%s: %w", "failed to unmarshal input arg svc", err))
+				}
+			}
+			return (*Voteapp).VoteApp(&parent, dir, svc), nil
 		default:
 			return nil, fmt.Errorf("unknown function %s", fnName)
 		}
@@ -620,7 +635,8 @@ func invoke(ctx context.Context, parentJSON []byte, parentName string, fnName st
 						dag.Function("VoteApp",
 							dag.TypeDef().WithObject("Service")).
 							WithDescription("example usage: \"dagger call vote-app --dir . up\"").
-							WithArg("dir", dag.TypeDef().WithObject("Directory")))), nil
+							WithArg("dir", dag.TypeDef().WithObject("Directory")).
+							WithArg("svc", dag.TypeDef().WithListOf(dag.TypeDef().WithKind(StringKind))))), nil
 	default:
 		return nil, fmt.Errorf("unknown object %s", parentName)
 	}
