@@ -1,11 +1,10 @@
 var app = angular.module('catsvsdogs', []);
 console.log("Location Host: " + location.host);
-var socket = io.connect("http://" + location.host, {
+
+var socket = io.connect("//" + location.host, {
   transports: ['websocket'],
   path: '/socket.io/'
 });
-
-
 
 var bg1 = document.getElementById('background-stats-1');
 var bg2 = document.getElementById('background-stats-2');

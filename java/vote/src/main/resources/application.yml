@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: vote
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+
+vote:
+  state-store: votes-statestore
