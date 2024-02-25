@@ -1,0 +1,12 @@
+{
+  "name": "worker",
+  "sdk": "typescript",
+  "dependencies": [
+    {
+      "name": "dapr",
+      "source": "../../dapr"
+    }
+  ],
+  "source": "dagger",
+  "engineVersion": "v0.9.11"
+}
