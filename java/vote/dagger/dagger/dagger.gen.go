@@ -114,6 +114,9 @@ type ContainerID string
 // The `CurrentModuleID` scalar type represents an identifier for an object of type CurrentModule.
 type CurrentModuleID string
 
+// The `DaprID` scalar type represents an identifier for an object of type Dapr.
+type DaprID string
+
 // The `DirectoryID` scalar type represents an identifier for an object of type Directory.
 type DirectoryID string
 
@@ -1828,6 +1831,95 @@ func (r *CurrentModule) WorkdirFile(path string) *File {
 		Query:  q,
 		Client: r.Client,
 	}
+}
+
+type Dapr struct {
+	Query  *querybuilder.Selection
+	Client graphql.Client
+
+	id *DaprID
+}
+
+// DaprDaprOpts contains options for Dapr.Dapr
+type DaprDaprOpts struct {
+	AppPort int
+
+	AppChannelAddress string
+
+	ComponentsPath *Directory
+}
+
+func (r *Dapr) Dapr(appId string, opts ...DaprDaprOpts) *Container {
+	q := r.Query.Select("dapr")
+	for i := len(opts) - 1; i >= 0; i-- {
+		// `appPort` optional argument
+		if !querybuilder.IsZeroValue(opts[i].AppPort) {
+			q = q.Arg("appPort", opts[i].AppPort)
+		}
+		// `appChannelAddress` optional argument
+		if !querybuilder.IsZeroValue(opts[i].AppChannelAddress) {
+			q = q.Arg("appChannelAddress", opts[i].AppChannelAddress)
+		}
+		// `componentsPath` optional argument
+		if !querybuilder.IsZeroValue(opts[i].ComponentsPath) {
+			q = q.Arg("componentsPath", opts[i].ComponentsPath)
+		}
+	}
+	q = q.Arg("appId", appId)
+
+	return &Container{
+		Query:  q,
+		Client: r.Client,
+	}
+}
+
+// A unique identifier for this Dapr.
+func (r *Dapr) ID(ctx context.Context) (DaprID, error) {
+	if r.id != nil {
+		return *r.id, nil
+	}
+	q := r.Query.Select("id")
+
+	var response DaprID
+
+	q = q.Bind(&response)
+	return response, q.Execute(ctx, r.Client)
+}
+
+// XXX_GraphQLType is an internal function. It returns the native GraphQL type name
+func (r *Dapr) XXX_GraphQLType() string {
+	return "Dapr"
+}
+
+// XXX_GraphQLIDType is an internal function. It returns the native GraphQL type name for the ID of this object
+func (r *Dapr) XXX_GraphQLIDType() string {
+	return "DaprID"
+}
+
+// XXX_GraphQLID is an internal function. It returns the underlying type ID
+func (r *Dapr) XXX_GraphQLID(ctx context.Context) (string, error) {
+	id, err := r.ID(ctx)
+	if err != nil {
+		return "", err
+	}
+	return string(id), nil
+}
+
+func (r *Dapr) MarshalJSON() ([]byte, error) {
+	id, err := r.ID(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(id)
+}
+func (r *Dapr) UnmarshalJSON(bs []byte) error {
+	var id string
+	err := json.Unmarshal(bs, &id)
+	if err != nil {
+		return err
+	}
+	*r = *dag.LoadDaprFromID(DaprID(id))
+	return nil
 }
 
 // A directory.
@@ -5234,6 +5326,15 @@ func (r *Client) CurrentTypeDefs(ctx context.Context) ([]TypeDef, error) {
 	return convert(response), nil
 }
 
+func (r *Client) Dapr() *Dapr {
+	q := r.Query.Select("dapr")
+
+	return &Dapr{
+		Query:  q,
+		Client: r.Client,
+	}
+}
+
 // The default platform of the engine.
 func (r *Client) DefaultPlatform(ctx context.Context) (Platform, error) {
 	q := r.Query.Select("defaultPlatform")
@@ -5394,6 +5495,17 @@ func (r *Client) LoadCurrentModuleFromID(id CurrentModuleID) *CurrentModule {
 	q = q.Arg("id", id)
 
 	return &CurrentModule{
+		Query:  q,
+		Client: r.Client,
+	}
+}
+
+// Load a Dapr from its ID.
+func (r *Client) LoadDaprFromID(id DaprID) *Dapr {
+	q := r.Query.Select("loadDaprFromID")
+	q = q.Arg("id", id)
+
+	return &Dapr{
 		Query:  q,
 		Client: r.Client,
 	}

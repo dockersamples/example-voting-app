@@ -25,6 +25,9 @@ type ContainerID = dagger.ContainerID
 // The `CurrentModuleID` scalar type represents an identifier for an object of type CurrentModule.
 type CurrentModuleID = dagger.CurrentModuleID
 
+// The `DaprID` scalar type represents an identifier for an object of type Dapr.
+type DaprID = dagger.DaprID
+
 // The `DirectoryID` scalar type represents an identifier for an object of type Directory.
 type DirectoryID = dagger.DirectoryID
 
@@ -207,6 +210,11 @@ type CurrentModule = dagger.CurrentModule
 
 // CurrentModuleWorkdirOpts contains options for CurrentModule.Workdir
 type CurrentModuleWorkdirOpts = dagger.CurrentModuleWorkdirOpts
+
+type Dapr = dagger.Dapr
+
+// DaprDaprOpts contains options for Dapr.Dapr
+type DaprDaprOpts = dagger.DaprDaprOpts
 
 // A directory.
 type Directory = dagger.Directory
@@ -498,6 +506,15 @@ func convertSlice[I any, O any](in []I, f func(I) O) []O {
 	return out
 }
 
+func (r *Vote) UnmarshalJSON(bs []byte) error {
+	var concrete struct{}
+	err := json.Unmarshal(bs, &concrete)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	ctx := context.Background()
 
@@ -557,8 +574,33 @@ func main() {
 
 func invoke(ctx context.Context, parentJSON []byte, parentName string, fnName string, inputArgs map[string][]byte) (_ any, err error) {
 	switch parentName {
+	case "Vote":
+		switch fnName {
+		case "Run":
+			var parent Vote
+			err = json.Unmarshal(parentJSON, &parent)
+			if err != nil {
+				panic(fmt.Errorf("%s: %w", "failed to unmarshal parent object", err))
+			}
+			var dir *Directory
+			if inputArgs["dir"] != nil {
+				err = json.Unmarshal([]byte(inputArgs["dir"]), &dir)
+				if err != nil {
+					panic(fmt.Errorf("%s: %w", "failed to unmarshal input arg dir", err))
+				}
+			}
+			return (*Vote).Run(&parent, dir), nil
+		default:
+			return nil, fmt.Errorf("unknown function %s", fnName)
+		}
 	case "":
-		return dag.Module(), nil
+		return dag.Module().
+			WithObject(
+				dag.TypeDef().WithObject("Vote").
+					WithFunction(
+						dag.Function("Run",
+							dag.TypeDef().WithObject("Service")).
+							WithArg("dir", dag.TypeDef().WithObject("Directory")))), nil
 	default:
 		return nil, fmt.Errorf("unknown object %s", parentName)
 	}

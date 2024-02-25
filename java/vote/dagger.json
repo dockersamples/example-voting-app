@@ -1,6 +1,12 @@
 {
   "name": "vote",
   "sdk": "go",
+  "dependencies": [
+    {
+      "name": "dapr",
+      "source": "github.com/marcosnils/daggerverse/dapr@18ab6cf84f5a783a2c72629eea6ed9e9f728c71e"
+    }
+  ],
   "source": "dagger",
   "engineVersion": "v0.9.11"
 }
