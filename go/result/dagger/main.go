@@ -6,8 +6,18 @@ func (m *Result) Run(
 	dir *Directory,
 	// +optional
 	componentsPath *Directory,
+	// +optional
+	postgresSvc *Service,
 ) *Service {
+	if componentsPath == nil {
+		componentsPath = dir.Directory("components")
+	}
+
 	dapr := dag.Dapr().Dapr("result", DaprDaprOpts{ComponentsPath: componentsPath})
+
+	if postgresSvc != nil {
+		dapr = dapr.WithServiceBinding("postgres", postgresSvc)
+	}
 
 	return dag.Go().WithSource(dir).Container().
 		WithServiceBinding("dapr", dapr.AsService()).

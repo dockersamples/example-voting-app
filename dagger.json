@@ -1,0 +1,20 @@
+{
+  "name": "voteapp",
+  "sdk": "go",
+  "dependencies": [
+    {
+      "name": "proxy",
+      "source": "github.com/kpenfound/dagger-modules/proxy@d5dfa6e20d26fd53246c20af721364c8f57e4b50"
+    },
+    {
+      "name": "result",
+      "source": "go/result"
+    },
+    {
+      "name": "vote",
+      "source": "java/vote"
+    }
+  ],
+  "source": "dagger",
+  "engineVersion": "v0.9.11"
+}

@@ -6,14 +6,21 @@ func (m *Vote) Run(
 	dir *Directory,
 	// +optional
 	redis *Service,
+	// +optional
+	componentsDir *Directory,
 ) *Service {
 	if redis == nil {
 		redis = dag.Container().
 			From("redis/redis-stack").
 			WithExposedPort(6379).AsService()
 	}
+
+	if componentsDir == nil {
+		componentsDir = dir.Directory("components")
+	}
+
 	dapr := dag.Dapr().
-		Dapr("vote", DaprDaprOpts{ComponentsPath: dir.Directory("components")}).
+		Dapr("vote", DaprDaprOpts{ComponentsPath: componentsDir}).
 		WithServiceBinding("redis", redis).
 		WithExposedPort(50001)
 
