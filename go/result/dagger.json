@@ -4,7 +4,7 @@
   "dependencies": [
     {
       "name": "dapr",
-      "source": "github.com/marcosnils/daggerverse/dapr@18ab6cf84f5a783a2c72629eea6ed9e9f728c71e"
+      "source": "github.com/marcosnils/daggerverse/dapr@028f6ef2535f063ef60ef62edbdb68d94ec1060c"
     },
     {
       "name": "go",
