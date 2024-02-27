@@ -104,6 +104,7 @@ Install RabbitMQ using the official Kubernetes Operator.
 ```shell script
 cd rabbitmq
 ./deploy.sh
+cd ..
 ```
 
 ## Sidecar-less Dapr

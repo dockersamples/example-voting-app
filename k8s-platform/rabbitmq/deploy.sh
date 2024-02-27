@@ -53,7 +53,17 @@ export RABBITMQ_PASSWORD=$(kubectl get secret rabbitmq-default-user -o jsonpath=
 echo "Username: $RABBITMQ_USERNAME"
 echo "Password: $RABBITMQ_PASSWORD"
 
+echo "\n🔑 Generating Secret with RabbitMQ credentials."
+
+kubectl delete secret rabbitmq-credentials || true
+
+kubectl create secret generic rabbitmq-credentials \
+    --from-literal=username="$RABBITMQ_USERNAME" \
+    --from-literal=password="$RABBITMQ_PASSWORD"
+
 unset RABBITMQ_USERNAME
 unset RABBITMQ_PASSWORD
+
+echo "\n🍃 Secret 'rabbitmq-credentials' has been created for Dapr to interact with RabbitMQ."
 
 echo "\n🐰 RabbitMQ deployment completed.\n"
