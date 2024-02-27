@@ -97,6 +97,15 @@ Verify that all the platform components have been installed and properly reconci
 kctrl package installed list -n kadras-packages
 ```
 
+## RabbitMQ
+
+Install RabbitMQ using the official Kubernetes Operator.
+
+```shell script
+cd rabbitmq
+./deploy.sh
+```
+
 ## Sidecar-less Dapr
 
 Considering the serverless deployment strategy we want to use for the Voting application,
