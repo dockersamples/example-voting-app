@@ -10,8 +10,7 @@ spec:
         autoscaling.knative.dev/min-scale: "1"
     spec:
       containers:
-      - image: salaboy/examplevotingapp_vote:java
-        imagePullPolicy: Always
+      - image: ghcr.io/thomasvitale/vote-java
         ports:
         - containerPort: 8080
         env:
@@ -19,4 +18,3 @@ spec:
           value: http://vote-dapr.default.svc.cluster.local:3500
         - name: DAPR_GRPC_ENDPOINT
           value: http://vote-dapr.default.svc.cluster.local:50001  
-        
