@@ -1,3 +1,4 @@
+---
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
@@ -17,7 +18,7 @@ spec:
   - name: outboxPublishTopic # Required
     value: "newVote"
   - name: outboxDiscardWhenMissingState #Optional. Defaults to false
-    value: false  
+    value: false    
   - name: actorStateStore
     value: "true"
   - name: queryIndexes

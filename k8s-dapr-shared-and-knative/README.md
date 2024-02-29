@@ -87,15 +87,19 @@ EOF
 Now we need to create three instances of Dapr Shared, one for each service: 
 
 ```
-helm install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote --set shared.remoteURL=vote --set shared.remotePort=80   
+helm install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote 
 ```
 
 ```
-helm install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result --set shared.remoteURL=result --set shared.remotePort=80   
+helm install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result 
 ```
 
 ```
 helm install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=worker --set shared.daprd.image.tag=1.13.0-rc.2
+```
+
+```
+helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo --set shared.remotePort=80   
 ```
 
 Now install the application, from the `k8s-dapr-shared-and-knative` directory: 

@@ -1,8 +1,10 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: vote
+  name: echo
   namespace: default
+  annotations: 
+    networking.knative.dev/http-protocol: "enabled"
 spec:
   template:
     metadata:
@@ -10,13 +12,8 @@ spec:
         autoscaling.knative.dev/min-scale: "1"
     spec:
       containers:
-      - image: salaboy/examplevotingapp_vote:java
+      - image: salaboy/examplevotingapp_echo:java
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
-        env:
-        - name: DAPR_HTTP_ENDPOINT
-          value: http://vote-dapr.default.svc.cluster.local:3500
-        - name: DAPR_GRPC_ENDPOINT
-          value: http://vote-dapr.default.svc.cluster.local:50001  
         

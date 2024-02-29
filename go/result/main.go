@@ -62,7 +62,7 @@ func main() {
 	}()
 	defer server.Close()
 
-	router.StaticFile("/stylesheets/style.css", "static/stylesheets/style.css")
+	router.StaticFile("/css/style.css", "static/css/style.css")
 	router.StaticFile("/app.js", "static/app.js")
 	router.StaticFile("/socket.io.js", "static/socket.io.js")
 	router.StaticFile("/angular.min.js", "static/angular.min.js")
@@ -94,6 +94,9 @@ func getVotes() {
 			continue
 		}
 		results := &Data{}
+
+		log.Printf("Result: %s", resultsState.Value)
+
 		err = json.Unmarshal(resultsState.Value, results)
 		if err != nil {
 			log.Printf("There was an error decoding the results into the struct: %v", err)

@@ -19,4 +19,3 @@ spec:
           value: http://vote-dapr.default.svc.cluster.local:3500
         - name: DAPR_GRPC_ENDPOINT
           value: http://vote-dapr.default.svc.cluster.local:50001  
-        

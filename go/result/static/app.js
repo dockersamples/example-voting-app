@@ -1,14 +1,15 @@
-var app = angular.module("catsvsdogs", []);
+var app = angular.module('catsvsdogs', []);
 console.log("Location Host: " + location.host);
-var socket = io.connect("http://" + location.host, {
-  transports: ["polling", "websocket"],
-  path: "/socket.io/",
+
+var socket = io.connect("//" + location.host, {
+  transports: ['websocket'],
+  path: '/socket.io/'
 });
 
-var bg1 = document.getElementById("background-stats-1");
-var bg2 = document.getElementById("background-stats-2");
+var bg1 = document.getElementById('background-stats-1');
+var bg2 = document.getElementById('background-stats-2');
 
-app.controller("statsCtrl", function ($scope) {
+app.controller('statsCtrl', function($scope){
   $scope.aPercent = 50;
   $scope.bPercent = 50;
   var updateScores = function () {
