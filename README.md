@@ -18,4 +18,14 @@ This repo contains a simple voting application that can be launched in Docker co
 
 https://gitpod.io/#https://github.com/gitpod-demos/voting-app
 
+## Architecture
+
+![Architecture diagram](architecture.excalidraw.png)
+
+* A front-end web app in [Python](/vote) which lets you vote between two options
+* A [Redis](https://hub.docker.com/_/redis/) which collects new votes
+* A [.NET](/worker/) worker which consumes votes and stores them in…
+* A [Postgres](https://hub.docker.com/_/postgres/) database backed by a Docker volume
+* A [Node.js](/result) web app which shows the results of the voting in real time
+
 You can also use the [Gitpod browser extension](https://chrome.google.com/webstore/detail/gitpod-always-ready-to-co/dodmmooeoklaejobgleioelladacbeki) to launch a workspace from *any* Github repo of your choice!
