@@ -7,25 +7,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.web.codec.CodecCustomizer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.codec.CodecConfigurer;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
+
 import org.springframework.web.bind.annotation.*;
 
 import io.cloudevents.CloudEvent;
 import io.cloudevents.spring.webflux.CloudEventHttpMessageReader;
 import io.cloudevents.spring.webflux.CloudEventHttpMessageWriter;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Map;
-import java.util.UUID;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
@@ -38,7 +30,7 @@ public class EchoApplication {
 }
 
 
-@Controller
+@RestController
 @RequestMapping("/")
 class EchoController {
 
