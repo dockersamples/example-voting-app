@@ -1,4 +1,11 @@
-import { dag, Directory, object, func, Service } from "@dagger.io/dagger";
+import {
+  dag,
+  Directory,
+  object,
+  func,
+  Service,
+  Container,
+} from "@dagger.io/dagger";
 
 @object()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -6,10 +13,42 @@ class Worker {
   @func()
   run(
     dir: Directory,
-    redisSvc: Service,
-    postgresSvc: Service,
-    componentsPath: Directory = null,
+    redisSvc?: Service,
+    postgresSvc?: Service,
+    componentsPath?: Directory,
   ): Service {
+    return this.container(dir, redisSvc, postgresSvc, componentsPath)
+      .withExec(["dotnet", "Worker.dll"])
+      .asService();
+  }
+
+  @func()
+  container(
+    dir: Directory,
+    redisSvc?: Service,
+    postgresSvc?: Service,
+    componentsPath?: Directory,
+  ): Container {
+    if (!componentsPath) {
+      componentsPath = dir.directory("components");
+    }
+
+    if (!redisSvc) {
+      redisSvc = dag
+        .container()
+        .from("redis/redis-stack")
+        .withExposedPort(6379)
+        .asService();
+    }
+
+    if (!postgresSvc) {
+      postgresSvc = dag
+        .container()
+        .from("postgres:15-alpine")
+        .withEnvVariable("POSTGRES_PASSWORD", "postgres")
+        .withExposedPort(5432)
+        .asService();
+    }
     const dapr = dag
       .dapr()
       .dapr("worker", { componentsPath: componentsPath })
@@ -43,8 +82,6 @@ class Worker {
       .withServiceBinding("dapr", dapr)
       .withEnvVariable("DAPR_GRPC_ENDPOINT", "http://dapr:50001")
       .withEnvVariable("BASE_URL", "http://dapr")
-      .withWorkdir("/app")
-      .withExec(["dotnet", "Worker.dll"])
-      .asService();
+      .withWorkdir("/app");
   }
 }
