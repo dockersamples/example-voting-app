@@ -99,7 +99,7 @@ helm install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set sh
 ```
 
 ```
-helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo --set shared.remotePort=80   
+helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo.default.svc.cluster.local --set shared.remotePort=80   
 ```
 
 Now install the application, from the `k8s-dapr-shared-and-knative` directory: 
