@@ -6,7 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"main/dagger"
+	"main/internal/dagger"
 	"os"
 )
 
@@ -412,6 +412,9 @@ type ModuleSourceOpts = dagger.ModuleSourceOpts
 // PipelineOpts contains options for Client.Pipeline
 type PipelineOpts = dagger.PipelineOpts
 
+// SecretOpts contains options for Client.Secret
+type SecretOpts = dagger.SecretOpts
+
 // A reference to a secret value, which can be handled more safely than the value itself.
 type Secret = dagger.Secret
 
@@ -553,6 +556,11 @@ func convertSlice[I any, O any](in []I, f func(I) O) []O {
 	return out
 }
 
+func (r Result) MarshalJSON() ([]byte, error) {
+	var concrete struct{}
+	return json.Marshal(&concrete)
+}
+
 func (r *Result) UnmarshalJSON(bs []byte) error {
 	var concrete struct{}
 	err := json.Unmarshal(bs, &concrete)
@@ -643,7 +651,14 @@ func invoke(ctx context.Context, parentJSON []byte, parentName string, fnName st
 					panic(fmt.Errorf("%s: %w", "failed to unmarshal input arg componentsPath", err))
 				}
 			}
-			return (*Result).Run(&parent, dir, componentsPath), nil
+			var postgresSvc *Service
+			if inputArgs["postgresSvc"] != nil {
+				err = json.Unmarshal([]byte(inputArgs["postgresSvc"]), &postgresSvc)
+				if err != nil {
+					panic(fmt.Errorf("%s: %w", "failed to unmarshal input arg postgresSvc", err))
+				}
+			}
+			return (*Result).Run(&parent, dir, componentsPath, postgresSvc), nil
 		default:
 			return nil, fmt.Errorf("unknown function %s", fnName)
 		}
@@ -655,7 +670,8 @@ func invoke(ctx context.Context, parentJSON []byte, parentName string, fnName st
 						dag.Function("Run",
 							dag.TypeDef().WithObject("Service")).
 							WithArg("dir", dag.TypeDef().WithObject("Directory")).
-							WithArg("componentsPath", dag.TypeDef().WithObject("Directory").WithOptional(true)))), nil
+							WithArg("componentsPath", dag.TypeDef().WithObject("Directory").WithOptional(true)).
+							WithArg("postgresSvc", dag.TypeDef().WithObject("Service").WithOptional(true)))), nil
 	default:
 		return nil, fmt.Errorf("unknown object %s", parentName)
 	}

@@ -1,6 +1,6 @@
 package main
 
-import "main/dagger"
+import "main/internal/dagger"
 
 type Voteapp struct{}
 
