@@ -98,6 +98,10 @@ helm install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set sh
 helm install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=worker --set shared.daprd.image.tag=1.13.0-rc.2
 ```
 
+```
+helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo --set shared.remotePort=80   
+```
+
 Now install the application, from the `k8s-dapr-shared-and-knative` directory: 
 ```
 kubectl apply -f .

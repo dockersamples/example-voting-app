@@ -13,6 +13,12 @@ spec:
     value: redis:6379
   - name: redisPassword
     value: ""
+  - name: outboxPublishPubsub # Required
+    value: "pubsub-rabbitmq"
+  - name: outboxPublishTopic # Required
+    value: "newVote"
+  - name: outboxDiscardWhenMissingState #Optional. Defaults to false
+    value: false    
   - name: actorStateStore
     value: "true"
   - name: queryIndexes
