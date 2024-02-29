@@ -29,11 +29,12 @@ func (m *Voteapp) VoteApp(dir *Directory) *Service {
 
 	workerSvc := dag.Worker().
 		Run(dir.Directory("dotnet/worker"),
-			redisSvc,
-			postgresSvc,
 			dagger.WorkerRunOpts{
+				RedisSvc:       redisSvc,
+				PostgresSvc:    postgresSvc,
 				ComponentsPath: dir.Directory("k8s-dapr"),
-			})
+			},
+		)
 
 	return dag.Proxy().
 		WithService(voteSvc, "vote", 8080, 8080).
