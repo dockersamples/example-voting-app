@@ -24,7 +24,7 @@ func (m *Vote) Run(
 		WithServiceBinding("redis", redis).
 		WithExposedPort(50001)
 
-	return dag.Container().From("maven:3.8.5-openjdk-17").
+	return dag.Container().From("maven:3.9.6-eclipse-temurin-21").
 		WithServiceBinding("dapr", dapr.AsService()).
 		WithEnvVariable("DAPR_GRPC_ENDPOINT", "http://dapr:50001").
 		WithMountedCache("/root/.m2", dag.CacheVolume("m2_cache")).
