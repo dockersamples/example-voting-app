@@ -4,6 +4,7 @@ import io.dapr.client.DaprClient;
 import io.dapr.client.DaprClientBuilder;
 import io.dapr.client.domain.SaveStateRequest;
 import io.dapr.client.domain.State;
+import io.dapr.client.domain.TransactionalStateOperation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -81,10 +84,17 @@ class VoteController {
 
 			logger.info("A new vote was recorded: " + vote);
 
-			SaveStateRequest request = new SaveStateRequest(voteProperties.stateStore())
-					.setStates(new State<>("voter-"+vote.voterId(), vote, null, meta, null));
+			// SaveStateRequest request = new SaveStateRequest(voteProperties.stateStore())
+			// 		.setStates(new State<>("voter-"+vote.voterId(), vote, null, meta, null));
 
-			client.saveBulkState(request).block();
+			// client.saveBulkState(request).block();
+
+			List<TransactionalStateOperation<?>> operationList = new ArrayList<>();
+			operationList.add(new TransactionalStateOperation<>(TransactionalStateOperation.OperationType.UPSERT,
+					new State<>("voter-"+vote.voterId(), vote, null, meta, null)));
+			
+            //Using Dapr SDK to perform the state transactions
+			client.executeStateTransaction(voteProperties.stateStore(), operationList).block();
 		} catch (Exception ex) {
 			logger.error("An error occurred while trying to save the vote.", ex);
 		}

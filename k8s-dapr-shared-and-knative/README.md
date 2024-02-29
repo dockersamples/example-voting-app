@@ -87,11 +87,11 @@ EOF
 Now we need to create three instances of Dapr Shared, one for each service: 
 
 ```
-helm install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote --set shared.remoteURL=vote --set shared.remotePort=80   
+helm install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote 
 ```
 
 ```
-helm install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result --set shared.remoteURL=result --set shared.remotePort=80   
+helm install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result 
 ```
 
 ```

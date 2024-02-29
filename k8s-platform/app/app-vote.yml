@@ -10,7 +10,8 @@ spec:
         autoscaling.knative.dev/min-scale: "1"
     spec:
       containers:
-      - image: ghcr.io/thomasvitale/vote-java
+      - image: salaboy/examplevotingapp_vote:java
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:

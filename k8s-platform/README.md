@@ -115,9 +115,10 @@ we'll configure Dapr to run as a DaemonSet rather than as a sidecar.
 To achieve that, we need to install the Dapr Shared Helm Chart for each service:
 
 ```shell script
-helm upgrade --install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote --set shared.remoteURL=vote --set shared.remotePort=80   
-helm upgrade --install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result --set shared.remoteURL=result --set shared.remotePort=80   
+helm upgrade --install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote   
+helm upgrade --install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result
 helm upgrade --install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=worker --set shared.daprd.image.tag=1.13.0-rc.2
+helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo.default.svc.cluster.local --set shared.remotePort=80
 ```
 
 Next, go ahead and install all application and data services composing the Voting system:

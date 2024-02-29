@@ -10,7 +10,7 @@ spec:
         autoscaling.knative.dev/min-scale: "1"
     spec:
       containers:
-      - image: ghcr.io/thomasvitale/result-go
+      - image: salaboy/examplevotingapp_result:go
         ports:
         - containerPort: 3000
         env:
