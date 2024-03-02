@@ -3,12 +3,12 @@
   "sdk": "typescript",
   "dependencies": [
     {
-      "name": "proxy",
-      "source": "github.com/kpenfound/dagger-modules/proxy@d5dfa6e20d26fd53246c20af721364c8f57e4b50"
+      "name": "dapr",
+      "source": "github.com/marcosnils/daggerverse/dapr@d4161dca9f53935beac0d18db271d0fdc847e89d"
     },
     {
-      "name": "dapr",
-      "source": "github.com/marcosnils/daggerverse/dapr@028f6ef2535f063ef60ef62edbdb68d94ec1060c"
+      "name": "proxy",
+      "source": "github.com/kpenfound/dagger-modules/proxy@d5dfa6e20d26fd53246c20af721364c8f57e4b50"
     }
   ],
   "source": "dagger",
