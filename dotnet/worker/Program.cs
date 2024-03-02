@@ -91,6 +91,12 @@ namespace Worker
                         // Save state into the state store
                         daprClient.SaveStateAsync(RESULTS_STATE_STORE, "results", results);
                     }
+                    else
+                    {
+                        Console.WriteLine("ReasonPhrase: " + response.ReasonPhrase  );
+                        var contents = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Response: " + contents);
+                    }
                 }
             }
             catch (Exception ex)

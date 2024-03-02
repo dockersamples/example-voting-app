@@ -11,7 +11,8 @@ func (m *Vote) Run(
 ) *Service {
 	if redis == nil {
 		redis = dag.Container().
-			From("redis/redis-stack").
+			//From("redis/redis-stack").
+			From("salaboy/redis-with-json:1.0.0").
 			WithExposedPort(6379).AsService()
 	}
 

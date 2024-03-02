@@ -7,7 +7,7 @@ spec:
   version: v1
   metadata:
   - name: keyPrefix
-    value: name
+    value: name 
   - name: redisHost
     value: redis:6379
   - name: redisPassword
@@ -22,9 +22,8 @@ spec:
           "indexes": [
            {
             "key": "type",
-            "type": "TEXT"
+            "type": "TEXT" 
            }
           ]
         }
       ]
-
