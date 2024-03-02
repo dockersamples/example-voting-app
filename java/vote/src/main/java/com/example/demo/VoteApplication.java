@@ -19,6 +19,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -81,20 +83,20 @@ class VoteController {
 		try (DaprClient client = new DaprClientBuilder().build()) {
 			Map<String, String> meta = Map.of("contentType", "application/json");
 			Vote vote = new Vote("vote", voterId, selectedOption);
-
 			logger.info("A new vote was recorded: " + vote);
-
-			// SaveStateRequest request = new SaveStateRequest(voteProperties.stateStore())
-			// 		.setStates(new State<>("voter-"+vote.voterId(), vote, null, meta, null));
-
-			// client.saveBulkState(request).block();
-
+			
 			List<TransactionalStateOperation<?>> operationList = new ArrayList<>();
 			operationList.add(new TransactionalStateOperation<>(TransactionalStateOperation.OperationType.UPSERT,
 					new State<>("voter-"+vote.voterId(), vote, null, meta, null)));
-			
+	
             //Using Dapr SDK to perform the state transactions
 			client.executeStateTransaction(voteProperties.stateStore(), operationList).block();
+
+			// SaveStateRequest request = new SaveStateRequest(voteProperties.stateStore())
+			//  		.setStates(new State<>("voter-"+vote.voterId(), vote, null, meta, null));
+
+			// client.saveBulkState(request).block();
+			
 		} catch (Exception ex) {
 			logger.error("An error occurred while trying to save the vote.", ex);
 		}
