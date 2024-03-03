@@ -4,7 +4,7 @@
   "dependencies": [
     {
       "name": "dapr",
-      "source": "github.com/marcosnils/daggerverse/dapr@d4161dca9f53935beac0d18db271d0fdc847e89d"
+      "source": "github.com/marcosnils/daggerverse/dapr@15660afb386b32b955d96ee42a7354338b56c570"
     },
     {
       "name": "proxy",
