@@ -36,8 +36,7 @@ class Worker {
     if (!redisSvc) {
       redisSvc = dag
         .container()
-        //.from("redis/redis-stack")
-        .from("salaboy/redis-with-json:1.0.0")
+        .from("redis/redis-stack")
         .withExposedPort(6379)
         .asService();
     }

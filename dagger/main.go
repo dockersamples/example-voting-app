@@ -7,8 +7,7 @@ type Voteapp struct{}
 // example usage: "dagger call vote-app --dir . up"
 func (m *Voteapp) VoteApp(dir *Directory) *Service {
 	redisSvc := dag.Container().
-		//From("redis/redis-stack").
-		From("salaboy/redis-with-json:1.0.0").
+		From("redis/redis-stack").
 		WithExposedPort(6379).AsService()
 
 	postgresSvc := dag.Container().
