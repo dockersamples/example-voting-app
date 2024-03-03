@@ -78,7 +78,7 @@ class VoteController {
 		try (DaprClient client = new DaprClientBuilder().build()) {
 			Map<String, String> meta = Map.of("contentType", "application/json");
 			Vote vote = new Vote("vote", voterId, selectedOption);
-			logger.info("A new vote was recorded: " + vote);
+			logger.info("A new vote was recorded: " + vote + "into the state store:" + voteProperties.stateStore() );
 			
 			// There is a bug in the runtime that is blocking this to work with JSON Encoding: https://github.com/dapr/dapr/issues/7580
 			// List<TransactionalStateOperation<?>> operationList = new ArrayList<>();
@@ -94,7 +94,8 @@ class VoteController {
 			client.saveBulkState(request).block();
 
 			if (voteProperties.pubsub() != null && !voteProperties.pubsub().equals("")){
-				logger.info("Emitting vote event via code: " + vote);
+				logger.info("Emitting vote event via code: " + vote + "into the pubsubs: " 
+								+ voteProperties.pubsub() + " and topic: " + voteProperties.topic());
 				client.publishEvent(voteProperties.pubsub(), voteProperties.topic(), vote).block();
 			}
 			
