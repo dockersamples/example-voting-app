@@ -10,7 +10,7 @@ spec:
         autoscaling.knative.dev/min-scale: "1"
     spec:
       containers:
-      - image: salaboy/examplevotingapp_result:go
+      - image: ghcr.io/salaboy/result-go
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
