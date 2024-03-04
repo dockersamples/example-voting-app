@@ -15,7 +15,8 @@ function connect() {
     console.log("Fetching Response")
     return response.json();
   }).then((response) => {
-    var publicURL = 'ws://' + response.publicIp + '/ws';
+    var websocketProtocol = location.protocol === "https:" ? "wss:" : "ws:";
+    var publicURL = websocketProtocol + '//' + response.publicIp + '/ws';
     stompClient.brokerURL = publicURL;
     console.log(publicURL);
     console.log("Activating client")
