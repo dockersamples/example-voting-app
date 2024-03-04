@@ -27,6 +27,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+		<dependency>
 			<groupId>io.cloudevents</groupId>
 			<artifactId>cloudevents-spring</artifactId>
 			<version>${cloudEventsVersion}</version>
@@ -41,6 +45,7 @@
 			<artifactId>cloudevents-json-jackson</artifactId>
 			<version>${cloudEventsVersion}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
