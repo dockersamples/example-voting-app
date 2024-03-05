@@ -93,6 +93,25 @@ cd k8s-platform/rabbitmq/
 ./deploy.sh
 ```
 
+If you want to include observability, go ahead and deploy the Grafana observability platform.
+
+```shell script
+cd ../k8s-platform/grafana
+./deploy.sh
+cd ../../k8s-dapr-shared-and-knative
+```
+
+Upon completing, the script will print the credentials you can use for logging into Grafana.
+
+You can access the Grafana console via port-fowarding to your local machine:
+
+```shell
+kubectl port-forward --namespace observability-stack service/loki-stack-grafana 3000:80
+```
+
+You can access Grafana at http://localhost:3000.
+
+
 Now install the application, from the `k8s-dapr-shared-and-knative` directory: 
 ```
 kubectl apply -f .

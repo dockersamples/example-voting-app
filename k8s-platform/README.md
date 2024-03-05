@@ -2,16 +2,21 @@
 
 The Dapr-ized version of the application uses the following projects:
 
+* Echo Service: [`java/echo`](../java/echo/)
 * Vote Service: [`java/vote`](../java/vote/)
 * Worker Service: [`dotnet/worker`](../dotnet/worker/)
 * Results Service: [`go/result`](../go/result/)
 
-The deployment is based on a platform providing:
+The deployment is based on a platform including:
 
 * Dapr
 * Knative Serving
 * Contour
-* Cert Manager.
+* Cert Manager
+* RabbitMQ
+* Redis
+* PostgreSQL
+* Grafana OSS.
 
 It also uses two State Stores: one for Votes (Redis) and one for Results (PostgreSQL).
 
@@ -24,6 +29,7 @@ For a local installation, ensure you have the following tools installed in your 
 * [Podman](https://www.thomasvitale.com/podman-desktop-for-java-development) (or Docker)
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl)
 * Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install)
+* [Helm](https://helm.sh/).
 * [kind](https://kind.sigs.k8s.io).
 
 Then, create a local Kubernetes cluster with `kind`.
@@ -85,21 +91,19 @@ kctrl package install -i engineering-platform \
   --values-file values-kind.yml
 ```
 
-### Cloud Installation
-
-_Coming soon_
-
-## Verify the Installation
-
-Verify that all the platform components have been installed and properly reconciled.
+Then, install Dapr using Helm.
 
 ```shell script
-kctrl package installed list -n kadras-packages
+helm repo add dapr https://dapr.github.io/helm-charts/
+helm repo update
+helm upgrade --install dapr dapr/dapr \
+--version=1.13.0-rc.10 \
+--namespace dapr-system \
+--create-namespace \
+--wait
 ```
 
-## RabbitMQ
-
-Install RabbitMQ using the official Kubernetes Operator.
+Finally, install RabbitMQ using the official Kubernetes Operator.
 
 ```shell script
 cd rabbitmq
@@ -107,24 +111,46 @@ cd rabbitmq
 cd ..
 ```
 
-## Sidecar-less Dapr
+If you want to include observability, go ahead and deploy the Grafana observability platform.
+
+```shell script
+cd grafana
+./deploy.sh
+cd ..
+```
+
+Upon completing, the script will print the credentials you can use for logging into Grafana.
+
+You can access the Grafana console via port-fowarding to your local machine:
+
+```shell
+kubectl port-forward --namespace observability-stack service/loki-stack-grafana 3000:80
+```
+
+Now, you can access Grafana at http://localhost:3000.
+
+### Cloud Installation
+
+_Coming soon_
+
+## Applications and Sidecar-less Dapr
+
+Let's deploy all the application and data services composing the Voting system:
+
+```shell script
+kubectl apply -f app
+```
 
 Considering the serverless deployment strategy we want to use for the Voting application,
-we'll configure Dapr to run as a DaemonSet rather than as a sidecar.
+we'll configure Dapr to run as a DaemonSet rather than as a sidecar (the default behaviour).
 
 To achieve that, we need to install the Dapr Shared Helm Chart for each service:
 
 ```shell script
-helm upgrade --install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote   
-helm upgrade --install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result
-helm upgrade --install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=worker --set shared.daprd.image.tag=1.13.0-rc.2
-helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo.default.svc.cluster.local --set shared.remotePort=80
-```
-
-Next, go ahead and install all application and data services composing the Voting system:
-
-```shell script
-kapp deploy -a voting-app -f app -y
+helm upgrade --install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote --set shared.daprd.image.tag=1.13.0-rc.10
+helm upgrade --install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result --set shared.daprd.image.tag=1.13.0-rc.10
+helm upgrade --install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=worker --set shared.daprd.image.tag=1.13.0-rc.10
+helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo.default.svc.cluster.local --set shared.remotePort=80 --set shared.daprd.image.tag=1.13.0-rc.10
 ```
 
 Finally, you can retrieve the URLs for each of the services using Knative:

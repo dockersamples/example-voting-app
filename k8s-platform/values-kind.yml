@@ -3,8 +3,6 @@ platform:
   infrastructure_provider: local
   ingress:
     domain: 127.0.0.1.sslip.io
-  additional_packages:
-    - dapr
   excluded_packages:
     - flux
 

@@ -18,7 +18,7 @@ spec:
   - name: outboxPublishTopic # Required
     value: "newVote"
   - name: outboxDiscardWhenMissingState #Optional. Defaults to false
-    value: false    
+    value: false
   - name: actorStateStore
     value: "true"
   - name: queryIndexes
