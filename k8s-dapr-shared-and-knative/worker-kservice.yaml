@@ -12,7 +12,7 @@ spec:
         autoscaling.knative.dev/min-scale: "1"
     spec:
       containers:
-      - image: salaboy/examplevotingapp_worker:dotnet
+      - image: ghcr.io/salaboy/worker-dotnet
         imagePullPolicy: Always
         env:
         - name: DAPR_HTTP_ENDPOINT

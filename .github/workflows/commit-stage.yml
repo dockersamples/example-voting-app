@@ -1,0 +1,47 @@
+name: Commit Stage
+
+on:
+  push:
+
+jobs:
+  publish-dockerfile:
+    name: Publish (Dockerfile)
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    uses: ./.github/workflows/publish-dockerfile.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [
+          {context: go/result, image: result-go},
+          {context: go/vote, image: vote-go},
+          {context: go/worker, image: worker-go},
+          {context: dotnet/worker, image: worker-dotnet},
+        ]
+    with:
+      context: ${{ matrix.project.context }}
+      image: ${{ matrix.project.image }}   
+    secrets:  
+      push-token: ${{ secrets.IMAGE_PUSH_TOKEN }}
+  
+  publish-java:
+    name: Publish (Java)
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    uses: ./.github/workflows/publish-java.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [
+          {context: java/echo, image: echo-java},
+          {context: java/vote, image: vote-java},
+        ]
+    with:
+      context: ${{ matrix.project.context }}
+      image: ${{ matrix.project.image }}   
+    secrets:  
+      push-token: ${{ secrets.IMAGE_PUSH_TOKEN }}
