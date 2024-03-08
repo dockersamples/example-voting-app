@@ -2,6 +2,7 @@ const stompClient = new StompJs.Client({
 });
 
 const jsConfetti = new JSConfetti()
+var currentWorkflowId;
 
 function connect() {
 
@@ -35,6 +36,54 @@ stompClient.onConnect = (frame) => {
 
   });
 };
+
+function winnerIsInTheAudience(){
+  const response = fetch("/yes-winner-in-audience?workflowId="+currentWorkflowId, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    }
+  })
+}
+
+function winnerGotTheBook(){
+  const response = fetch("/yes-winner-got-book?workflowId="+currentWorkflowId, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    }
+  })
+}
+
+function pickADogWinner(){
+  console.log("Let's pick a DOG winner!");
+
+  const response = fetch("/pick-a-winner?option=a", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    }
+  }).then(response => { 
+    console.log(response.text())
+    currentWorkflowId = response;
+  })
+}
+
+function pickACatWinner(){
+  console.log("Let's pick a CAT winner!");
+
+  const response = fetch("/pick-a-winner?option=b", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    }
+  }).then(response => { console.log(response.text())
+      currentWorkflowId = response;
+    })
+  
+  
+
+}
 
 function showEvent(event) {
   console.log("Option Selected: " + event.data.node.option)

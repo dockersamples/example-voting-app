@@ -19,4 +19,8 @@ spec:
         env: 
         - name: PUBLIC_IP
           value: echo.default.127.0.0.1.sslip.io
+        - name: DAPR_HTTP_ENDPOINT
+          value: http://echo-dapr.default.svc.cluster.local:3500
+        - name: DAPR_GRPC_ENDPOINT
+          value: http://echo-dapr.default.svc.cluster.local:50001  
         

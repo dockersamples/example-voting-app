@@ -31,6 +31,11 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 		<dependency>
+            <groupId>io.dapr</groupId>
+            <artifactId>dapr-sdk-workflows</artifactId>
+            <version>0.10.0-SNAPSHOT</version>
+        </dependency>
+		<dependency>
 			<groupId>io.cloudevents</groupId>
 			<artifactId>cloudevents-spring</artifactId>
 			<version>${cloudEventsVersion}</version>
@@ -62,4 +67,10 @@
 		</plugins>
 	</build>
 
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 </project>

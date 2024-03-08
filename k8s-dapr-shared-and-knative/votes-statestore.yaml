@@ -29,6 +29,10 @@ spec:
            {
             "key": "type",
             "type": "TEXT" 
+           },
+           {
+            "key": "option",
+            "type": "TEXT" 
            }
           ]
         }

@@ -36,7 +36,7 @@ public class VoteApplication {
 @ConfigurationProperties(prefix = "vote")
 record VoteProperties(String stateStore, String pubsub, String topic){}
 
-record Vote(String type, String voterId, String option){}
+record Vote(String type, String voterId, String option, String user){}
 
 @Controller
 @RequestMapping("/")
@@ -51,12 +51,13 @@ class VoteController {
 	}
 
 	@GetMapping
-	String renderHTML(Model model) throws UnknownHostException {
+	String renderHTML(Model model, @CookieValue(value = "voter_id", required = false) String voterId) throws UnknownHostException {
 		logger.info("Processing GET request");
 		model.addAttribute("option_a", "Cats");
 		model.addAttribute("option_b", "Dogs");
 		model.addAttribute("hostname", InetAddress.getLocalHost().getHostName());
 		model.addAttribute("vote", "");
+		model.addAttribute("user", voterId);
 		return "index.html";
 	}
 
@@ -77,7 +78,7 @@ class VoteController {
 
 		try (DaprClient client = new DaprClientBuilder().build()) {
 			Map<String, String> meta = Map.of("contentType", "application/json");
-			Vote vote = new Vote("vote", voterId, selectedOption);
+			Vote vote = new Vote("vote", voterId, selectedOption, voterId);
 			logger.info("A new vote was recorded: " + vote + "into the state store:" + voteProperties.stateStore() );
 			
 			// There is a bug in the runtime that is blocking this to work with JSON Encoding: https://github.com/dapr/dapr/issues/7580
@@ -109,6 +110,7 @@ class VoteController {
 		model.addAttribute("option_b", "Dogs");
 		model.addAttribute("hostname", InetAddress.getLocalHost().getHostName());
 		model.addAttribute("vote", selectedOption);
+		model.addAttribute("user", voterId);
 		return "index.html";
 	}
 
