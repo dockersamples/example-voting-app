@@ -30,7 +30,7 @@ Install Dapr:
 helm repo add dapr https://dapr.github.io/helm-charts/
 helm repo update
 helm upgrade --install dapr dapr/dapr \
---version=1.13.0-rc.10 \
+--version=1.13.0 \
 --namespace dapr-system \
 --create-namespace \
 --wait
@@ -88,9 +88,9 @@ EOF
 Install RabbitMQ by running the follwing: 
 
 ```
-cd ..
-cd k8s-platform/rabbitmq/
+cd rabbitmq
 ./deploy.sh
+cd ..
 ```
 
 If you want to include observability, go ahead and deploy the Grafana observability platform.
@@ -121,19 +121,19 @@ kubectl apply -f .
 Finally, Now we need to create four instances of Dapr Shared, one for each service: 
 
 ```
-helm install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote --set shared.daprd.image.tag=1.13.0-rc.10
+helm install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote --set shared.daprd.image.tag=1.13.0
 ```
 
 ```
-helm install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result --set shared.daprd.image.tag=1.13.0-rc.10
+helm install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result --set shared.daprd.image.tag=1.13.0
 ```
 
 ```
-helm install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=worker --set shared.daprd.image.tag=1.13.0-rc.10
+helm install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=worker --set shared.daprd.image.tag=1.13.0
 ```
 
 ```
-helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo.default.svc.cluster.local --set shared.remotePort=80 --set shared.daprd.image.tag=1.13.0-rc.10
+helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo.default.svc.cluster.local --set shared.remotePort=80 --set shared.daprd.image.tag=1.13.0
 ```
 
 

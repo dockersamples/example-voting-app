@@ -73,7 +73,7 @@ Add the Kadras repository to make the platform packages available to the cluster
 
 ```shell script
 kctrl package repository add -r kadras-packages \
-  --url ghcr.io/kadras-io/kadras-packages:0.15.0 \
+  --url ghcr.io/kadras-io/kadras-packages:0.16.0 \
   -n kadras-packages --create-namespace
 ```
 
@@ -86,29 +86,9 @@ Reference the `values-kind.yml` file available in the current folder and install
 ```shell script
 kctrl package install -i engineering-platform \
   -p engineering-platform.packages.kadras.io \
-  -v 0.13.0 \
+  -v 0.14.0 \
   -n kadras-packages \
   --values-file values-kind.yml
-```
-
-Then, install Dapr using Helm.
-
-```shell script
-helm repo add dapr https://dapr.github.io/helm-charts/
-helm repo update
-helm upgrade --install dapr dapr/dapr \
---version=1.13.0-rc.10 \
---namespace dapr-system \
---create-namespace \
---wait
-```
-
-Finally, install RabbitMQ using the official Kubernetes Operator.
-
-```shell script
-cd rabbitmq
-./deploy.sh
-cd ..
 ```
 
 If you want to include observability, go ahead and deploy the Grafana observability platform.
@@ -147,10 +127,10 @@ we'll configure Dapr to run as a DaemonSet rather than as a sidecar (the default
 To achieve that, we need to install the Dapr Shared Helm Chart for each service:
 
 ```shell script
-helm upgrade --install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote --set shared.daprd.image.tag=1.13.0-rc.10
-helm upgrade --install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result --set shared.daprd.image.tag=1.13.0-rc.10
-helm upgrade --install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=worker --set shared.daprd.image.tag=1.13.0-rc.10
-helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo.default.svc.cluster.local --set shared.remotePort=80 --set shared.daprd.image.tag=1.13.0-rc.10
+helm upgrade --install vote oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=vote --set shared.daprd.image.tag=1.13.0
+helm upgrade --install result oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=result --set shared.daprd.image.tag=1.13.0
+helm upgrade --install worker oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=worker --set shared.daprd.image.tag=1.13.0
+helm install echo oci://registry-1.docker.io/daprio/dapr-shared-chart --set shared.appId=echo --set shared.remoteURL=echo.default.svc.cluster.local --set shared.remotePort=80 --set shared.daprd.image.tag=1.13.0
 ```
 
 Finally, you can retrieve the URLs for each of the services using Knative:

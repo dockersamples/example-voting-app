@@ -129,3 +129,248 @@ prometheus:
       tag: v2.50.1
     persistentVolume:
       enabled: false
+  extraScrapeConfigs: |
+    - job_name: rabbitmq-http
+      honor_timestamps: true
+      scrape_interval: 15s
+      scrape_timeout: 14s
+      metrics_path: /metrics
+      scheme: http
+      follow_redirects: true
+      relabel_configs:
+      - source_labels: [job]
+        separator: ;
+        regex: (.*)
+        target_label: __tmp_prometheus_job_name
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_component]
+        separator: ;
+        regex: rabbitmq
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        separator: ;
+        regex: prometheus
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+        separator: ;
+        regex: Node;(.*)
+        target_label: node
+        replacement: ${1}
+        action: replace
+      - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+        separator: ;
+        regex: Pod;(.*)
+        target_label: pod
+        replacement: ${1}
+        action: replace
+      - source_labels: [__meta_kubernetes_namespace]
+        separator: ;
+        regex: (.*)
+        target_label: namespace
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: service
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_pod_name]
+        separator: ;
+        regex: (.*)
+        target_label: pod
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_pod_container_name]
+        separator: ;
+        regex: (.*)
+        target_label: container
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: job
+        replacement: ${1}
+        action: replace
+      - separator: ;
+        regex: (.*)
+        target_label: endpoint
+        replacement: prometheus
+        action: replace
+      - source_labels: [__address__]
+        separator: ;
+        regex: (.*)
+        modulus: 1
+        target_label: __tmp_hash
+        replacement: $1
+        action: hashmod
+      - source_labels: [__tmp_hash]
+        separator: ;
+        regex: "0"
+        replacement: $1
+        action: keep
+      kubernetes_sd_configs:
+      - role: endpoints
+        follow_redirects: true
+    - job_name: rabbitmq-https
+      honor_timestamps: true
+      scrape_interval: 15s
+      scrape_timeout: 14s
+      metrics_path: /metrics
+      scheme: https
+      tls_config:
+        insecure_skip_verify: true
+      follow_redirects: true
+      relabel_configs:
+      - source_labels: [job]
+        separator: ;
+        regex: (.*)
+        target_label: __tmp_prometheus_job_name
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_component]
+        separator: ;
+        regex: rabbitmq
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        separator: ;
+        regex: prometheus-tls
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+        separator: ;
+        regex: Node;(.*)
+        target_label: node
+        replacement: ${1}
+        action: replace
+      - source_labels: [__meta_kubernetes_endpoint_address_target_kind, __meta_kubernetes_endpoint_address_target_name]
+        separator: ;
+        regex: Pod;(.*)
+        target_label: pod
+        replacement: ${1}
+        action: replace
+      - source_labels: [__meta_kubernetes_namespace]
+        separator: ;
+        regex: (.*)
+        target_label: namespace
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: service
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_pod_name]
+        separator: ;
+        regex: (.*)
+        target_label: pod
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_pod_container_name]
+        separator: ;
+        regex: (.*)
+        target_label: container
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: job
+        replacement: ${1}
+        action: replace
+      - separator: ;
+        regex: (.*)
+        target_label: endpoint
+        replacement: prometheus-tls
+        action: replace
+      - source_labels: [__address__]
+        separator: ;
+        regex: (.*)
+        modulus: 1
+        target_label: __tmp_hash
+        replacement: $1
+        action: hashmod
+      - source_labels: [__tmp_hash]
+        separator: ;
+        regex: "0"
+        replacement: $1
+        action: keep
+      kubernetes_sd_configs:
+      - role: endpoints
+        follow_redirects: true
+    - job_name: rabbitmq-cluster-operator
+      honor_timestamps: true
+      scrape_interval: 30s
+      scrape_timeout: 10s
+      metrics_path: /metrics
+      scheme: http
+      follow_redirects: true
+      relabel_configs:
+      - source_labels: [job]
+        separator: ;
+        regex: (.*)
+        target_label: __tmp_prometheus_job_name
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_component]
+        separator: ;
+        regex: rabbitmq-cluster-operator
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_container_port_name]
+        separator: ;
+        regex: metrics
+        replacement: $1
+        action: keep
+      - source_labels: [__meta_kubernetes_namespace]
+        separator: ;
+        regex: (.*)
+        target_label: namespace
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_pod_container_name]
+        separator: ;
+        regex: (.*)
+        target_label: container
+        replacement: $1
+        action: replace
+      - source_labels: [__meta_kubernetes_pod_name]
+        separator: ;
+        regex: (.*)
+        target_label: pod
+        replacement: $1
+        action: replace
+      - separator: ;
+        regex: (.*)
+        target_label: job
+        replacement: rabbitmq-cluster-operator
+        action: replace
+      - separator: ;
+        regex: (.*)
+        target_label: endpoint
+        replacement: metrics
+        action: replace
+      - source_labels: [__address__]
+        separator: ;
+        regex: (.*)
+        modulus: 1
+        target_label: __tmp_hash
+        replacement: $1
+        action: hashmod
+      - source_labels: [__tmp_hash]
+        separator: ;
+        regex: "0"
+        replacement: $1
+        action: keep
+      kubernetes_sd_configs:
+      - role: pod
+        follow_redirects: true
+        namespaces:
+          names:
+          - rabbitmq-system

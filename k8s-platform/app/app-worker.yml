@@ -1,18 +1,21 @@
-apiVersion: serving.knative.dev/v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: worker
   namespace: default
-  labels:
-    networking.knative.dev/visibility: cluster-local
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
   template:
     metadata:
-      annotations:
-        autoscaling.knative.dev/min-scale: "1"
+      labels:
+        app: worker
     spec:
       containers:
-      - image: ghcr.io/salaboy/worker-dotnet
+      - name: user-container
+        image: ghcr.io/thomasvitale/worker-dotnet
         imagePullPolicy: Always
         env:
         - name: DAPR_HTTP_ENDPOINT
