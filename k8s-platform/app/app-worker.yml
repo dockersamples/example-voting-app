@@ -21,3 +21,10 @@ spec:
           value: http://worker-dapr.default.svc.cluster.local:50001
         - name: BASE_URL
           value: http://worker-dapr.default.svc.cluster.local
+        readinessProbe:
+          exec:
+            command:
+              - cat
+              - /tmp/ready
+          initialDelaySeconds: 15
+          periodSeconds: 10

@@ -1,5 +1,6 @@
 using System;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -30,6 +31,11 @@ namespace Worker
             var baseURL = (Environment.GetEnvironmentVariable("BASE_URL") ?? "http://localhost") + ":" + (Environment.GetEnvironmentVariable("DAPR_HTTP_PORT") ?? "3500");
             try
             {
+                string tempPath = Path.Combine(Path.GetTempPath(), "ready");
+                using (StreamWriter writer = new StreamWriter(tempPath))
+                {
+                    writer.Write("ready");
+                }
 
                 var definition = new { vote = "", voter_id = "" };
                 while (true)
