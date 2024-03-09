@@ -32,6 +32,7 @@ namespace Worker
             try
             {
                 string tempPath = Path.Combine(Path.GetTempPath(), "ready");
+                Console.WriteLine("Writing to file " + tempPath);
                 using (StreamWriter writer = new StreamWriter(tempPath))
                 {
                     writer.Write("ready");
