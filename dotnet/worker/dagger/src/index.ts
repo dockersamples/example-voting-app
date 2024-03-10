@@ -11,15 +11,14 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class Worker {
   @func()
-  run(
+  serve(
     dir: Directory,
     redisSvc?: Service,
     postgresSvc?: Service,
     componentsPath?: Directory,
   ): Service {
     return (
-      this.container(dir, redisSvc, postgresSvc, componentsPath)
-        .withExec(["dotnet", "Worker.dll"])
+      this.build(dir, redisSvc, postgresSvc, componentsPath)
         //we don't need a healtcheck since this service doesn't actually listen
         //to any ports
         .withExposedPort(3000, { experimentalSkipHealthcheck: true })
@@ -28,7 +27,7 @@ class Worker {
   }
 
   @func()
-  container(
+  build(
     dir: Directory,
     redisSvc?: Service,
     postgresSvc?: Service,
@@ -87,6 +86,7 @@ class Worker {
       .withServiceBinding("dapr", dapr)
       .withEnvVariable("DAPR_GRPC_ENDPOINT", "http://dapr:50001")
       .withEnvVariable("BASE_URL", "http://dapr")
-      .withWorkdir("/app");
+      .withWorkdir("/app")
+      .withEntrypoint(["dotnet", "Worker.dll"]);
   }
 }

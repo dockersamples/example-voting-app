@@ -2,13 +2,13 @@ package main
 
 type Vote struct{}
 
-func (m *Vote) Run(
+func (m *Vote) Build(
 	dir *Directory,
 	// +optional
 	redis *Service,
 	// +optional
 	componentsDir *Directory,
-) *Service {
+) *Container {
 	if redis == nil {
 		redis = dag.Container().
 			From("redis/redis-stack").
@@ -31,6 +31,17 @@ func (m *Vote) Run(
 		WithMountedDirectory("/app", dir).
 		WithWorkdir("/app").
 		WithExposedPort(8080).
-		WithExec([]string{"mvn", "spring-boot:run"}).
+		WithEntrypoint([]string{"mvn", "spring-boot:run"})
+}
+
+func (m *Vote) Serve(
+	dir *Directory,
+	// +optional
+	redis *Service,
+	// +optional
+	componentsDir *Directory,
+) *Service {
+	return m.Build(dir, redis, componentsDir).
+		WithExposedPort(8080).
 		AsService()
 }

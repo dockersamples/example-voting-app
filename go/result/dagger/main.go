@@ -2,13 +2,25 @@ package main
 
 type Result struct{}
 
-func (m *Result) Run(
+func (m *Result) Serve(
 	dir *Directory,
 	// +optional
 	componentsPath *Directory,
 	// +optional
 	postgresSvc *Service,
 ) *Service {
+	return m.Build(dir, componentsPath, postgresSvc).
+		WithExposedPort(3000).
+		AsService()
+}
+
+func (m *Result) Build(
+	dir *Directory,
+	// +optional
+	componentsPath *Directory,
+	// +optional
+	postgresSvc *Service,
+) *Container {
 	if componentsPath == nil {
 		componentsPath = dir.Directory("components")
 	}
@@ -22,7 +34,5 @@ func (m *Result) Run(
 	return dag.Go().WithSource(dir).Container().
 		WithServiceBinding("dapr", dapr.AsService()).
 		WithEnvVariable("DAPR_GRPC_ENDPOINT", "dapr").
-		WithExec([]string{"go", "run", "main.go"}).
-		WithExposedPort(3000).
-		AsService()
+		WithEntrypoint([]string{"go", "run", "main.go"})
 }

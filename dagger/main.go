@@ -16,20 +16,20 @@ func (m *Voteapp) VoteApp(dir *Directory) *Service {
 		WithExposedPort(5432).AsService()
 
 	voteSvc := dag.Vote().
-		Run(dir.Directory("java/vote"), dagger.VoteRunOpts{
+		Serve(dir.Directory("java/vote"), dagger.VoteServeOpts{
 			Redis:         redisSvc,
 			ComponentsDir: dir.Directory("java/vote/components"),
 		})
 
 	resultSvc := dag.Result().
-		Run(dir.Directory("go/result"), dagger.ResultRunOpts{
+		Serve(dir.Directory("go/result"), dagger.ResultServeOpts{
 			ComponentsPath: dag.Directory().WithFile("results-statestore.yaml", dir.Directory("k8s-dapr").File("results-statestore.yaml")),
 			PostgresSvc:    postgresSvc,
 		})
 
 	workerSvc := dag.Worker().
-		Run(dir.Directory("dotnet/worker"),
-			dagger.WorkerRunOpts{
+		Serve(dir.Directory("dotnet/worker"),
+			dagger.WorkerServeOpts{
 				RedisSvc:       redisSvc,
 				PostgresSvc:    postgresSvc,
 				ComponentsPath: dir.Directory("k8s-dapr"),
