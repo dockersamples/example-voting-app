@@ -17,9 +17,14 @@ class Worker {
     postgresSvc?: Service,
     componentsPath?: Directory,
   ): Service {
-    return this.container(dir, redisSvc, postgresSvc, componentsPath)
-      .withExec(["dotnet", "Worker.dll"])
-      .asService();
+    return (
+      this.container(dir, redisSvc, postgresSvc, componentsPath)
+        .withExec(["dotnet", "Worker.dll"])
+        //we don't need a healtcheck since this service doesn't actually listen
+        //to any ports
+        .withExposedPort(3000, { experimentalSkipHealthcheck: true })
+        .asService()
+    );
   }
 
   @func()
