@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: user-container
-        image: ghcr.io/thomasvitale/worker-dotnet
+        image: ghcr.io/salaboy/worker-dotnet
         imagePullPolicy: Always
         env:
         - name: DAPR_HTTP_ENDPOINT
