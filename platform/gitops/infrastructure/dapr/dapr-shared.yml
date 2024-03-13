@@ -1,0 +1,107 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: dapr
+  namespace: default
+spec:
+  interval: 24h
+  url: oci://registry-1.docker.io/daprio
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: vote
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: dapr-shared-chart
+      version: "1.13.x"
+      sourceRef:
+        kind: HelmRepository
+        name: dapr
+        namespace: default
+      interval: 12h
+  values:
+    shared:
+      appId: vote
+      daprd:
+        image:
+          tag: 1.13.0
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: result
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: dapr-shared-chart
+      version: "1.13.x"
+      sourceRef:
+        kind: HelmRepository
+        name: dapr
+        namespace: default
+      interval: 12h
+  values:
+    shared:
+      appId: result
+      daprd:
+        image:
+          tag: 1.13.0
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: worker
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: dapr-shared-chart
+      version: "1.13.x"
+      sourceRef:
+        kind: HelmRepository
+        name: dapr
+        namespace: default
+      interval: 12h
+  values:
+    shared:
+      appId: worker
+      daprd:
+        image:
+          tag: 1.13.0
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: echo
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: dapr-shared-chart
+      version: "1.13.x"
+      sourceRef:
+        kind: HelmRepository
+        name: dapr
+        namespace: default
+      interval: 12h
+  values:
+    shared:
+      appId: echo
+      daprd:
+        image:
+          tag: 1.13.0
+      remoteURL: echo.default.svc.cluster.local
+      remotePort: 80

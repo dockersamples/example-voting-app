@@ -1,0 +1,27 @@
+platform:
+  profile: run
+  
+  additional_packages:
+    - dapr
+    - gitops-configurer
+    - rabbitmq-operator
+  
+  ingress:
+    domain: cloud.kadras.dev
+    issuer:
+      type: letsencrypt
+      email: security@kadras.io
+
+contour:
+  certificates:
+    useCertManager: true
+
+flux:
+  optional_components:
+    helm_controller: true
+
+gitops_configurer:
+  type: flux-kustomization
+  git:
+    url: https://github.com/ThomasVitale/example-voting-app
+    path: platform/gitops/clusters/cloud
