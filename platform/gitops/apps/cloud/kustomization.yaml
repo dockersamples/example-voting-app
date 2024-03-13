@@ -5,4 +5,11 @@ kind: Kustomization
 namespace: default
 
 resources:
-  - ../../../apps
+  - ../../../apps/app-echo.yml
+  - ../../../apps/app-result.yml
+  - ../../../apps/app-vote.yml
+  - ../../../apps/app-worker.yml
+  - ../../../apps/pubsub-rabbitmq.yml
+  - ../../../apps/statestore-results.yml
+  - ../../../apps/statestore-votes.yml
+  - ../../../apps/subscription-echo.yml
