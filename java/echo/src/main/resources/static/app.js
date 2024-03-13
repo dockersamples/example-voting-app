@@ -38,6 +38,7 @@ stompClient.onConnect = (frame) => {
 };
 
 function winnerIsInTheAudience(){
+  console.log("The Winner is in the audience!!");
   const response = fetch("/yes-winner-in-audience?workflowId="+currentWorkflowId, {
     method: "POST",
     headers: {
@@ -47,6 +48,7 @@ function winnerIsInTheAudience(){
 }
 
 function winnerGotTheBook(){
+  console.log("The Winner got the Book!!");
   const response = fetch("/yes-winner-got-book?workflowId="+currentWorkflowId, {
     method: "POST",
     headers: {
@@ -58,48 +60,58 @@ function winnerGotTheBook(){
 function pickADogWinner(){
   console.log("Let's pick a DOG winner!");
 
-  const response = fetch("/pick-a-winner?option=a", {
+  const fetchPromise =  fetch("/pick-a-winner?option=a", {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8"
     }
-  }).then(response => { 
-    console.log(response.text())
-    currentWorkflowId = response;
-  })
+  });
+  fetchPromise.then(response => response.text())
+      .then(data => {
+        console.log("Workflow Id: " + data);
+        currentWorkflowId = data;
+  });
 }
 
 function pickACatWinner(){
   console.log("Let's pick a CAT winner!");
 
-  const response = fetch("/pick-a-winner?option=b", {
+  const fetchPromise = fetch("/pick-a-winner?option=b", {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8"
     }
-  }).then(response => { console.log(response.text())
-      currentWorkflowId = response;
-    })
-  
-  
+  })
+  fetchPromise.then(response => response.text())
+      .then(data => {
+        console.log("Workflow Id: " + data);
+        currentWorkflowId = data;
+  });
+}
 
+function cats(){
+  jsConfetti.addConfetti({
+    emojis: ['😺'],
+    emojiSize: 100,
+    confettiNumber: 30,
+  })
+}
+
+function dogs(){
+  jsConfetti.addConfetti({
+    emojis: ['🐶'],
+    emojiSize: 100,
+    confettiNumber: 30,
+  })
 }
 
 function showEvent(event) {
   console.log("Option Selected: " + event.data.node.option)
   if (event.data.node.option == "a") {
-    jsConfetti.addConfetti({
-      emojis: ['😺'],
-      emojiSize: 100,
-      confettiNumber: 30,
-    })
+    cats();
   }
   if (event.data.node.option == "b") {
-    jsConfetti.addConfetti({
-      emojis: ['🐶'],
-      emojiSize: 100,
-      confettiNumber: 30,
-    })
+    dogs();
   }
 
 }

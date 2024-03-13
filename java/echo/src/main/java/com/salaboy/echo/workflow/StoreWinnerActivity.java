@@ -9,6 +9,7 @@ public class StoreWinnerActivity implements WorkflowActivity{
     public Object run(WorkflowActivityContext ctx) {
         WorkflowPayload workflowPayload = ctx.getInput(WorkflowPayload.class);
         //Store winner using the Dapr SDKs
+            
         return "";
     }
 }

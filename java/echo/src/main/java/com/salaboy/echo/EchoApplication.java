@@ -91,13 +91,15 @@ class EchoController {
 
 	@PostMapping("/yes-winner-in-audience")
 	public String yesWinnerInTheAudience(@RequestParam("workflowId") String workflowId) {
-		workflowClient.raiseEvent(workflowId, "KitchenDone", true);
+		System.out.println(" -> Winner is in the audience: " + workflowId);
+		workflowClient.raiseEvent(workflowId, "WinnerInTheAudience", true);
 		return "OK";
 	}
 
 	@PostMapping("/yes-winner-got-book")
 	public String yesWinnerGotBook(@RequestParam("workflowId") String workflowId) {
-		workflowClient.raiseEvent(workflowId, "KitchenDone", true);
+		System.out.println(" -> Winner got the book: " + workflowId);
+		workflowClient.raiseEvent(workflowId, "WinnerGotTheBook", true);
 		return "OK";
 	}
 

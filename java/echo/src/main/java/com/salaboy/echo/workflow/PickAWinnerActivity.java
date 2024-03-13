@@ -34,6 +34,7 @@ public class PickAWinnerActivity implements WorkflowActivity {
         headers.add("dapr-api-token", System.getenv("DAPR_API_TOKEN"));
 
         System.out.println("WorkflowPayload: " + workflowPayload);
+        System.out.println("Query URL: " + daprHttp + "/v1.0-alpha1/state/"+stateStore+"/query?metadata.contentType=application/json&metadata.queryIndexName=voteIndex");
 
         PropertyFilter voteFilter = new EQVote("vote");
         PropertyFilter optionFilter = new EQOption(workflowPayload.getOption());

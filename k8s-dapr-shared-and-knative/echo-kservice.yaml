@@ -22,5 +22,7 @@ spec:
         - name: DAPR_HTTP_ENDPOINT
           value: http://echo-dapr.default.svc.cluster.local:3500
         - name: DAPR_GRPC_ENDPOINT
-          value: http://echo-dapr.default.svc.cluster.local:50001  
+          value: http://echo-dapr.default.svc.cluster.local:50001
+        - name: ECHO_STATE_STORE
+          value: votes-statestore  
         

@@ -1,31 +1,60 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Votes Live!</title>
-    <base href="/index.html">
-    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
-    <meta name="keywords" content="docker-compose, docker, stack">
-    <meta name="author" content="Tutum dev team">
-    <link rel='stylesheet' href="css/style.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0" />
+    <meta name="keywords" content="docker-compose, docker, stack" />
+    <meta name="author" content="Tutum dev team" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
-
   </head>
   <body onload="connect()">
     <div id="content-container">
-      <div id="content-container-center">
-        
-      </div>
-      <div>
-        <button id="pickADogWinner"  name="pickADogWinner" class="a" onclick="pickADogWinner()">Pick a Dog Winner!</button>
-        <button id="pickACatWinner"  name="pickACatWinner" class="a" onclick="pickACatWinner()">Pick a Cat Winner!</button>
-        <button id="winnerIsInTheAudience"  name="winnerIsInTheAudience" class="a" onclick="winnerIsInTheAudience()">YES! The winner is in the Audience!</button>
-        <button id="winnerGotTheBook"  name="winnerGotTheBook" class="a" onclick="winnerGotTheBook()">YES! The winner got the book!</button>
+      <button id="cats" name="cats" onclick="cats()">😺</button>
+      <button id="dogs" name="dogs" onclick="dogs()">🐶</button>
+      <div class="bottomBar">
+        <button
+          id="pickADogWinner"
+          name="pickADogWinner"
+          class="smaller"
+          onclick="pickACatWinner()"
+        >
+          🏆😺
+        </button>
+        <button
+          id="pickACatWinner"
+          name="pickACatWinner"
+          class="smaller"
+          onclick="pickADogWinner()"
+        >
+          🏆🐶
+        </button>
+        <button
+          id="winnerIsInTheAudience"
+          name="winnerIsInTheAudience"
+          onclick="winnerIsInTheAudience()"
+        >
+          👍
+        </button>
+        <button
+          id="winnerGotTheBook"
+          name="winnerGotTheBook"
+          onclick="winnerGotTheBook()"
+        >
+          📚
+        </button>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script
+      src="https://code.jquery.com/jquery-latest.min.js"
+      type="text/javascript"
+    ></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="app.js"></script>
   </body>

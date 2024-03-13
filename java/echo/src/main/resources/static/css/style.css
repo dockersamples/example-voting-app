@@ -1,47 +1,70 @@
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400,700,600);
 
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
-html,body{
+html,
+body {
   margin: 0;
   padding: 0;
-  background-color: #F7F8F9;
+  background-color: #f7f8f9;
   height: 100vh;
-  font-family: 'Open Sans';
+  font-family: "Open Sans";
+  background-image: linear-gradient(
+    to right top,
+    #d16ba5,
+    #c777b9,
+    #ba83ca,
+    #aa8fd8,
+    #9a9ae1,
+    #8aa7ec,
+    #79b3f4,
+    #69bff8,
+    #52cffe,
+    #41dfff,
+    #46eefa,
+    #5ffbf1
+  );
 }
 
-button{
-  border-radius: 0;
-  width: 100%;
-  height: 50%;
+button {
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 400px;
+  width: 150px;
+  height: 150px;
+  font-size: 80px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 2px;
+  background: #fff;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.25);
+  border: 10px solid #46eefa;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
 }
 
-button[type="submit"] {
-  -webkit-appearance:none; -webkit-border-radius:0;
+button:hover {
+  transform: scale(1.2);
+  box-shadow: 0px 20px 45px -3px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
-button i{
-  float: right;
-  padding-right: 30px;
-  margin-top: 3px;
+button.smaller {
+  font-size: 42px;
 }
 
-button.a{
-  background-color: #1aaaf8;
-}
-
-button.b{
-  background-color: #00cbca;
-}
-
-#tip{
+#tip {
   text-align: left;
   color: #c0c9ce;
   font-size: 14px;
 }
 
-#hostname{
+#hostname {
   position: absolute;
   bottom: 100px;
   right: 0;
@@ -50,47 +73,48 @@ button.b{
   font-size: 24px;
 }
 
-#content-container{
+#content-container {
   z-index: 2;
   position: relative;
   margin: 0 auto;
   display: table;
   padding: 10px;
+  width: 100%;
   max-width: 940px;
   height: 100%;
+  position: relative;
 }
-#content-container-center{
+#content-container-center {
   display: table-cell;
   text-align: center;
 }
 
-#content-container-center h3{
+#content-container-center h3 {
   color: #254356;
 }
 
-#choice{
+#choice {
   transition: all 300ms linear;
   line-height: 1.3em;
   display: inline;
   vertical-align: middle;
   font-size: 3em;
 }
-#choice a{
-  text-decoration:none;
+#choice a {
+  text-decoration: none;
 }
-#choice a:hover, #choice a:focus{
-  outline:0;
-  text-decoration:underline;
+#choice a:hover,
+#choice a:focus {
+  outline: 0;
+  text-decoration: underline;
 }
 
-#choice button{
+#choice button {
   display: block;
-  height: 80px;
-  width: 330px;
   border: none;
   color: white;
   text-transform: uppercase;
-  font-size:18px;
+  font-size: 18px;
   font-weight: 700;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -98,32 +122,39 @@ button.b{
   padding-left: 50px;
 }
 
-#choice button.a:hover{
-  background-color: #1488c6;
+#background-stats {
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
-
-#choice button.b:hover{
-  background-color: #00a2a1;
-}
-
-#choice button.a:focus{
-  background-color: #1488c6;
-}
-
-#choice button.b:focus{
-  background-color: #00a2a1;
-}
-
-#background-stats{
-  z-index:1;
-  height:100%;
-  width:100%;
-  position:absolute;
-}
-#background-stats div{
+#background-stats div {
   transition: width 400ms ease-in-out;
-  display:inline-block;
-  margin-bottom:-4px;
-  width:50%;
-  height:100%;
+  display: inline-block;
+  margin-bottom: -4px;
+  width: 50%;
+  height: 100%;
+}
+
+button#cats {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+button#dogs {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.bottomBar {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
