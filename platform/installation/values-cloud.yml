@@ -7,7 +7,7 @@ platform:
     - rabbitmq-operator
   
   ingress:
-    domain: cloud.kadras.dev
+    domain: cloud.thomasvitale.dev
     issuer:
       type: letsencrypt
       email: security@kadras.io

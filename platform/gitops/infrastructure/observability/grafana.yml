@@ -118,7 +118,7 @@ spec:
         paths:
           temp_data_lifetime: 1h
         server:
-          domain: grafana.cloud.kadras.dev
+          domain: grafana.cloud.thomasvitale.dev
           enable_gzip: true
         snapshots:
           enabled: false
@@ -131,11 +131,11 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-http01-issuer
         hosts:
-          - grafana.cloud.kadras.dev
+          - grafana.cloud.thomasvitale.dev
         tls:
           - secretName: grafana-tls-certificate
             hosts:
-              - grafana.cloud.kadras.dev
+              - grafana.cloud.thomasvitale.dev
       persistence:
         enabled: false
       # See: https://github.com/grafana/helm-charts/issues/1746
