@@ -5,6 +5,7 @@ metadata:
   name: dapr
   namespace: default
 spec:
+  type: "oci"
   interval: 24h
   url: oci://registry-1.docker.io/daprio
 
