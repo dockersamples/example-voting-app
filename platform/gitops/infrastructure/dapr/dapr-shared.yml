@@ -20,7 +20,7 @@ spec:
   chart:
     spec:
       chart: dapr-shared-chart
-      version: "1.13.x"
+      version: "0.0.x"
       sourceRef:
         kind: HelmRepository
         name: dapr
@@ -44,7 +44,7 @@ spec:
   chart:
     spec:
       chart: dapr-shared-chart
-      version: "1.13.x"
+      version: "0.0.x"
       sourceRef:
         kind: HelmRepository
         name: dapr
@@ -68,7 +68,7 @@ spec:
   chart:
     spec:
       chart: dapr-shared-chart
-      version: "1.13.x"
+      version: "0.0.x"
       sourceRef:
         kind: HelmRepository
         name: dapr
@@ -92,7 +92,7 @@ spec:
   chart:
     spec:
       chart: dapr-shared-chart
-      version: "1.13.x"
+      version: "0.0.x"
       sourceRef:
         kind: HelmRepository
         name: dapr
