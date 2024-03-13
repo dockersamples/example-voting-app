@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
       - name: redis
-        #image: docker.io/salaboy/redis-with-json:1.0.0
-        image: docker.io/redis/redis-stack-server:7.2.0-v8
+        image: docker.io/salaboy/redis-with-json:1.0.0
+        #image: docker.io/redis/redis-stack-server:7.2.0-v8
         ports:
         - containerPort: 6379
           name: redis
