@@ -45,6 +45,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres
+  namespace: default
   labels:
     db: postgres
 spec:
