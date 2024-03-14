@@ -1,13 +1,3 @@
-apiVersion: serving.knative.dev/v1
-kind: Service
-metadata:
-  name: echo
-  namespace: default
-spec:
-  template:
-    spec:
-      containers:
-      - image: ghcr.io/salaboy/echo-java
-        env: 
-        - name: PUBLIC_IP
-          value: echo.default.cloud.thomasvitale.dev
+- op: replace
+  path: /spec/template/spec/containers/0/env/0
+  value: echo.default.cloud.thomasvitale.dev
