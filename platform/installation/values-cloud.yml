@@ -6,6 +6,9 @@ platform:
     - gitops-configurer
     - rabbitmq-operator
   
+  excluded_packages:
+    - metrics-server
+  
   ingress:
     domain: cloud.thomasvitale.dev
     issuer:

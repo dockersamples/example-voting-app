@@ -6,4 +6,4 @@ metadata:
 spec:
   topic: newVote
   route: /events
-  pubsubname: pubsub-rabbitmq 
+  pubsubname: pubsub-rabbitmq
