@@ -32,6 +32,7 @@ spec:
       daprd:
         image:
           tag: 1.13.0
+      strategy: deployment
 
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
@@ -56,6 +57,7 @@ spec:
       daprd:
         image:
           tag: 1.13.0
+      strategy: deployment
 
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
@@ -80,6 +82,7 @@ spec:
       daprd:
         image:
           tag: 1.13.0
+      strategy: deployment
 
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
@@ -106,3 +109,4 @@ spec:
           tag: 1.13.0
       remoteURL: echo.default.svc.cluster.local
       remotePort: 80
+      strategy: deployment
