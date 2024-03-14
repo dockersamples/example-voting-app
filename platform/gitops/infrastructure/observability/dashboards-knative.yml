@@ -1,0 +1,3526 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: knative-serving-dashboards
+  namespace: observability-stack
+  labels:
+    grafana_dashboard: "1"
+data:
+  knative-revision-cpu-memory-metrics.json: |
+    {
+        "__inputs": [
+        ],
+        "__requires": [
+        ],
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "description": "Knative Serving - Revision CPU and Memory Usage",
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "iteration": 1623959693725,
+        "links": [],
+        "panels": [
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 0
+            },
+            "hiddenSeries": false,
+            "id": 2,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$revision.*\", container != \"POD\", container != \"\"}[1m])) by (container)",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{container}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Total CPU Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "s",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 0
+            },
+            "hiddenSeries": false,
+            "id": 3,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "expr": "sum(container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$revision.*\", container != \"POD\", container != \"\"}) by (container)",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "{{container}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Total Memory Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "decbytes",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          }
+        ],
+        "refresh": "5s",
+        "schemaVersion": 30,
+        "style": "dark",
+        "tags": [
+          "knative"
+        ],
+        "templating": {
+          "list": [
+            {
+              "current": {
+                  "text": "default",
+                  "value": "default"
+              },
+              "hide": 0,
+              "label": "Datasource",
+              "name": "datasource",
+              "options": [
+      
+              ],
+              "query": "prometheus",
+              "refresh": 1,
+              "regex": "",
+              "type": "datasource"
+            },        
+            {
+              "allValue": null,
+              "current": {},
+              "datasource": "$datasource",
+              "definition": "label_values(kube_pod_labels{label_serving_knative_dev_configuration=~\".+\"}, namespace)",
+              "description": null,
+              "error": null,
+              "hide": 0,
+              "includeAll": false,
+              "label": "Namespace",
+              "multi": false,
+              "name": "namespace",
+              "options": [],
+              "query": {
+                "query": "label_values(kube_pod_labels{label_serving_knative_dev_configuration=~\".+\"}, namespace)",
+                "refId": "StandardVariableQuery"
+              },
+              "refresh": 2,
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": 1,
+              "tagValuesQuery": "",
+              "tagsQuery": "",
+              "type": "query",
+              "useTags": false
+            },
+            {
+              "allValue": null,
+              "current": {},
+              "datasource": "$datasource",
+              "definition": "label_values(kube_pod_labels{label_serving_knative_dev_configuration=~\".+\", namespace=\"$namespace\"}, label_serving_knative_dev_configuration)",
+              "description": null,
+              "error": null,
+              "hide": 0,
+              "includeAll": false,
+              "label": "Configuration",
+              "multi": false,
+              "name": "configuration",
+              "options": [],
+              "query": {
+                "query": "label_values(kube_pod_labels{label_serving_knative_dev_configuration=~\".+\", namespace=\"$namespace\"}, label_serving_knative_dev_configuration)",
+                "refId": "StandardVariableQuery"
+              },
+              "refresh": 2,
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": 1,
+              "tagValuesQuery": "",
+              "tagsQuery": "",
+              "type": "query",
+              "useTags": false
+            },
+            {
+              "allValue": null,
+              "current": {},
+              "datasource": "$datasource",
+              "definition": "label_values(kube_pod_labels{label_serving_knative_dev_configuration=~\".+\", namespace=\"$namespace\", label_serving_knative_dev_configuration=\"$configuration\"}, label_serving_knative_dev_revision)",
+              "description": null,
+              "error": null,
+              "hide": 0,
+              "includeAll": false,
+              "label": "Revision",
+              "multi": false,
+              "name": "revision",
+              "options": [],
+              "query": {
+                "query": "label_values(kube_pod_labels{label_serving_knative_dev_configuration=~\".+\", namespace=\"$namespace\", label_serving_knative_dev_configuration=\"$configuration\"}, label_serving_knative_dev_revision)",
+                "refId": "StandardVariableQuery"
+              },
+              "refresh": 2,
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": 2,
+              "tagValuesQuery": "",
+              "tagsQuery": "",
+              "type": "query",
+              "useTags": false
+            }
+          ]
+        },
+        "time": {
+          "from": "now-15m",
+          "to": "now"
+        },
+        "timepicker": {
+          "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+          ],
+          "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+          ]
+        },
+        "timezone": "",
+        "title": "Knative Serving - Revision CPU and Memory Usage",
+        "uid": "PB08H0R7z",
+        "version": 4
+      }
+  knative-serving-http-requests.json: |
+    {
+        "__inputs": [
+          {
+            "name": "DS_PROMETHEUS",
+            "label": "Prometheus",
+            "description": "",
+            "type": "datasource",
+            "pluginId": "prometheus",
+            "pluginName": "Prometheus"
+          }
+        ],
+        "__requires": [
+          {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "8.0.1"
+          },
+          {
+            "type": "panel",
+            "id": "graph",
+            "name": "Graph (old)",
+            "version": ""
+          },
+          {
+            "type": "datasource",
+            "id": "prometheus",
+            "name": "Prometheus",
+            "version": "1.0.0"
+          },
+          {
+            "type": "panel",
+            "id": "stat",
+            "name": "Stat",
+            "version": ""
+          }
+        ],
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "description": "Knative Serving - Revision HTTP Requests",
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "iteration": 1623953343289,
+        "links": [],
+        "panels": [
+          {
+            "collapsed": false,
+            "datasource": "$datasource",
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 0
+            },
+            "id": 8,
+            "panels": [],
+            "title": "Overview (average over the selected time range)",
+            "type": "row"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "$datasource",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "ops"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 6,
+              "x": 0,
+              "y": 1
+            },
+            "id": 2,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.0.1",
+            "repeat": null,
+            "repeatDirection": "v",
+            "targets": [
+              {
+                "datasource": "$datasource",
+                "exemplar": true,
+                "expr": "round(sum(rate(activator_request_count{namespace_name=\"$namespace\", revision_name=~\"$revision\", configuration_name=~\"$configuration\"}[1m])), 0.001)",
+                "format": "time_series",
+                "hide": false,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Request Volume",
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "$datasource",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#d44a3a",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 95
+                    },
+                    {
+                      "color": "#299c46",
+                      "value": 99
+                    }
+                  ]
+                },
+                "unit": "percentunit"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 6,
+              "x": 6,
+              "y": 1
+            },
+            "id": 4,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.0.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "sum(rate(activator_request_count{response_code_class!=\"5xx\", namespace_name=\"$namespace\", revision_name=~\"$revision\", configuration_name=~\"$configuration\"}[1m])) / sum(rate(activator_request_count{namespace_name=\"$namespace\", revision_name=~\"$revision\", configuration_name=~\"$configuration\"}[1m]))",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Success Rate (non-5xx responses)",
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "$datasource",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "ops"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 6,
+              "x": 12,
+              "y": 1
+            },
+            "id": 5,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.0.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "sum(rate(activator_request_count{response_code_class=\"4xx\", namespace_name=\"$namespace\", revision_name=~\"$revision\", configuration_name=~\"$configuration\"}[1m])) ",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "4xx",
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "$datasource",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "ops"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 6,
+              "x": 18,
+              "y": 1
+            },
+            "id": 9,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "8.0.1",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "sum(rate(activator_request_count{response_code_class=\"5xx\", namespace_name=\"$namespace\", revision_name=~\"$revision\", configuration_name=~\"$configuration\"}[1m])) ",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "5xx",
+            "type": "stat"
+          },
+          {
+            "collapsed": false,
+            "datasource": "$datasource",
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 5
+            },
+            "id": 11,
+            "panels": [],
+            "title": "Request Volume",
+            "type": "row"
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 10,
+              "w": 12,
+              "x": 0,
+              "y": 6
+            },
+            "hiddenSeries": false,
+            "id": 17,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "label_replace(round(sum(rate(activator_request_count{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (revision_name), 0.001), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{revision_name}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Request Volume by Revision",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "ops",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 10,
+              "w": 12,
+              "x": 12,
+              "y": 6
+            },
+            "hiddenSeries": false,
+            "id": 18,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "round(sum(rate(activator_request_count{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (response_code_class), 0.001)",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{ response_code_class }}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Request Volume by Response Code Class",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "ops",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": false,
+            "datasource": "$datasource",
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 16
+            },
+            "id": 15,
+            "panels": [],
+            "title": "Response Time",
+            "type": "row"
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 17
+            },
+            "hiddenSeries": false,
+            "id": 20,
+            "legend": {
+              "alignAsTable": false,
+              "avg": true,
+              "current": false,
+              "hideEmpty": false,
+              "hideZero": false,
+              "max": false,
+              "min": false,
+              "rightSide": false,
+              "show": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.50, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (revision_name, le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{ revision_name }} (p50)",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.90, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (revision_name, le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{ revision_name }} (p90)",
+                "refId": "B"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.95, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (revision_name, le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{ revision_name }} (p95)",
+                "refId": "C"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.99, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (revision_name, le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{ revision_name }} (p99)",
+                "refId": "D"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Response Time by Revision",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "ms",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 17
+            },
+            "hiddenSeries": false,
+            "id": 21,
+            "legend": {
+              "alignAsTable": false,
+              "avg": true,
+              "current": false,
+              "hideEmpty": false,
+              "hideZero": false,
+              "max": false,
+              "min": false,
+              "rightSide": false,
+              "show": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.50, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\",response_code_class=\"2xx\"}[1m])) by (le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "2xx (p50)",
+                "refId": "C"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.50, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\",response_code_class=\"3xx\"}[1m])) by (le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "3xx (p50)",
+                "refId": "D"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.50, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\",response_code_class=\"4xx\"}[1m])) by (le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "4xx (p50)",
+                "refId": "A"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.50, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\",response_code_class=\"5xx\"}[1m])) by (le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "5xx (p50)",
+                "refId": "B"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.95, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\",response_code_class=\"2xx\"}[1m])) by (le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "2xx (p95)",
+                "refId": "E"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.95, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\",response_code_class=\"3xx\"}[1m])) by (le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "3xx (p95)",
+                "refId": "F"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.95, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\",response_code_class=\"4xx\"}[1m])) by (le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "4xx (p95)",
+                "refId": "G"
+              },
+              {
+                "exemplar": true,
+                "expr": "label_replace(histogram_quantile(0.95, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\",response_code_class=\"5xx\"}[1m])) by (le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "5xx (p95)",
+                "refId": "H"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Response Time by Response Code Class",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "ms",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          }
+        ],
+        "refresh": "5s",
+        "schemaVersion": 30,
+        "style": "dark",
+        "tags": [
+          "knative"
+        ],
+        "templating": {
+          "list": [
+            {
+              "current": {
+                  "text": "default",
+                  "value": "default"
+              },
+              "hide": 0,
+              "label": "Datasource",
+              "name": "datasource",
+              "options": [
+      
+              ],
+              "query": "prometheus",
+              "refresh": 1,
+              "regex": "",
+              "type": "datasource"
+            },
+            {
+              "allValue": null,
+              "current": {},
+              "datasource": "$datasource",
+              "definition": "label_values(activator_request_count{namespace_name!=\"unknown\"}, namespace_name)",
+              "description": null,
+              "error": null,
+              "hide": 0,
+              "includeAll": false,
+              "label": "Namespace",
+              "multi": false,
+              "name": "namespace",
+              "options": [],
+              "query": {
+                "query": "label_values(activator_request_count{namespace_name!=\"unknown\"}, namespace_name)",
+                "refId": "StandardVariableQuery"
+              },
+              "refresh": 1,
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": 1,
+              "tagValuesQuery": "",
+              "tagsQuery": "",
+              "type": "query",
+              "useTags": false
+            },
+            {
+              "allValue": null,
+              "current": {},
+              "datasource": "$datasource",
+              "definition": "label_values(activator_request_count{namespace_name=\"$namespace\", configuration_name!=\"unknown\"}, configuration_name)",
+              "description": null,
+              "error": null,
+              "hide": 0,
+              "includeAll": false,
+              "label": "Configuration",
+              "multi": false,
+              "name": "configuration",
+              "options": [],
+              "query": {
+                "query": "label_values(activator_request_count{namespace_name=\"$namespace\", configuration_name!=\"unknown\"}, configuration_name)",
+                "refId": "StandardVariableQuery"
+              },
+              "refresh": 1,
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": 1,
+              "tagsQuery": "",
+              "type": "query",
+              "useTags": false
+            },
+            {
+              "allValue": null,
+              "current": {},
+              "datasource": "$datasource",
+              "definition": "label_values(activator_request_count{namespace_name=\"$namespace\", configuration_name=~\"$configuration\", revision_name!=\"unknown\"}, revision_name)",
+              "description": null,
+              "error": null,
+              "hide": 0,
+              "includeAll": true,
+              "label": "Revision",
+              "multi": true,
+              "name": "revision",
+              "options": [],
+              "query": {
+                "query": "label_values(activator_request_count{namespace_name=\"$namespace\", configuration_name=~\"$configuration\", revision_name!=\"unknown\"}, revision_name)",
+                "refId": "StandardVariableQuery"
+              },
+              "refresh": 1,
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": 2,
+              "tagValuesQuery": "",
+              "tagsQuery": "",
+              "type": "query",
+              "useTags": false
+            }
+          ]
+        },
+        "time": {
+          "from": "now-15m",
+          "to": "now"
+        },
+        "timepicker": {
+          "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+          ],
+          "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+          ]
+        },
+        "timezone": "",
+        "title": "Knative Serving - Revision HTTP Requests",
+        "uid": "GHxwI0g7z",
+        "version": 3
+      }
+  knative-reconciler.json: |
+    {
+    	"annotations": {
+    	  "list": [
+    		{
+    		  "builtIn": 1,
+    		  "datasource": "-- Grafana --",
+    		  "enable": true,
+    		  "hide": true,
+    		  "iconColor": "rgba(0, 211, 255, 1)",
+    		  "name": "Annotations & Alerts",
+    		  "type": "dashboard"
+    		}
+    	  ]
+    	},
+    	"description": "Knative - Reconciler",
+    	"editable": true,
+    	"gnetId": null,
+    	"graphTooltip": 0,
+    	"id": null,
+    	"iteration": 1629390753397,
+    	"links": [],
+    	"panels": [
+    	  {
+    		"collapsed": false,
+    		"datasource": "$datasource",
+    		"gridPos": {
+    		  "h": 1,
+    		  "w": 24,
+    		  "x": 0,
+    		  "y": 0
+    		},
+    		"id": 7,
+    		"panels": [],
+    		"title": "Aggregate",
+    		"type": "row"
+    	  },
+    	  {
+    		"aliasColors": {},
+    		"bars": false,
+    		"dashLength": 10,
+    		"dashes": false,
+    		"datasource": "$datasource",
+    		"fill": 1,
+    		"fillGradient": 0,
+    		"gridPos": {
+    		  "h": 9,
+    		  "w": 12,
+    		  "x": 0,
+    		  "y": 1
+    		},
+    		"hiddenSeries": false,
+    		"id": 10,
+    		"legend": {
+    		  "alignAsTable": false,
+    		  "avg": false,
+    		  "current": false,
+    		  "hideEmpty": true,
+    		  "hideZero": false,
+    		  "max": false,
+    		  "min": false,
+    		  "rightSide": false,
+    		  "show": true,
+    		  "total": false,
+    		  "values": false
+    		},
+    		"lines": true,
+    		"linewidth": 1,
+    		"links": [],
+    		"nullPointMode": "null",
+    		"options": {
+    		  "alertThreshold": true
+    		},
+    		"percentage": false,
+    		"pluginVersion": "8.0.5",
+    		"pointradius": 5,
+    		"points": false,
+    		"renderer": "flot",
+    		"seriesOverrides": [],
+    		"spaceLength": 10,
+    		"stack": false,
+    		"steppedLine": true,
+    		"targets": [
+    		  {
+    			"expr": "sum by (reconciler)(60 * rate(controller_reconcile_count[1m]))",
+    			"format": "time_series",
+    			"instant": false,
+    			"interval": "",
+    			"intervalFactor": 1,
+    			"legendFormat": "{{reconciler}}",
+    			"refId": "A"
+    		  }
+    		],
+    		"thresholds": [],
+    		"timeFrom": null,
+    		"timeRegions": [],
+    		"timeShift": null,
+    		"title": "Reconcile Count (per min)",
+    		"tooltip": {
+    		  "shared": true,
+    		  "sort": 0,
+    		  "value_type": "individual"
+    		},
+    		"type": "graph",
+    		"xaxis": {
+    		  "buckets": null,
+    		  "mode": "time",
+    		  "name": null,
+    		  "show": true,
+    		  "values": []
+    		},
+    		"yaxes": [
+    		  {
+    			"format": "short",
+    			"label": null,
+    			"logBase": 1,
+    			"max": null,
+    			"min": null,
+    			"show": true
+    		  },
+    		  {
+    			"format": "short",
+    			"label": null,
+    			"logBase": 1,
+    			"max": null,
+    			"min": null,
+    			"show": true
+    		  }
+    		],
+    		"yaxis": {
+    		  "align": false,
+    		  "alignLevel": null
+    		}
+    	  },
+    	  {
+    		"collapsed": false,
+    		"datasource": "$datasource",
+    		"gridPos": {
+    		  "h": 1,
+    		  "w": 24,
+    		  "x": 0,
+    		  "y": 10
+    		},
+    		"id": 5,
+    		"panels": [],
+    		"title": "Per Reconciler",
+    		"type": "row"
+    	  },
+    	  {
+    		"aliasColors": {},
+    		"bars": false,
+    		"dashLength": 10,
+    		"dashes": false,
+    		"datasource": "$datasource",
+    		"fill": 1,
+    		"fillGradient": 0,
+    		"gridPos": {
+    		  "h": 9,
+    		  "w": 12,
+    		  "x": 0,
+    		  "y": 11
+    		},
+    		"hiddenSeries": false,
+    		"id": 2,
+    		"legend": {
+    		  "alignAsTable": false,
+    		  "avg": false,
+    		  "current": false,
+    		  "hideEmpty": true,
+    		  "hideZero": false,
+    		  "max": false,
+    		  "min": false,
+    		  "rightSide": false,
+    		  "show": false,
+    		  "total": false,
+    		  "values": false
+    		},
+    		"lines": true,
+    		"linewidth": 1,
+    		"links": [],
+    		"nullPointMode": "null",
+    		"options": {
+    		  "alertThreshold": true
+    		},
+    		"percentage": false,
+    		"pluginVersion": "8.0.5",
+    		"pointradius": 5,
+    		"points": false,
+    		"renderer": "flot",
+    		"seriesOverrides": [],
+    		"spaceLength": 10,
+    		"stack": false,
+    		"steppedLine": true,
+    		"targets": [
+    		  {
+    			"expr": "sum(60 * rate(controller_reconcile_count{reconciler=\"$reconciler\"}[1m]))",
+    			"format": "time_series",
+    			"instant": false,
+    			"interval": "",
+    			"intervalFactor": 1,
+    			"legendFormat": "{{reconciler}}",
+    			"refId": "A"
+    		  }
+    		],
+    		"thresholds": [],
+    		"timeFrom": null,
+    		"timeRegions": [],
+    		"timeShift": null,
+    		"title": "$reconciler Reconcile Count (per min)",
+    		"tooltip": {
+    		  "shared": true,
+    		  "sort": 0,
+    		  "value_type": "individual"
+    		},
+    		"type": "graph",
+    		"xaxis": {
+    		  "buckets": null,
+    		  "mode": "time",
+    		  "name": null,
+    		  "show": true,
+    		  "values": []
+    		},
+    		"yaxes": [
+    		  {
+    			"format": "short",
+    			"label": null,
+    			"logBase": 1,
+    			"max": null,
+    			"min": null,
+    			"show": true
+    		  },
+    		  {
+    			"format": "short",
+    			"label": null,
+    			"logBase": 1,
+    			"max": null,
+    			"min": null,
+    			"show": true
+    		  }
+    		],
+    		"yaxis": {
+    		  "align": false,
+    		  "alignLevel": null
+    		}
+    	  },
+    	  {
+    		"aliasColors": {},
+    		"bars": false,
+    		"dashLength": 10,
+    		"dashes": false,
+    		"datasource": "$datasource",
+    		"fill": 1,
+    		"fillGradient": 0,
+    		"gridPos": {
+    		  "h": 9,
+    		  "w": 12,
+    		  "x": 12,
+    		  "y": 11
+    		},
+    		"hiddenSeries": false,
+    		"id": 11,
+    		"legend": {
+    		  "alignAsTable": false,
+    		  "avg": false,
+    		  "current": false,
+    		  "hideEmpty": true,
+    		  "hideZero": false,
+    		  "max": false,
+    		  "min": false,
+    		  "rightSide": false,
+    		  "show": true,
+    		  "total": false,
+    		  "values": false
+    		},
+    		"lines": true,
+    		"linewidth": 1,
+    		"links": [],
+    		"nullPointMode": "null",
+    		"options": {
+    		  "alertThreshold": true
+    		},
+    		"percentage": false,
+    		"pluginVersion": "8.0.5",
+    		"pointradius": 5,
+    		"points": false,
+    		"renderer": "flot",
+    		"seriesOverrides": [],
+    		"spaceLength": 10,
+    		"stack": false,
+    		"steppedLine": true,
+    		"targets": [
+    		  {
+    			"expr": "histogram_quantile(0.99, sum(rate(controller_reconcile_latency_bucket{reconciler=\"$reconciler\"}[1m])) by (le))",
+    			"format": "time_series",
+    			"instant": false,
+    			"interval": "",
+    			"intervalFactor": 1,
+    			"legendFormat": "99th",
+    			"refId": "A"
+    		  },
+    		  {
+    			"expr": "histogram_quantile(0.90, sum(rate(controller_reconcile_latency_bucket{reconciler=\"$reconciler\"}[1m])) by (le))",
+    			"format": "time_series",
+    			"intervalFactor": 1,
+    			"legendFormat": "90th",
+    			"refId": "B"
+    		  },
+    		  {
+    			"expr": "histogram_quantile(0.50, sum(rate(controller_reconcile_latency_bucket{reconciler=\"$reconciler\"}[1m])) by (le))",
+    			"format": "time_series",
+    			"intervalFactor": 1,
+    			"legendFormat": "50th",
+    			"refId": "C"
+    		  }
+    		],
+    		"thresholds": [],
+    		"timeFrom": null,
+    		"timeRegions": [],
+    		"timeShift": null,
+    		"title": "$reconciler Reconcile Latency Percentiles",
+    		"tooltip": {
+    		  "shared": true,
+    		  "sort": 0,
+    		  "value_type": "individual"
+    		},
+    		"type": "graph",
+    		"xaxis": {
+    		  "buckets": null,
+    		  "mode": "time",
+    		  "name": null,
+    		  "show": true,
+    		  "values": []
+    		},
+    		"yaxes": [
+    		  {
+    			"format": "short",
+    			"label": null,
+    			"logBase": 1,
+    			"max": null,
+    			"min": null,
+    			"show": true
+    		  },
+    		  {
+    			"format": "short",
+    			"label": null,
+    			"logBase": 1,
+    			"max": null,
+    			"min": null,
+    			"show": true
+    		  }
+    		],
+    		"yaxis": {
+    		  "align": false,
+    		  "alignLevel": null
+    		}
+    	  }
+    	],
+    	"refresh": "5s",
+    	"schemaVersion": 30,
+    	"style": "dark",
+    	"tags": [
+    	  "knative"
+    	],
+    	"templating": {
+    	  "list": [
+    		{
+    		  "current": {
+    			"selected": false,
+    			"text": "default",
+    			"value": "default"
+    		  },
+    		  "description": null,
+    		  "error": null,
+    		  "hide": 0,
+    		  "includeAll": false,
+    		  "label": "Datasource",
+    		  "multi": false,
+    		  "name": "datasource",
+    		  "options": [],
+    		  "query": "prometheus",
+    		  "refresh": 1,
+    		  "regex": "",
+    		  "skipUrlSync": false,
+    		  "type": "datasource"
+    		},
+    		{
+    		  "allValue": null,
+    		  "current": {
+    			"selected": false,
+    			"text": "knative.dev.serving.pkg.reconciler.configuration.Reconciler",
+    			"value": "knative.dev.serving.pkg.reconciler.configuration.Reconciler"
+    		  },
+    		  "datasource": "$datasource",
+    		  "definition": "label_values(controller_reconcile_count{reconciler=~\".+\"}, reconciler)",
+    		  "description": null,
+    		  "error": null,
+    		  "hide": 0,
+    		  "includeAll": false,
+    		  "label": "Reconciler",
+    		  "multi": false,
+    		  "name": "reconciler",
+    		  "options": [],
+    		  "query": {
+    			"query": "label_values(controller_reconcile_count{reconciler=~\".+\"}, reconciler)",
+    			"refId": "StandardVariableQuery"
+    		  },
+    		  "refresh": 1,
+    		  "regex": "",
+    		  "skipUrlSync": false,
+    		  "sort": 0,
+    		  "tagValuesQuery": "",
+    		  "tagsQuery": "",
+    		  "type": "query",
+    		  "useTags": false
+    		}
+    	  ]
+    	},
+    	"time": {
+    	  "from": "now-15m",
+    	  "to": "now"
+    	},
+    	"timepicker": {
+    	  "refresh_intervals": [
+    		"5s",
+    		"10s",
+    		"30s",
+    		"1m",
+    		"5m",
+    		"15m",
+    		"30m",
+    		"1h",
+    		"2h",
+    		"1d"
+    	  ],
+    	  "time_options": [
+    		"5m",
+    		"15m",
+    		"1h",
+    		"6h",
+    		"12h",
+    		"24h",
+    		"2d",
+    		"7d",
+    		"30d"
+    	  ]
+    	},
+    	"timezone": "",
+    	"title": "Knative - Reconciler",
+    	"uid": "DSHrKxnnz",
+    	"version": 3
+    }
+  knative-control-plane-efficiency.json: |
+    {
+        "__inputs": [],
+        "__requires": [
+        ],
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "description": "Knative Serving - Control Plane Efficiency",
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "links": [],
+        "panels": [
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "decimals": 2,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 0
+            },
+            "hiddenSeries": false,
+            "id": 2,
+            "legend": {
+              "alignAsTable": true,
+              "avg": true,
+              "current": true,
+              "max": false,
+              "min": false,
+              "rightSide": true,
+              "show": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.5",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"knative-serving\"}[1m]))",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "knative-serving",
+                "refId": "A"
+              },
+              {
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"istio-system\"}[1m]))",
+                "format": "time_series",
+                "instant": false,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "istio-system",
+                "refId": "D"
+              },
+              {
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"kube-system\"}[1m]))",
+                "format": "time_series",
+                "instant": false,
+                "intervalFactor": 1,
+                "legendFormat": "kube-system",
+                "refId": "F"
+              },
+              {
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"kube-public\"}[1m]))",
+                "format": "time_series",
+                "instant": false,
+                "intervalFactor": 1,
+                "legendFormat": "kube-public",
+                "refId": "E"
+              },
+              {
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"knative-monitoring\"}[1m]))",
+                "format": "time_series",
+                "instant": false,
+                "intervalFactor": 1,
+                "legendFormat": "knative-monitoring",
+                "refId": "B"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Namespace CPU Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "decimals": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 0
+            },
+            "hiddenSeries": false,
+            "id": 3,
+            "legend": {
+              "alignAsTable": true,
+              "avg": true,
+              "current": true,
+              "max": false,
+              "min": false,
+              "rightSide": true,
+              "show": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.5",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "expr": "sum(container_memory_usage_bytes{namespace=\"knative-serving\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "knative-serving",
+                "refId": "A"
+              },
+              {
+                "expr": "sum(container_memory_usage_bytes{namespace=\"istio-system\"})",
+                "format": "time_series",
+                "instant": false,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "istio-system",
+                "refId": "D"
+              },
+              {
+                "expr": "sum(container_memory_usage_bytes{namespace=\"kube-system\"})",
+                "format": "time_series",
+                "instant": false,
+                "intervalFactor": 1,
+                "legendFormat": "kube-system",
+                "refId": "F"
+              },
+              {
+                "expr": "sum(container_memory_usage_bytes{namespace=\"kube-public\"})",
+                "format": "time_series",
+                "instant": false,
+                "intervalFactor": 1,
+                "legendFormat": "kube-public",
+                "refId": "E"
+              },
+              {
+                "expr": "sum(container_memory_usage_bytes{namespace=\"knative-monitoring\"})",
+                "format": "time_series",
+                "instant": false,
+                "intervalFactor": 1,
+                "legendFormat": "knative-monitoring",
+                "refId": "B"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Namespace Memory Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "decbytes",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "decimals": 2,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 9
+            },
+            "hiddenSeries": false,
+            "id": 4,
+            "legend": {
+              "alignAsTable": true,
+              "avg": true,
+              "current": true,
+              "max": false,
+              "min": false,
+              "rightSide": true,
+              "show": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.5",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace!~\"knative-serving|knative-monitoring|istio-system|kube-system|kube-public|^$\"}[1m]))",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "Data plane",
+                "refId": "A"
+              },
+              {
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=~\"knative-serving|knative-monitoring|istio-system|kube-system|kube-public\"}[1m]))",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Control plane",
+                "refId": "B"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Control Plane vs Data Plane CPU Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "decimals": null,
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 9
+            },
+            "hiddenSeries": false,
+            "id": 5,
+            "legend": {
+              "alignAsTable": true,
+              "avg": true,
+              "current": true,
+              "max": false,
+              "min": false,
+              "rightSide": true,
+              "show": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.5",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "expr": "sum(container_memory_usage_bytes{namespace!~\"knative-serving|knative-monitoring|istio-system|kube-system|kube-public|^$\"})",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "Data plane",
+                "refId": "A"
+              },
+              {
+                "expr": "sum(container_memory_usage_bytes{namespace=~\"knative-serving|knative-monitoring|istio-system|kube-system|kube-public\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Control plane",
+                "refId": "B"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Control Plane vs Data Plane Memory Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "decbytes",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          }
+        ],
+        "refresh": "5s",
+        "schemaVersion": 30,
+        "style": "dark",
+        "tags": [
+          "knative"
+        ],
+        "templating": {
+          "list": [
+            {
+              "current": {
+                  "text": "default",
+                  "value": "default"
+              },
+              "hide": 0,
+              "label": "Datasource",
+              "name": "datasource",
+              "options": [
+              ],
+              "query": "prometheus",
+              "refresh": 1,
+              "regex": "",
+              "type": "datasource"
+            }
+          ]
+        },
+        "time": {
+          "from": "now-15m",
+          "to": "now"
+        },
+        "timepicker": {
+          "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+          ],
+          "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+          ]
+        },
+        "timezone": "",
+        "title": "Knative Serving - Control Plane Efficiency",
+        "uid": "ziwESARnk",
+        "version": 3
+    }
+  knative-scaling.json: |
+    {
+        "title": "Knative Serving - Scaling Debugging",
+        "uid": "Bn1mdAR7z",
+        "__inputs": [
+        ],
+        "__requires": [
+        ],
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "description": "Knative Serving - Scaling Debugging",
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "iteration": 1623953187275,
+        "links": [],
+        "panels": [
+          {
+            "collapsed": false,
+            "datasource": "$datasource",
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 0
+            },
+            "id": 14,
+            "panels": [],
+            "title": "Revision Pod Counts",
+            "type": "row"
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 11,
+              "w": 24,
+              "x": 0,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 2,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": true,
+            "targets": [
+              {
+                "expr": "sum(autoscaler_actual_pods{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "interval": "1s",
+                "intervalFactor": 1,
+                "legendFormat": "Actual Pods",
+                "refId": "A"
+              },
+              {
+                "expr": "sum(autoscaler_requested_pods{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "interval": "1s",
+                "intervalFactor": 1,
+                "legendFormat": "Requested Pods",
+                "refId": "C"
+              },
+              {
+                "expr": "sum(autoscaler_pending_pods{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "interval": "1s",
+                "intervalFactor": 1,
+                "legendFormat": "Pending Pods",
+                "refId": "P"
+              },
+              {
+                "expr": "sum(autoscaler_not_ready_pods{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "interval": "1s",
+                "intervalFactor": 1,
+                "legendFormat": "NotReady Pods",
+                "refId": "N"
+              },
+              {
+                "expr": "sum(autoscaler_terminating_pods{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "interval": "1s",
+                "intervalFactor": 1,
+                "legendFormat": "Terminating Pods",
+                "refId": "T"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Revision Pod Counts",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "decimals": null,
+                "format": "short",
+                "label": "Concurrency",
+                "logBase": 1,
+                "max": "1",
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 24,
+              "x": 0,
+              "y": 12
+            },
+            "hiddenSeries": false,
+            "id": 3,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": true,
+            "targets": [
+              {
+                "expr": "sum(activator_request_concurrency{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "interval": "1s",
+                "intervalFactor": 1,
+                "legendFormat": "Request Concurrency",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Request Concurrency",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": "",
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": "",
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": false,
+            "datasource": "$datasource",
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 21
+            },
+            "id": 18,
+            "panels": [],
+            "title": "Resource Usages",
+            "type": "row"
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 22
+            },
+            "hiddenSeries": false,
+            "id": 4,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\", namespace=\"$namespace\", pod=~\"$revision-deployment-.*\"})",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "Cores requested",
+                "refId": "A"
+              },
+              {
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$revision-deployment-.*\", container=\"\"}[1m]))",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Cores used",
+                "refId": "B"
+              },
+              {
+                "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\", namespace=\"$namespace\", pod=~\"$revision-deployment-.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Core limit",
+                "refId": "C"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Revision CPU Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "decimals": null,
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 22
+            },
+            "hiddenSeries": false,
+            "id": 6,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\", namespace=\"$namespace\", pod=~\"$revision-deployment-.*\"})",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "Memory requested",
+                "refId": "A"
+              },
+              {
+                "expr": "sum(container_memory_usage_bytes{namespace=\"$namespace\", pod=~\"$revision-deployment-.*\"})",
+                "format": "time_series",
+                "hide": false,
+                "intervalFactor": 1,
+                "legendFormat": "Memory used",
+                "refId": "B"
+              },
+              {
+                "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\", namespace=\"$namespace\", pod=~\"$revision-deployment-.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Memory limit",
+                "refId": "C"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Pod Memory Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "decbytes",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": false,
+            "datasource": "$datasource",
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 31
+            },
+            "id": 16,
+            "panels": [],
+            "title": "Autoscaler Metrics",
+            "type": "row"
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 10,
+              "w": 24,
+              "x": 0,
+              "y": 32
+            },
+            "hiddenSeries": false,
+            "id": 10,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": true,
+            "targets": [
+              {
+                "expr": "sum(autoscaler_desired_pods{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"}) ",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Desired Pods",
+                "refId": "A"
+              },
+              {
+                "expr": "sum(autoscaler_actual_pods{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Actual Pods",
+                "refId": "B"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Pod Counts",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$datasource",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 9,
+              "w": 24,
+              "x": 0,
+              "y": 42
+            },
+            "hiddenSeries": false,
+            "id": 8,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "8.0.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [
+              {
+                "alias": "Panic Mode",
+                "color": "#ea6460",
+                "dashes": true,
+                "fill": 2,
+                "linewidth": 2,
+                "steppedLine": true,
+                "yaxis": 2
+              },
+              {
+                "alias": "Target Concurrency Per Pod",
+                "color": "#0a50a1",
+                "dashes": true,
+                "steppedLine": false
+              }
+            ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": true,
+            "targets": [
+              {
+                "expr": "sum(autoscaler_stable_request_concurrency{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "interval": "1s",
+                "intervalFactor": 1,
+                "legendFormat": "Average Concurrency",
+                "refId": "A"
+              },
+              {
+                "expr": "sum(autoscaler_panic_request_concurrency{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "interval": "1s",
+                "intervalFactor": 1,
+                "legendFormat": "Average Panic Concurrency",
+                "refId": "B"
+              },
+              {
+                "expr": "sum(autoscaler_target_concurrency_per_pod{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Target Concurrency",
+                "refId": "C"
+              },
+              {
+                "expr": "sum(autoscaler_excess_burst_capacity{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Excess Burst Capacity",
+                "refId": "D"
+              }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Observed Concurrency",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": "",
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": "",
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": false
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": true,
+            "datasource": "$datasource",
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 78
+            },
+            "id": 20,
+            "panels": [
+              {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "$datasource",
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                  "h": 10,
+                  "w": 24,
+                  "x": 0,
+                  "y": 4
+                },
+                "hiddenSeries": false,
+                "id": 24,
+                "legend": {
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "show": true,
+                  "total": false,
+                  "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "options": {
+                  "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "8.0.1",
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                  {
+                    "expr": "round(sum(increase(activator_request_count{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (response_code))",
+                    "format": "time_series",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{ response_code }}",
+                    "refId": "A"
+                  }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Request Count in last minute by Response Code",
+                "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": []
+                },
+                "yaxes": [
+                  {
+                    "format": "none",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                  },
+                  {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                  }
+                ],
+                "yaxis": {
+                  "align": false,
+                  "alignLevel": null
+                }
+              },
+              {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "$datasource",
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                  "h": 10,
+                  "w": 24,
+                  "x": 0,
+                  "y": 14
+                },
+                "hiddenSeries": false,
+                "id": 28,
+                "legend": {
+                  "avg": true,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "show": true,
+                  "total": false,
+                  "values": true
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "options": {
+                  "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "8.0.1",
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                  {
+                    "expr": "label_replace(histogram_quantile(0.50, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (revision_name, le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                    "format": "time_series",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{ revision_name }} (p50)",
+                    "refId": "A"
+                  },
+                  {
+                    "expr": "label_replace(histogram_quantile(0.90, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (revision_name, le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                    "format": "time_series",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{ revision_name }} (p90)",
+                    "refId": "B"
+                  },
+                  {
+                    "expr": "label_replace(histogram_quantile(0.95, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (revision_name, le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                    "format": "time_series",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{ revision_name }} (p95)",
+                    "refId": "C"
+                  },
+                  {
+                    "expr": "label_replace(histogram_quantile(0.99, sum(rate(activator_request_latencies_bucket{namespace_name=\"$namespace\", configuration_name=~\"$configuration\",revision_name=~\"$revision\"}[1m])) by (revision_name, le)), \"revision_name\", \"$2\", \"revision_name\", \"$configuration(-+)(.*)\")",
+                    "format": "time_series",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{ revision_name }} (p99)",
+                    "refId": "D"
+                  }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Response Time in last minute",
+                "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": []
+                },
+                "yaxes": [
+                  {
+                    "format": "ms",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                  },
+                  {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                  }
+                ],
+                "yaxis": {
+                  "align": false,
+                  "alignLevel": null
+                }
+              },
+              {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "$datasource",
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                  "h": 9,
+                  "w": 24,
+                  "x": 0,
+                  "y": 24
+                },
+                "hiddenSeries": false,
+                "id": 29,
+                "legend": {
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "show": true,
+                  "total": false,
+                  "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "options": {
+                  "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "8.0.1",
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [
+                  {
+                    "alias": "Panic Mode",
+                    "color": "#ea6460",
+                    "dashes": true,
+                    "fill": 2,
+                    "linewidth": 2,
+                    "steppedLine": true,
+                    "yaxis": 2
+                  },
+                  {
+                    "alias": "Target Concurrency Per Pod",
+                    "color": "#0a50a1",
+                    "dashes": true,
+                    "steppedLine": false
+                  }
+                ],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": true,
+                "targets": [
+                  {
+                    "expr": "sum(activator_request_concurrency{namespace_name=\"$namespace\", configuration_name=\"$configuration\", revision_name=\"$revision\"})",
+                    "format": "time_series",
+                    "interval": "1s",
+                    "intervalFactor": 1,
+                    "legendFormat": "Request Concurrency",
+                    "refId": "A"
+                  }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Request Concurrency",
+                "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": []
+                },
+                "yaxes": [
+                  {
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                  },
+                  {
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": false
+                  }
+                ],
+                "yaxis": {
+                  "align": false,
+                  "alignLevel": null
+                }
+              }
+            ],
+            "title": "Activator Metrics",
+            "type": "row"
+          }
+        ],
+        "refresh": "5s",
+        "schemaVersion": 30,
+        "style": "dark",
+        "tags": [
+          "knative"
+        ],
+        "templating": {
+          "list": [
+            {
+              "current": {
+                  "text": "default",
+                  "value": "default"
+              },
+              "hide": 0,
+              "label": "Datasource",
+              "name": "datasource",
+              "options": [
+              ],
+              "query": "prometheus",
+              "refresh": 1,
+              "regex": "",
+              "type": "datasource"
+            },
+            {
+              "allValue": null,
+              "current": {},
+              "datasource": "$datasource",
+              "definition": "",
+              "description": null,
+              "error": null,
+              "hide": 0,
+              "includeAll": false,
+              "label": "Namespace",
+              "multi": false,
+              "name": "namespace",
+              "options": [],
+              "query": {
+                "query": "label_values(autoscaler_desired_pods, namespace_name)",
+                "refId": "prometheus-namespace-Variable-Query"
+              },
+              "refresh": 1,
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": 1,
+              "tagValuesQuery": "",
+              "tagsQuery": "",
+              "type": "query",
+              "useTags": false
+            },
+            {
+              "allValue": null,
+              "current": {},
+              "datasource": "$datasource",
+              "definition": "",
+              "description": null,
+              "error": null,
+              "hide": 0,
+              "includeAll": false,
+              "label": "Configuration",
+              "multi": false,
+              "name": "configuration",
+              "options": [],
+              "query": {
+                "query": "label_values(autoscaler_desired_pods{namespace_name=\"$namespace\"}, configuration_name)",
+                "refId": "prometheus-configuration-Variable-Query"
+              },
+              "refresh": 1,
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": 1,
+              "tagValuesQuery": "",
+              "tagsQuery": "",
+              "type": "query",
+              "useTags": false
+            },
+            {
+              "allValue": null,
+              "current": {},
+              "datasource": "$datasource",
+              "definition": "",
+              "description": null,
+              "error": null,
+              "hide": 0,
+              "includeAll": false,
+              "label": "Revision",
+              "multi": false,
+              "name": "revision",
+              "options": [],
+              "query": {
+                "query": "label_values(autoscaler_desired_pods{namespace_name=\"$namespace\", configuration_name=\"$configuration\"}, revision_name)",
+                "refId": "prometheus-revision-Variable-Query"
+              },
+              "refresh": 1,
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": 2,
+              "tagValuesQuery": "",
+              "tagsQuery": "",
+              "type": "query",
+              "useTags": false
+            }
+          ]
+        },
+        "time": {
+          "from": "now-15m",
+          "to": "now"
+        },
+        "timepicker": {
+          "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+          ],
+          "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+          ]
+        },
+        "timezone": "",
+        "version": 3
+    }

@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps
+  namespace: kadras-system
+spec:
+  dependsOn:
+    - name: dapr
+  interval: 1m
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: gitops-configurer
+  path: ./platform/gitops/apps/cloud
+  prune: true
+  wait: true

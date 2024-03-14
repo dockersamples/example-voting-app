@@ -1,0 +1,22 @@
+platform:
+  profile: run
+
+  infrastructure_provider: local
+  
+  additional_packages:
+    - dapr
+    - gitops-configurer
+    - rabbitmq-operator
+  
+  ingress:
+    domain: 127.0.0.1.sslip.io
+
+flux:
+  optional_components:
+    helm_controller: true
+
+gitops_configurer:
+  type: flux-kustomization
+  git:
+    url: https://github.com/ThomasVitale/example-voting-app
+    path: platform/gitops/clusters/local

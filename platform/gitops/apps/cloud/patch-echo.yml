@@ -1,0 +1,20 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: echo
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: ghcr.io/salaboy/echo-java
+        env: 
+        - name: PUBLIC_IP
+          value: echo.default.cloud.thomasvitale.dev
+        - name: DAPR_HTTP_ENDPOINT
+          value: http://echo-dapr.default.svc.cluster.local:3500
+        - name: DAPR_GRPC_ENDPOINT
+          value: http://echo-dapr.default.svc.cluster.local:50001
+        - name: ECHO_STATE_STORE
+          value: votes-statestore
+
