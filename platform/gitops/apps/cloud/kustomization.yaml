@@ -10,4 +10,7 @@ resources:
 patches:
   - path: patch-echo.yml
     target:
+      group: serving.knative.dev
+      version: v1
       kind: Service
+      name: echo
