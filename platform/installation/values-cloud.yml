@@ -26,5 +26,5 @@ flux:
 gitops_configurer:
   type: flux-kustomization
   git:
-    url: https://github.com/ThomasVitale/example-voting-app
+    url: https://github.com/salaboy/example-voting-app
     path: platform/gitops/clusters/cloud
