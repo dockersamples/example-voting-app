@@ -5,8 +5,8 @@ metadata:
   name: apps
   namespace: kadras-system
 spec:
-  dependsOn:
-    - name: dapr
+  # dependsOn:
+  #   - name: dapr
   interval: 1m
   retryInterval: 1m
   timeout: 5m
