@@ -55,6 +55,12 @@ Verify that all the platform components have been installed and properly reconci
   kctrl package installed list -n kadras-system
   ```
 
+A GitOps reconciliation strategy is used to install data services and applications. You can check the sync status as follows.
+
+  ```shell
+  kubectl get kustomization gitops-configurer -n kadras-system
+  ```
+
 
 ### 6. Accessing Grafana
 
@@ -65,7 +71,24 @@ echo "Admin Username: $(kubectl get secret --namespace observability-stack loki-
 echo "Admin Password: $(kubectl get secret --namespace observability-stack loki-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode)"
 ```
 
-### 7. Testing the Applications
+It will be available at [https://grafana.cloud.thomasvitale.dev](https://grafana.cloud.thomasvitale.dev).
+
+### 7. Accessing RabbitMQ
+
+The RabbitMQ management console is not publicly exposed, but you can access it via port forward at [http://localhost:15672](http://localhost:15672).
+
+```shell script
+kubectl port-forward svc/rabbitmq 15672:15672
+```
+
+You can get the credentials from the dedicated Secret.
+
+```shell script
+echo "Admin Username: $(kubectl get secret rabbitmq-default-user -o jsonpath='{.data.username}' | base64 --decode)"
+echo "Admin Password: $(kubectl get secret rabbitmq-default-user -o jsonpath='{.data.password}' | base64 --decode)"
+```
+
+### 8. Testing the Applications
 
 You can retrieve the URLs for each of the services using Knative:
 

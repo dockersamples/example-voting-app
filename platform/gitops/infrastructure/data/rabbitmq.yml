@@ -10,10 +10,10 @@ spec:
       cpu: 100m
       memory: 275Mi
     limits:
-      cpu: 250m
-      memory: 275Mi
+      cpu: 1000m
+      memory: 756Mi
   persistence:
-    storage: 1Gi
+    storage: 10Gi
   rabbitmq:
     additionalConfig: |
       vm_memory_high_watermark_paging_ratio = 0.99
