@@ -1,9 +1,8 @@
 package com.salaboy.echo;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-
 import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
@@ -16,24 +15,27 @@ import org.springframework.boot.web.codec.CodecCustomizer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.codec.CodecConfigurer;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.salaboy.echo.workflow.PickAWinnerActivity;
 import com.salaboy.echo.workflow.PrizeWorkflow;
+import com.salaboy.echo.workflow.StoreWinnerActivity;
 import com.salaboy.echo.workflow.WorkflowPayload;
 
 import io.cloudevents.CloudEvent;
 import io.cloudevents.spring.webflux.CloudEventHttpMessageReader;
 import io.cloudevents.spring.webflux.CloudEventHttpMessageWriter;
 import io.dapr.workflows.client.DaprWorkflowClient;
+import io.dapr.workflows.client.WorkflowInstanceStatus;
 import io.dapr.workflows.runtime.WorkflowRuntime;
 import io.dapr.workflows.runtime.WorkflowRuntimeBuilder;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
 public class EchoApplication {
+
+
+	public static Map<String, WorkflowPayload> instancePayloads = new ConcurrentHashMap<>();
 
 	public static void main(String[] args) {
 		SpringApplication.run(EchoApplication.class, args);
@@ -103,6 +105,11 @@ class EchoController {
 		return "OK";
 	}
 
+	@GetMapping("/status")
+	public WorkflowPayload getWorkflowStatus(@RequestParam("workflowId") String workflowId){
+		return EchoApplication.instancePayloads.get(workflowId);
+	}
+
 	public record Info(String publicIp) {
 	}
 
@@ -115,6 +122,7 @@ class EchoController {
 	private void createWorkflowDefinition(){
 		WorkflowRuntimeBuilder builder = new WorkflowRuntimeBuilder().registerWorkflow(PrizeWorkflow.class);
 		builder.registerActivity(PickAWinnerActivity.class);
+		builder.registerActivity(StoreWinnerActivity.class);
 		try (WorkflowRuntime runtime = builder.build()) {
 		  System.out.println("Start workflow runtime");
 		  runtime.start(false);

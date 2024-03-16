@@ -148,6 +148,13 @@ button#dogs {
   right: 20px;
 }
 
+.div-1 {
+  position: relative;
+  text-align: center;
+  margin: auto;
+  width: 100%;
+}
+
 .bottomBar {
   position: absolute;
   bottom: 20px;

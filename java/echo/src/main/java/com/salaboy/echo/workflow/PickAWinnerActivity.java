@@ -10,11 +10,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.salaboy.echo.EchoApplication;
+
 import io.dapr.workflows.runtime.WorkflowActivity;
 import io.dapr.workflows.runtime.WorkflowActivityContext;
 
 public class PickAWinnerActivity implements WorkflowActivity {
-
 
     private static RestTemplate restTemplate;
     
@@ -69,7 +70,10 @@ public class PickAWinnerActivity implements WorkflowActivity {
         System.out.println("And the WINNER IS!!! Voter Id: " + winnerVote.voterId);
 
         workflowPayload.setWinner(winnerVote.voterId);
-     
+
+        System.out.println("Storing Payload into Payloads Map with Id: " + workflowPayload.getWorkflowId());
+        EchoApplication.instancePayloads.put(workflowPayload.getWorkflowId(), workflowPayload);
+        
         return workflowPayload;
     } 
 
@@ -85,10 +89,6 @@ public class PickAWinnerActivity implements WorkflowActivity {
     public enum Order{ ASC, DESC }
 
     public interface PropertyFilter{}
-
-    /// {"results":[{"key":"voter-cd7a901c-1","data":{"type":"vote","voterId":"cd7a901c-1","option":"b","user":"cd7a901c-1"},"etag":"1"},{"key":"voter-28d9c909-0","data":{"user":"28d9c909-0","type":"vote","voterId":"28d9c909-0","option":"a"},"etag":"6"}]}
-
-    
 
     public record Results(@JsonProperty("results") List<Data> data){}
 

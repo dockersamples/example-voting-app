@@ -3,6 +3,8 @@ const stompClient = new StompJs.Client({
 
 const jsConfetti = new JSConfetti()
 var currentWorkflowId;
+var currentIntervalId;
+
 
 function connect() {
 
@@ -45,6 +47,26 @@ function winnerIsInTheAudience(){
       "Content-type": "application/json; charset=UTF-8"
     }
   })
+  document.getElementById("winnerIsInTheAudience").innerHTML = "<h2>The Winner is in the Audience 🥳👍 <h2>";
+  document.getElementById("winnerGotTheBook").innerHTML = "<h2>Did the Winner got the Book?<h2>";
+  
+}
+
+function getWorkflowStatus(workflowId){
+  const fetchPromise =  fetch("/status?workflowId="+currentWorkflowId, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    }
+  });
+  fetchPromise.then(response => response.json())
+      .then(data => {
+        console.log("Winner: " + data.winner);
+        winner();
+        document.getElementById("winner").innerHTML = "<h1> Winner: <b>" + data.winner + "</b><h1>";
+        document.getElementById("winnerIsInTheAudience").innerHTML = "<h2>Is the Winner In the Audience??<h2>";
+        document.getElementById("winnerGotTheBook").innerHTML = "";
+  });
 }
 
 function winnerGotTheBook(){
@@ -55,37 +77,61 @@ function winnerGotTheBook(){
       "Content-type": "application/json; charset=UTF-8"
     }
   })
+  document.getElementById("winnerGotTheBook").innerHTML = "<h2>The Winner got the Book! Congrats! 📚<h2>";
 }
 
-function pickADogWinner(){
-  console.log("Let's pick a DOG winner!");
+function waitForWinner(){
+  const currentIntervalId = setInterval(() => { 
+    
+    getWorkflowStatus(currentWorkflowId); 
+    console.log("fetching winner for workflow Id = "+ currentWorkflowId);
+    if(document.getElementById("winner").innerHTML != ""){
+         console.log("we got a winner!");
+         clearInterval(currentIntervalId);
+    }
+  }, 4000);
+  
+}
 
+
+function clean(){
+  document.getElementById("winner").innerHTML = "";
+  document.getElementById("winnerIsInTheAudience").innerHTML = "";
+  document.getElementById("winnerGotTheBook").innerHTML = "";
+}
+function pickADogWinner(){
+  clean();
+  console.log("Let's pick a DOG winner!");
   const fetchPromise =  fetch("/pick-a-winner?option=a", {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8"
     }
   });
+  drumRoll();
   fetchPromise.then(response => response.text())
       .then(data => {
         console.log("Workflow Id: " + data);
         currentWorkflowId = data;
+        waitForWinner();
   });
 }
 
 function pickACatWinner(){
+  clean();
   console.log("Let's pick a CAT winner!");
-
   const fetchPromise = fetch("/pick-a-winner?option=b", {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8"
     }
   })
+  drumRoll();
   fetchPromise.then(response => response.text())
       .then(data => {
         console.log("Workflow Id: " + data);
         currentWorkflowId = data;
+        waitForWinner();
   });
 }
 
@@ -93,7 +139,23 @@ function cats(){
   jsConfetti.addConfetti({
     emojis: ['😺'],
     emojiSize: 100,
-    confettiNumber: 30,
+    confettiNumber: 6,
+  })
+}
+
+function winner(){
+  jsConfetti.addConfetti({
+    emojis: ['🥳'],
+    emojiSize: 200,
+    confettiNumber: 50,
+  })
+}
+
+function drumRoll(){
+  jsConfetti.addConfetti({
+    emojis: ['🥁'],
+    emojiSize: 200,
+    confettiNumber: 100,
   })
 }
 
@@ -101,7 +163,7 @@ function dogs(){
   jsConfetti.addConfetti({
     emojis: ['🐶'],
     emojiSize: 100,
-    confettiNumber: 30,
+    confettiNumber: 6,
   })
 }
 
