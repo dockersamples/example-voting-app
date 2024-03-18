@@ -1,5 +1,7 @@
 package main
 
+import "context"
+
 type Result struct{}
 
 func (m *Result) Serve(
@@ -35,4 +37,12 @@ func (m *Result) Build(
 		WithServiceBinding("dapr", dapr.AsService()).
 		WithEnvVariable("DAPR_GRPC_ENDPOINT", "dapr").
 		WithEntrypoint([]string{"go", "run", "main.go"})
+}
+
+func (m *Result) Test(
+	ctx context.Context,
+	dir *Directory,
+) (string, error) {
+	return dag.Go().WithSource(dir).Container().
+		WithExec([]string{"go", "test", "-v", "./..."}).Stdout(ctx)
 }
