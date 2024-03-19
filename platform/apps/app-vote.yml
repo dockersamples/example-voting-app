@@ -8,6 +8,7 @@ spec:
     metadata:
       annotations:
         autoscaling.knative.dev/min-scale: "1"
+        autoscaling.knative.dev/target: "10"
     spec:
       containers:
       - image: ghcr.io/salaboy/vote-java
