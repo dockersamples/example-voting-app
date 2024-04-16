@@ -47,7 +47,7 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
     - name: Push
-      uses: docker/build-push-action@naster
+      uses: docker/build-push-action@master
       with:
         context: ${{ env.DOCKERFILE_CONTEXT }}
         push: true
