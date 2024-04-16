@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       
     - name: Set Tags #New env varaibles to add tag based on date & hour for the new image
       run: echo "IMAGE_TAG=result-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV 
