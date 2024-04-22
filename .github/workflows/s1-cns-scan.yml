@@ -17,7 +17,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-           repository: aparent-git2/example-voting-app/vote
+          repository: aparent-git2/example-voting-app/vote
 
       - name: Configure SentinelOne CNS CLI
         run: s1-cns-cli config --api-token $TOKEN --endpoint-url https://app.pingsafe.com
