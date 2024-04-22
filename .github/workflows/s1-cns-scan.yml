@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
-          fetch-depth: 0
+          fetch-depth: 3
 
       - name: Configure SentinelOne CNS CLI
         run: s1-cns-cli config --api-token $TOKEN --endpoint-url https://app.pingsafe.com
