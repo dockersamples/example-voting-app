@@ -11,13 +11,12 @@ on:
     - 'vote/**Dockerfile' #conditions to scan only when modifying the DOCKERFILE related to image
 
 jobs:
-  s1-cns-cli:
+  build-scan-and-push:
     runs-on: ubuntu-latest
-    steps:
     container:
       image: pingsafe/s1cnscli:latest
       options: --entrypoint ""
-      
+    steps:
     - name: Checkout
       uses: actions/checkout@v2
       
@@ -34,22 +33,19 @@ jobs:
         tags: ${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         load: true
         
-    - name: Configure SentinelOne CNS CLI
-      container:
-        image: pingsafe/s1cnscli:latest
-        options: --entrypoint ""
-      run: s1-cns-cli config --api-token $TOKEN --endpoint-url https://app.pingsafe.com
-      env:
-        TOKEN: ${{secrets.SENTINELONE_CNS_TOKEN}}
+      - name: Configure SentinelOne CNS CLI
+        run: s1-cns-cli config --api-token $TOKEN --endpoint-url https://app.pingsafe.com
+        env:
+         TOKEN: ${{secrets.SENTINELONE_CNS_TOKEN}}
 
-    - name: Configure git config
-      run: git config --global --add safe.directory $PWD
+      - name: Configure git config
+        run: git config --global --add safe.directory $PWD
 
-    - name: Run VULN SCAN
-      run:  s1-cns-cli scan vuln -d $PWD
-      env:
-        DEST: ${{ github.event.pull_request.base.sha }}
-        SRC: ${{ github.event.pull_request.head.ref }}
+      - name: Run IAC
+        run:  s1-cns-cli scan vuln -d $PWD
+        env:
+          DEST: ${{ github.event.pull_request.base.sha }}
+          SRC: ${{ github.event.pull_request.head.ref }}
     
     - name: Login to the registry
       uses: docker/login-action@v2
