@@ -3,7 +3,7 @@ name: SentinelOne CNS Scan
 on: 
   pull_request:
     paths:
-    - 'result/**Dockerfile' #conditions to scan only when modifying the DOCKERFILE related to image
+    - 'vote/**Dockerfile' #conditions to scan only when modifying the DOCKERFILE related to image
 
 jobs:
   s1-cns-cli:
