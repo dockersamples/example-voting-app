@@ -11,7 +11,7 @@ on:
     - 'vote/**Dockerfile' #conditions to scan only when modifying the DOCKERFILE related to image
 
 jobs:
-  build-scan-and-push:
+  s1-cns-cli:
     runs-on: ubuntu-latest
     steps:
     container:
