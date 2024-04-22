@@ -1,10 +1,9 @@
 name: SentinelOne CNS Scan
 
-on:
-  # Triggers the workflow when pull_request created on master/main branch
+on: 
   pull_request:
-    types: [ opened, reopened, synchronize ]
-    branches: [ master, main ]
+    paths:
+    - 'result/**Dockerfile' #conditions to scan only when modifying the DOCKERFILE related to image
 
 jobs:
   s1-cns-cli:
