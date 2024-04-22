@@ -28,7 +28,7 @@ jobs:
         run: git config --global --add safe.directory $PWD
 
       - name: Run IAC
-        run:  s1-cns-cli scan vuln -d $PWD/vote
+        run:  s1-cns-cli scan vuln -d $PWD
         env:
           DEST: ${{ github.event.pull_request.base.sha }}
           SRC: ${{ github.event.pull_request.head.ref }}
