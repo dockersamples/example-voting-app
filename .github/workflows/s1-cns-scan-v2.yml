@@ -11,7 +11,7 @@ on:
     - 'vote/**Dockerfile' #conditions to scan only when modifying the DOCKERFILE related to image
 
 jobs:
-  build-scan-and-push:
+  tests:
     runs-on: ubuntu-latest
     container:
       image: pingsafe/s1cnscli:latest
