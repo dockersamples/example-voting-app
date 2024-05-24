@@ -10,3 +10,5 @@ management:
 
 vote:
   state-store: votes-statestore
+  pubsub: pubsub
+  topic: votes

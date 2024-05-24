@@ -15,6 +15,7 @@
 	<description>Vote Service</description>
 	<properties>
 		<java.version>21</java.version>
+		<testcontainers-dapr.version>0.10.14</testcontainers-dapr.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -26,11 +27,27 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.dapr</groupId>
-			<artifactId>dapr-sdk-springboot3</artifactId>
-			<version>1.11.0-rc-3</version>
+			<groupId>io.diagrid.dapr</groupId>
+			<artifactId>dapr-client-spring-boot-starter</artifactId>
+			<version>0.10.7</version>
 		</dependency>
-
+		<dependency>
+            <groupId>io.diagrid.dapr</groupId>
+            <artifactId>testcontainers-dapr</artifactId>
+            <version>${testcontainers-dapr.version}</version>
+			<scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>com.redis.testcontainers</groupId>
+            <artifactId>testcontainers-redis-junit</artifactId>
+            <version>1.6.4</version>
+            <scope>test</scope>
+        </dependency>	
 		<dependency>
       		<groupId>org.springframework.boot</groupId>
       		<artifactId>spring-boot-starter-thymeleaf</artifactId>
