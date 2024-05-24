@@ -14,23 +14,14 @@ import org.testcontainers.utility.DockerImageName;
 
 import com.redis.testcontainers.RedisContainer;
 
-import io.dapr.client.DaprClient;
-import io.dapr.client.DaprClientBuilder;
-import io.dapr.client.DaprPreviewClient;
 import io.diagrid.dapr.DaprContainer;
 import io.diagrid.dapr.DaprContainer.Component;
 import io.diagrid.dapr.DaprContainer.DaprLogLevel;
 import io.diagrid.dapr.QuotedBoolean;
-import io.diagrid.springboot.dapr.core.DaprKeyValueAdapter;
-import io.diagrid.springboot.dapr.core.DaprKeyValueTemplate;
-
-
 
 @TestConfiguration(proxyBeanMethods = false) 
 @ComponentScan("io.dapr.springboot")  
-public class DaprConfig {
-
-    private DaprClientBuilder builder = new DaprClientBuilder();
+public class DaprTestConfig {
 
     @Bean
     public DaprContainer getDaprContainer(DynamicPropertyRegistry registry) {
@@ -84,25 +75,5 @@ public class DaprConfig {
 
     }
 
-
-    @Bean
-    public DaprClient daprClient(){
-        return builder.build();
-    }
-
-    @Bean
-    public DaprPreviewClient daprPreviewClient(){
-        return builder.buildPreviewClient();
-    }
-
-    @Bean
-	public DaprKeyValueTemplate keyValueTemplate(DaprClient daprClient, DaprPreviewClient daprPreviewClient) {
-		return new DaprKeyValueTemplate(keyValueAdapter(daprClient, daprPreviewClient));
-	}
-
-	@Bean
-	public DaprKeyValueAdapter keyValueAdapter(DaprClient daprClient, DaprPreviewClient daprPreviewClient) {
-		return new DaprKeyValueAdapter(daprClient, daprPreviewClient, "VotesQueryIndex");
-	}
 
 }

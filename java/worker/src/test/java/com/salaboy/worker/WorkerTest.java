@@ -16,16 +16,20 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.test.context.TestPropertySource;
+
 import io.diagrid.springboot.dapr.core.DaprKeyValueTemplate;
 
 import org.awaitility.Duration;
 import static org.awaitility.Awaitility.await;
 
-
-@SpringBootTest(classes={DaprConfig.class}, webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes={DaprTestConfig.class}, webEnvironment = WebEnvironment.RANDOM_PORT)
 @ComponentScan("com.salaboy.worker")
 @ComponentScan("io.dapr.springboot")
 @DependsOn("keyValueTemplate")
+@TestPropertySource(properties = {
+    "dapr.query.indexName=VotesQueryIndex",
+})
 public class WorkerTest {
     
     @Autowired
