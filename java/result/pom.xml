@@ -14,10 +14,14 @@
 	<name>result</name>
 	<description>Result Service</description>
 	<properties>
-		<java.version>21</java.version>
-		<cloudEventsVersion>2.5.0</cloudEventsVersion>
+		<java.version>17</java.version>
+		<testcontainers-dapr.version>0.10.14</testcontainers-dapr.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -26,36 +30,40 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-		<dependency>
-            <groupId>io.dapr</groupId>
-            <artifactId>dapr-sdk-workflows</artifactId>
-            <version>0.11.0</version>
-        </dependency>
-		<dependency>
-			<groupId>io.cloudevents</groupId>
-			<artifactId>cloudevents-spring</artifactId>
-			<version>${cloudEventsVersion}</version>
+			<groupId>io.diagrid.dapr</groupId>
+			<artifactId>dapr-client-spring-boot-starter</artifactId>
+			<version>0.10.7</version>
 		</dependency>
 		<dependency>
-            <groupId>io.cloudevents</groupId>
-            <artifactId>cloudevents-http-basic</artifactId>
-            <version>${cloudEventsVersion}</version>
+            <groupId>io.diagrid.dapr</groupId>
+            <artifactId>testcontainers-dapr</artifactId>
+            <version>${testcontainers-dapr.version}</version>
+			<scope>test</scope>
         </dependency>
 		<dependency>
-			<groupId>io.cloudevents</groupId>
-			<artifactId>cloudevents-json-jackson</artifactId>
-			<version>${cloudEventsVersion}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>3.1.6</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>com.redis.testcontainers</groupId>
+            <artifactId>testcontainers-redis-junit</artifactId>
+            <version>1.6.4</version>
+            <scope>test</scope>
+        </dependency>	
 	</dependencies>
 
 	<build>
