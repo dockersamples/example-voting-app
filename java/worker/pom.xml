@@ -20,6 +20,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>com.salaboy</groupId>
+			<artifactId>model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>io.diagrid.dapr</groupId>
 			<artifactId>dapr-client-spring-boot-starter</artifactId>
 			<version>0.10.7</version>
@@ -31,30 +36,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-		<dependency>
-            <groupId>io.dapr</groupId>
-            <artifactId>dapr-sdk-workflows</artifactId>
-            <version>0.11.0</version>
-        </dependency>
-		<dependency>
-			<groupId>io.cloudevents</groupId>
-			<artifactId>cloudevents-spring</artifactId>
-			<version>${cloudEventsVersion}</version>
-		</dependency>
-		<dependency>
-            <groupId>io.cloudevents</groupId>
-            <artifactId>cloudevents-http-basic</artifactId>
-            <version>${cloudEventsVersion}</version>
-        </dependency>
-		<dependency>
-			<groupId>io.cloudevents</groupId>
-			<artifactId>cloudevents-json-jackson</artifactId>
-			<version>${cloudEventsVersion}</version>
 		</dependency>
 		<dependency>
             <groupId>io.diagrid.dapr</groupId>

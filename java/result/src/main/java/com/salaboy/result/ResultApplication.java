@@ -23,7 +23,6 @@ public class ResultApplication {
  
 	@GetMapping
 	String renderHTML() {
-		
 		return "index.html";
 	}
 

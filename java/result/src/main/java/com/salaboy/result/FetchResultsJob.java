@@ -4,6 +4,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.salaboy.model.Results;
+import com.salaboy.model.Score;
 
 import io.diagrid.springboot.dapr.core.DaprKeyValueTemplate;
 
@@ -23,8 +25,6 @@ public class FetchResultsJob {
 
 	@Scheduled(fixedDelay = 2000)
 	public void fetchResults() {
-
-		keyValueTemplate.update(new Results("results", 4,5));
 
 		Results results = keyValueTemplate.findById("results", Results.class).get();
 

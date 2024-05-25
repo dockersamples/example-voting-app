@@ -25,7 +25,7 @@ import io.dapr.client.domain.CloudEvent;
 @ComponentScan("io.dapr.springboot")
 @TestPropertySource(properties = {
     "vote.pubsub=pubsub",
-	"vote.topic=votes"
+	"vote.topic=newVote"
 })
 class VoteApplicationTests {
 
@@ -41,15 +41,28 @@ class VoteApplicationTests {
 		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 		formData.put("vote", Collections.singletonList("a"));
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		
-		voteController.vote(extendedModelMap, formData, UUID.randomUUID().toString().substring(0, 10), response);
+		String userId = UUID.randomUUID().toString().substring(0, 10);
+		voteController.vote(extendedModelMap, formData, userId , response);
 
 		assertEquals(1, response.getCookies().length);
 
+		Thread.sleep(3000);
 
 		List<CloudEvent> events = appRestController.getEvents();
 
-		assertTrue(!events.isEmpty() );
+		assertTrue(!events.isEmpty());
+		assertEquals(1, events.size());
+
+		formData.put("vote", Collections.singletonList("b"));
+		voteController.vote(extendedModelMap, formData, userId, response);
+
+		Thread.sleep(3000);
+		
+		events = appRestController.getEvents();
+
+		assertTrue(!events.isEmpty());
+		assertEquals(2, events.size());
+
 	}
 
 

@@ -11,9 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.boot.web.codec.CodecCustomizer;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.codec.CodecConfigurer;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,11 +19,9 @@ import com.salaboy.echo.workflow.PrizeWorkflow;
 import com.salaboy.echo.workflow.StoreWinnerActivity;
 import com.salaboy.echo.workflow.WorkflowPayload;
 
-import io.cloudevents.CloudEvent;
-import io.cloudevents.spring.webflux.CloudEventHttpMessageReader;
-import io.cloudevents.spring.webflux.CloudEventHttpMessageWriter;
+import io.dapr.client.domain.CloudEvent;
+import io.dapr.Topic;
 import io.dapr.workflows.client.DaprWorkflowClient;
-import io.dapr.workflows.client.WorkflowInstanceStatus;
 import io.dapr.workflows.runtime.WorkflowRuntime;
 import io.dapr.workflows.runtime.WorkflowRuntimeBuilder;
 
@@ -56,8 +51,12 @@ class EchoController {
 
 	DaprWorkflowClient workflowClient = new DaprWorkflowClient();
 
+	public final static String pubSubName = "pubsub-rabbitmq" ;
+    public final static String topicName = "newVote";
+
+	@Topic(name = topicName, pubsubName = pubSubName)
 	@PostMapping("events")
-	CloudEvent echo(@RequestBody CloudEvent cloudEvent) {
+	public CloudEvent echo(@RequestBody CloudEvent cloudEvent) {
 
 		logger.info("Echo CloudEvent: " + cloudEvent.toString());
 		emitWSEvent(cloudEvent);
@@ -68,17 +67,9 @@ class EchoController {
 	public EchoController(SimpMessagingTemplate simpMessagingTemplate) {
 		this.simpMessagingTemplate = simpMessagingTemplate;
 		createWorkflowDefinition();
+
 	}
 
-	@Configuration
-	class CloudEventHandlerConfiguration implements CodecCustomizer {
-
-		@Override
-		public void customize(CodecConfigurer configurer) {
-			configurer.customCodecs().register(new CloudEventHttpMessageReader());
-			configurer.customCodecs().register(new CloudEventHttpMessageWriter());
-		}
-	}
 
 	@GetMapping("/server-info")
 	public Info getInfo() {

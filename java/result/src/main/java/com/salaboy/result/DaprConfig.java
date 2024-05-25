@@ -18,6 +18,9 @@ public class DaprConfig {
     @Value("${dapr.query.indexName:QueryIndex}")
     private String queryIndexName;
 
+    @Value("${dapr.statestore.name:kvstore}")
+    private String statestoreName;
+
     private DaprClientBuilder builder = new DaprClientBuilder();
 
     @Bean
@@ -37,7 +40,7 @@ public class DaprConfig {
 
 	@Bean
 	public DaprKeyValueAdapter keyValueAdapter(DaprClient daprClient, DaprPreviewClient daprPreviewClient) {
-		return new DaprKeyValueAdapter(daprClient, daprPreviewClient, queryIndexName);
+		return new DaprKeyValueAdapter(daprClient, daprPreviewClient, statestoreName, queryIndexName);
 	}
 
 

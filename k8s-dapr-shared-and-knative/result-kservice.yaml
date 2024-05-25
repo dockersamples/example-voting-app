@@ -10,12 +10,14 @@ spec:
         autoscaling.knative.dev/min-scale: "1"
     spec:
       containers:
-      - image: ghcr.io/salaboy/result-go
+      - image: salaboy/result-java:1.0.0
         imagePullPolicy: Always
         ports:
-        - containerPort: 3000
+        - containerPort: 8080
         env:
         - name: DAPR_HTTP_ENDPOINT
           value: http://result-dapr.default.svc.cluster.local:3500
         - name: DAPR_GRPC_ENDPOINT
-          value: result-dapr.default.svc.cluster.local
+          value: http://result-dapr.default.svc.cluster.local:50001
+        - name: DAPR_STATESTORE_NAME
+          value: results-statestore  

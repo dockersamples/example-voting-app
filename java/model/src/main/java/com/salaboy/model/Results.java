@@ -1,4 +1,4 @@
-package com.salaboy.worker;
+package com.salaboy.model;
 
 import org.springframework.data.annotation.Id;
 

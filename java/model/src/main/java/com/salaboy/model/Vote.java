@@ -1,4 +1,4 @@
-package com.salaboy.worker;
+package com.salaboy.model;
 
 import org.springframework.data.annotation.Id;
 
@@ -8,15 +8,17 @@ public class Vote {
     private String voterId;
     private String option;
     private String type;
+    private String user;
     
 
     public Vote() {
     }
 
-    public Vote(String option, String type, String voterId) {
+    public Vote(String type, String voterId, String option,  String user) {
         this.option = option;
         this.type = type;
         this.voterId = voterId;
+        this.user = user;
     }
     public String getOption() {
         return option;
@@ -36,6 +38,16 @@ public class Vote {
     public void setVoterId(String voterId) {
         this.voterId = voterId;
     }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    
 
     
 }

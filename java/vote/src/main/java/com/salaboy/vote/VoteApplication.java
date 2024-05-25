@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -22,6 +21,7 @@ import io.diagrid.springboot.dapr.core.DaprMessagingTemplate;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
+import com.salaboy.model.Vote;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
@@ -37,8 +37,6 @@ public class VoteApplication {
 
 @ConfigurationProperties(prefix = "vote")
 record VoteProperties(String stateStore, String pubsub, String topic){}
-
-record Vote(String type, @Id String voterId, String option, String user){}
 
 @Controller
 @RequestMapping("/")
@@ -86,11 +84,12 @@ class VoteController {
 
 		Vote vote = new Vote("vote", voterId, selectedOption, voterId);
 		
-		// Save the vote
-		keyValueTemplate.insert(vote);
+		// Upsert (insert or update) the vote
+		keyValueTemplate.update(vote);
 
 		if (voteProperties.pubsub() != null && !voteProperties.pubsub().equals("")){
 			// Emit CloudEvent
+			System.out.println("Emitting Cloud Event to Pubsub: " + voteProperties.pubsub() + "and topic: " + voteProperties.topic());
 			messagingTemplate.send(voteProperties.topic(), vote);
 		}
 

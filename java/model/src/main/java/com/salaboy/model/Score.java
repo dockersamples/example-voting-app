@@ -1,4 +1,4 @@
-package com.salaboy.result;
+package com.salaboy.model;
 
 public class Score {
     private String a;

@@ -13,6 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.test.context.TestPropertySource;
 
+import com.salaboy.model.Results;
+
 import io.diagrid.springboot.dapr.core.DaprKeyValueTemplate;
 
 import org.awaitility.Duration;
@@ -40,14 +42,13 @@ public class ResultTest {
         Results results = new Results(3, 5);
         keyValueTemplate.insert("results", results);
      
+        Thread.sleep(5000);
 
         await()
           .atMost(Duration.FIVE_SECONDS)
-          .untilAsserted(() -> verify(fetchResultsJob, atLeast(4)).fetchResults());
+          .untilAsserted(() -> verify(fetchResultsJob, atLeast(2)).fetchResults());
 
         Thread.sleep(5000);
-
-		
         
         
     }

@@ -18,6 +18,12 @@ public class DaprConfig {
     @Value("${dapr.query.indexName:QueryIndex}")
     private String queryIndexName;
 
+    @Value("${votes.statestore.name:kvstore}")
+    private String votesStatestoreName;
+
+    @Value("${results.statestore.name:kvstore}")
+    private String resultsStatestoreName;
+
     private DaprClientBuilder builder = new DaprClientBuilder();
 
     @Bean
@@ -31,15 +37,23 @@ public class DaprConfig {
     }
 
     @Bean
-	public DaprKeyValueTemplate keyValueTemplate(DaprClient daprClient, DaprPreviewClient daprPreviewClient) {
-		return new DaprKeyValueTemplate(keyValueAdapter(daprClient, daprPreviewClient));
+	public DaprKeyValueTemplate votesKeyValueTemplate(DaprClient daprClient, DaprPreviewClient daprPreviewClient) {
+		return new DaprKeyValueTemplate(votesKeyValueAdapter(daprClient, daprPreviewClient));
+	}
+
+    @Bean
+	public DaprKeyValueTemplate resultsKeyValueTemplate(DaprClient daprClient, DaprPreviewClient daprPreviewClient) {
+		return new DaprKeyValueTemplate(resultsKeyValueAdapter(daprClient, daprPreviewClient));
 	}
 
 	@Bean
-	public DaprKeyValueAdapter keyValueAdapter(DaprClient daprClient, DaprPreviewClient daprPreviewClient) {
-		return new DaprKeyValueAdapter(daprClient, daprPreviewClient, queryIndexName);
+	public DaprKeyValueAdapter votesKeyValueAdapter(DaprClient daprClient, DaprPreviewClient daprPreviewClient) {
+		return new DaprKeyValueAdapter(daprClient, daprPreviewClient, votesStatestoreName, queryIndexName);
 	}
 
+    @Bean
+	public DaprKeyValueAdapter resultsKeyValueAdapter(DaprClient daprClient, DaprPreviewClient daprPreviewClient) {
+		return new DaprKeyValueAdapter(daprClient, daprPreviewClient, resultsStatestoreName, queryIndexName);
+	}
 
-    
 }
