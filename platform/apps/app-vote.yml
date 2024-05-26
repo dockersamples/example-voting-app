@@ -11,7 +11,7 @@ spec:
         autoscaling.knative.dev/target: "10"
     spec:
       containers:
-      - image: ghcr.io/salaboy/vote-java
+      - image: docker.io/salaboy/vote-java:1.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -20,9 +20,13 @@ spec:
           value: http://vote-dapr.default.svc.cluster.local:3500
         - name: DAPR_GRPC_ENDPOINT
           value: http://vote-dapr.default.svc.cluster.local:50001 
-        - name: VOTE_STATE_STORE
+        - name: DAPR_STATESTORE_NAME
           value: votes-statestore
-        - name: VOTE_PUBSUB
+        - name: DAPR_PUBSUB_NAME
           value: pubsub-rabbitmq
+        - name: DAPR_TOPIC_NAME
+          value: newVote
+        - name: VOTE_PUBSUB
+          value: pubsub-rabbitmq     
         - name: VOTE_TOPIC
           value: newVote

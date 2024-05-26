@@ -27,7 +27,7 @@ Add the Kadras repository to make the platform packages available to the cluster
 
   ```shell
   kctrl package repository add -r kadras-packages \
-    --url ghcr.io/kadras-io/kadras-packages:0.17.3 \
+    --url ghcr.io/kadras-io/kadras-packages:0.18.0 \
     -n kadras-system --create-namespace
   ```
 
@@ -42,7 +42,7 @@ Reference the `values-cloud.yml` file mentioned in the previous step and install
   ```shell
   kctrl package install -i engineering-platform \
     -p engineering-platform.packages.kadras.io \
-    -v 0.15.3 \
+    -v 0.16.0 \
     -n kadras-system \
     --values-file values-cloud.yml
   ```
@@ -146,7 +146,7 @@ Add the Kadras repository to make the platform packages available to the cluster
 
   ```shell
   kctrl package repository add -r kadras-packages \
-    --url ghcr.io/kadras-io/kadras-packages:0.17.3 \
+    --url ghcr.io/kadras-io/kadras-packages:0.18.0 \
     -n kadras-system --create-namespace
   ```
 
@@ -163,7 +163,7 @@ Reference the `values-local.yml` file mentioned in the previous step and install
   ```shell
   kctrl package install -i engineering-platform \
     -p engineering-platform.packages.kadras.io \
-    -v 0.15.3 \
+    -v 0.16.0 \
     -n kadras-system \
     --values-file values-local.yml
   ```
@@ -175,7 +175,6 @@ Verify that all the platform components have been installed and properly reconci
   ```shell
   kctrl package installed list -n kadras-system
   ```
-
 
 ### 7. Accessing Grafana
 

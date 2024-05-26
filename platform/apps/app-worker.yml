@@ -15,15 +15,23 @@ spec:
     spec:
       containers:
       - name: user-container
-        image: ghcr.io/salaboy/worker-dotnet
+        image: docker.io/salaboy/worker-java:1.0.0
         imagePullPolicy: Always
         env:
+        - name: test
+          value: test
         - name: DAPR_HTTP_ENDPOINT
           value: http://worker-dapr.default.svc.cluster.local:3500
         - name: DAPR_GRPC_ENDPOINT
           value: http://worker-dapr.default.svc.cluster.local:50001
         - name: BASE_URL
           value: http://worker-dapr.default.svc.cluster.local
+        - name: VOTES_STATESTORE_NAME
+          value: votes-statestore
+        - name: RESULTS_STATESTORE_NAME
+          value: results-statestore
+        - name: DAPR_QUERY_INDEXNAME
+          value: voteIndex  
         readinessProbe:
           exec:
             command:
