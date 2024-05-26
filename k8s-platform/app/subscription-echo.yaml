@@ -1,8 +1,0 @@
-apiVersion: dapr.io/v1alpha1
-kind: Subscription
-metadata:
-  name: echo-subscritpion
-spec:
-  topic: newVote
-  route: /events
-  pubsubname: pubsub-rabbitmq 
