@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.salaboy.echo.workflow.PickAWinnerActivity;
@@ -39,7 +40,7 @@ public class EchoApplication {
 }
 
 @RestController
-@RequestMapping("/")
+@RequestMapping()
 class EchoController {
 
 	private static final Logger logger = LoggerFactory.getLogger(EchoController.class);

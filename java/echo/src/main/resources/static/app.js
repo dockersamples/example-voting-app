@@ -168,11 +168,11 @@ function dogs(){
 }
 
 function showEvent(event) {
-  console.log("Option Selected: " + event.data.node.option)
-  if (event.data.node.option == "a") {
+  console.log("Option Selected: " + event.data.option)
+  if (event.data.option == "a") {
     cats();
   }
-  if (event.data.node.option == "b") {
+  if (event.data.option == "b") {
     dogs();
   }
 
