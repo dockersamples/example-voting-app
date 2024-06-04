@@ -1,7 +1,7 @@
 # Notes : -> Of Course 
-`
+
 [Docker Notes](https://satin-crafter-d5d.notion.site/Docker-78cb10306175455abfea9e92db300863?pvs=4)
-`
+
 # Example Voting App
 
 A simple distributed application running across multiple Docker containers.
