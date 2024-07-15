@@ -22,11 +22,21 @@ pipeline{
         }
         stage ('Push Docker Image') {
             steps {
-                dir('result')
                 script {
                     sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/l1b1a8r4'
                     sh 'docker tag voting-app:latest public.ecr.aws/l1b1a8r4/voting-app:latest'
+                }
+                dir('result')
+                script {
                     sh 'docker tag result:latest public.ecr.aws/l1b1a8r4/voting-app:latest'
+                }
+                dir('vote')
+                script {
+                    sh 'docker tag vote:latest public.ecr.aws/l1b1a8r4/voting-app:latest'
+                }
+                dir('worker')
+                script {
+                    sh 'docker tag worker:latest public.ecr.aws/l1b1a8r4/voting-app:latest'
                 }
             }
         }
