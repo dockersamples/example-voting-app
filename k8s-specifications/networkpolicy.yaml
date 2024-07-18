@@ -1,0 +1,12 @@
+kind: NetworkPolicy
+metadata:
+  name: access-redis
+spec:
+  podSelector:
+    matchLabels:
+      app: redis
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: "frontend"
