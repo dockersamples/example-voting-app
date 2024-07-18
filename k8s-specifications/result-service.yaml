@@ -12,4 +12,4 @@ spec:
     targetPort: 80
     nodePort: 31001
   selector:
-    app: result
+    app: results
