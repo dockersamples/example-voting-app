@@ -2,6 +2,11 @@
 
 A simple distributed application running across multiple Docker containers.
 
+> [!NOTE]
+> This repo is a fork of example voting app by Docker, we have made some changes to the manifests so that it can be used as a sample app for the Kubernetes Application troubleshooting video.
+> There are some intentional errors introduced in the application to demo the application troubleshooting scenario for a simple web app
+
+
 ## Getting started
 
 Download [Docker Desktop](https://www.docker.com/products/docker-desktop) for Mac or Windows. [Docker Compose](https://docs.docker.com/compose) will be automatically installed. On Linux, make sure you have the latest version of [Compose](https://docs.docker.com/compose/install/).
@@ -56,10 +61,17 @@ kubectl delete -f k8s-specifications/
 * A [Postgres](https://hub.docker.com/_/postgres/) database backed by a Docker volume
 * A [Node.js](/result) web app which shows the results of the voting in real time
 
+  
+## Architecture from Kubernetes perspective
+
+![image](https://github.com/user-attachments/assets/75135739-a0eb-4598-ab9d-71cc2f9fad9a)
+
+
+
 ## Notes
 
 The voting application only accepts one vote per client browser. It does not register additional votes if a vote has already been submitted from a client.
 
-This isn't an example of a properly architected perfectly designed distributed app... it's just a simple
+This isn't an example of a properly architected, perfectly designed distributed app... it's just a simple
 example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to
 deal with them in Docker at a basic level.
