@@ -9,6 +9,8 @@ WORKDIR /usr/local/app
 
 # have nodemon available for local dev use (file watching)
 RUN npm install -g nodemon
+RUN npm install --save @opentelemetry/api
+RUN npm install --save @opentelemetry/auto-instrumentations-node
 
 COPY package*.json ./
 
@@ -17,8 +19,11 @@ RUN npm ci && \
  mv /usr/local/app/node_modules /node_modules
 
 COPY . .
+ENV PORT=80 \
+    OTEL_TRACES_EXPORTER=otlp \
+    OTEL_EXPORTER_OTLP_ENDPOINT=http://141.148.199.176:4317 \
+    OTEL_SERVICE_NAME=NodeJS_Result
 
-ENV PORT 80
 EXPOSE 80
 
 ENTRYPOINT ["/usr/bin/tini", "--"]

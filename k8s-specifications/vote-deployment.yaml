@@ -13,9 +13,11 @@ spec:
     metadata:
       labels:
         app: vote
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "true"
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_vote
+      - image: pastav/example-voting-app:v7
         name: vote
         ports:
         - containerPort: 80

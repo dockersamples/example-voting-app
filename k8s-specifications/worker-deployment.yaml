@@ -13,7 +13,9 @@ spec:
     metadata:
       labels:
         app: worker
+      annotations:
+        instrumentation.opentelemetry.io/inject-dotnet: "true"    
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_worker
+      - image: pastav/example-voting-app:dotnetv1
         name: worker

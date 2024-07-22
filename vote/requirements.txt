@@ -1,4 +1,5 @@
 Flask
 Redis
 gunicorn
-opentelemetry-distro==0.43b0
+opentelemetry-distro
+opentelemetry-exporter-otlp

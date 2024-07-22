@@ -13,9 +13,11 @@ spec:
     metadata:
       labels:
         app: result
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "true"
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_result
+      - image: pastav/example-voting-app:nodev1
         name: result
         ports:
         - containerPort: 80
