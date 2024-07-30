@@ -63,6 +63,8 @@ jobs:
         fi
 
     - name: Scan vote image with Sysdig
+      env:
+        SYSDIG_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
       run: |
         ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner \
           --apiurl ${SYSDIG_SECURE_ENDPOINT} \ 
@@ -70,8 +72,6 @@ jobs:
           --console-log \
           --dbpath=${GITHUB_WORKSPACE}/cache/db/ \
           --cachepath=${GITHUB_WORKSPACE}/cache/scanner-cache/ ||true
-      env:
-        SYSDIG_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
 
     - name: Scan worker image with Sysdig
       run: |
