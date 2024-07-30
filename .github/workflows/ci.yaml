@@ -40,6 +40,9 @@ jobs:
     - name: Push result image
       run: docker push ${DOCKER_USERNAME}/voting-app-result:latest
 
+    - name: Install Sysdig CLI
+      run: curl -sL https://download.sysdig.com/stable/install-sysdig | sudo bash
+
     - name: Scan vote image with Sysdig
       run: |
         sysdig-cli scan ${DOCKER_USERNAME}/voting-app-vote:latest
