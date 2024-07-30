@@ -26,37 +26,37 @@ jobs:
       run: docker build -t ${{ secrets.DOCKER_USERNAME }}/voting-app-vote:latest ./vote
 
     - name: Build worker image
-      run: docker build -t ${DOCKER_USERNAME}/voting-app-worker:latest ./worker
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/voting-app-worker:latest ./worker
 
     - name: Build result image
-      run: docker build -t ${DOCKER_USERNAME}/voting-app-result:latest ./result
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/voting-app-result:latest ./result
 
     - name: Push vote image
-      run: docker push ${DOCKER_USERNAME}/voting-app-vote:latest
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-vote:latest
 
     - name: Push worker image
-      run: docker push ${DOCKER_USERNAME}/voting-app-worker:latest
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-worker:latest
 
     - name: Push result image
-      run: docker push ${DOCKER_USERNAME}/voting-app-result:latest
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-result:latest
 
     - name: Install Sysdig CLI
       run: curl -sL https://download.sysdig.com/stable/install-sysdig | sudo bash
 
     - name: Scan vote image with Sysdig
       run: |
-        sysdig-cli scan ${DOCKER_USERNAME}/voting-app-vote:latest
+        sysdig-cli scan ${{ secrets.DOCKER_USERNAME }}/voting-app-vote:latest
       env:
         SYSDIG_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
 
     - name: Scan worker image with Sysdig
       run: |
-        sysdig-cli scan ${DOCKER_USERNAME}/voting-app-worker:latest
+        sysdig-cli scan ${{ secrets.DOCKER_USERNAME }}/voting-app-worker:latest
       env:
         SYSDIG_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
 
     - name: Scan result image with Sysdig
       run: |
-        sysdig-cli scan ${DOCKER_USERNAME}/voting-app-result:latest
+        sysdig-cli scan ${{ secrets.DOCKER_USERNAME }}/voting-app-result:latest
       env:
         SYSDIG_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
