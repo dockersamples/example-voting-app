@@ -68,10 +68,7 @@ jobs:
       run: |
         ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner \
           --apiurl ${SYSDIG_SECURE_ENDPOINT} \ 
-          ${{ secrets.DOCKER_USERNAME }}/voting-app-vote:latest \
-          --console-log \
-          --dbpath=${GITHUB_WORKSPACE}/cache/db/ \
-          --cachepath=${GITHUB_WORKSPACE}/cache/scanner-cache/ ||true
+          ${{ secrets.DOCKER_USERNAME }}/voting-app-vote:latest
 
     - name: Scan worker image with Sysdig
       run: |
