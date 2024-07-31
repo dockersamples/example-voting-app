@@ -44,4 +44,4 @@ jobs:
       run: |
         ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner \
           --apiurl ${SYSDIG_SECURE_ENDPOINT} --iac -r -f H \
-          ../../vote
+          ./vote
