@@ -43,5 +43,5 @@ jobs:
         SECURE_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
       run: |
         ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner \
-          --apiurl ${SYSDIG_SECURE_ENDPOINT} -r -f H \
+          --apiurl ${SYSDIG_SECURE_ENDPOINT} --iac -r -f H \
           /home/user/vote
