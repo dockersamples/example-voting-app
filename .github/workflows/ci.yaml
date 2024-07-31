@@ -1,6 +1,6 @@
 env:
   SYSDIG_SECURE_ENDPOINT: "https://app.us4.sysdig.com/secure"
-  REGISTRY_HOST: "https://hub.docker.com"
+  REGISTRY_HOST: "https://hub.docker.com/r"
 
 name: CIWF
 
