@@ -1,5 +1,5 @@
 env:
-  SYSDIG_SECURE_ENDPOINT: "https://secure.sysdig.com"
+  SYSDIG_SECURE_ENDPOINT: "https://app.us4.sysdig.com/secure"
 
 name: CIWF
 
@@ -74,13 +74,23 @@ jobs:
           --cachepath=${GITHUB_WORKSPACE}/cache/scanner-cache/ 
 
     - name: Scan worker image with Sysdig
-      run: |
-        sysdig-cli scan ${{ secrets.DOCKER_USERNAME }}/voting-app-worker:latest
       env:
-        SYSDIG_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
+        SECURE_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
+      run: |
+        ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner \
+          --apiurl ${SYSDIG_SECURE_ENDPOINT} \ 
+          ${{ secrets.DOCKER_USERNAME }}/voting-app-worker:latest \
+          --console-log \
+          --dbpath=${GITHUB_WORKSPACE}/cache/db/ \
+          --cachepath=${GITHUB_WORKSPACE}/cache/scanner-cache/ 
 
     - name: Scan result image with Sysdig
-      run: |
-        sysdig-cli scan ${{ secrets.DOCKER_USERNAME }}/voting-app-result:latest
       env:
-        SYSDIG_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
+        SECURE_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
+      run: |
+        ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner \
+          --apiurl ${SYSDIG_SECURE_ENDPOINT} \ 
+          ${{ secrets.DOCKER_USERNAME }}/voting-app-results:latest \
+          --console-log \
+          --dbpath=${GITHUB_WORKSPACE}/cache/db/ \
+          --cachepath=${GITHUB_WORKSPACE}/cache/scanner-cache/ 
