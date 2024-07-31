@@ -1,6 +1,6 @@
 env:
   SYSDIG_SECURE_ENDPOINT: "https://app.us4.sysdig.com/secure"
-  REGISTRY_HOST: "https://hub.docker.com/r"
+  REGISTRY_HOST: "docker.io"
 
 name: CIWF
 
@@ -35,6 +35,15 @@ jobs:
     - name: Build result image
       run: docker build -t ${{ secrets.DOCKER_USERNAME }}/voting-app-result:latest ./result
 
+    - name: Push vote image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-vote:latest
+
+    - name: Push worker image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-worker:latest
+
+    - name: Push result image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-result:latest
+
     - name: Setup cache
       uses: actions/cache@v3
       with:
@@ -60,7 +69,7 @@ jobs:
       run: |
         ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner \
           --apiurl ${SYSDIG_SECURE_ENDPOINT} \ 
-          docker://${{ secrets.DOCKER_USERNAME }}/voting-app-vote:latest \
+          docker://${REGISTRY_HOST}/${{ secrets.DOCKER_USERNAME }}/voting-app-vote:latest \
           --console-log \
           --dbpath=${GITHUB_WORKSPACE}/cache/db/ \
           --cachepath=${GITHUB_WORKSPACE}/cache/scanner-cache/ 
@@ -87,11 +96,4 @@ jobs:
           --dbpath=${GITHUB_WORKSPACE}/cache/db/ \
           --cachepath=${GITHUB_WORKSPACE}/cache/scanner-cache/ 
           
-    - name: Push vote image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-vote:latest
 
-    - name: Push worker image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-worker:latest
-
-    - name: Push result image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-result:latest
