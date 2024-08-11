@@ -49,7 +49,7 @@ jobs:
         # US-West https://us2.app.sysdig.com
         # EU      https://eu1.app.sysdig.com
         sysdig-secure-url: https://us2.app.sysdig.com
-        dockerfile-path: ./Dockerfile
+        dockerfile-path: ./worker/Dockerfile
         input-type: docker-daemon
         ignore-failed-scan: true
         # Sysdig inline scanner requires privileged rights
