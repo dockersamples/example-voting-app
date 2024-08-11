@@ -1,0 +1,29 @@
+name: Sysdig Vulnerability Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Sysdig CLI Scanner
+      run: |
+        curl -sLo /tmp/install-sysdig https://download.sysdig.com/stable/install-agent && \
+        chmod +x /tmp/install-sysdig && \
+        sudo /tmp/install-sysdig --cli
+
+    - name: Run Sysdig CLI Scanner
+      env:
+        SYSDIG_SECURE_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+      run: |
+        sudo /usr/local/bin/sysdig-cli-scanner scan <image_name>
