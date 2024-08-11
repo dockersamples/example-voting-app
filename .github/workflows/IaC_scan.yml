@@ -23,4 +23,5 @@ jobs:
         sysdig-secure-token: 98513912-9a2c-4f60-a5ba-2c424565e793 # ${{ secrets.SYSDIG_SECURE_TOKEN }}
         cli-scanner-version: 1.9.0
         mode: iac
+        sysdig-secure-url: https://eu1.app.sysdig.com
         iac-scan-path: ./vote
