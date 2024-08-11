@@ -33,7 +33,7 @@ jobs:
     - name: Build the Docker image
       # Tag image to be built
       # Change ${{ github.repository }} variable by another image name if you want but don't forget changing also image-tag below
-      run: docker build . --file Dockerfile --tag ${{ github.repository }}:latest
+      run: docker build . --file worker/Dockerfile --tag ${{ github.repository }}:latest
 
     - name: Sysdig Secure Inline Scan
       id: scan
