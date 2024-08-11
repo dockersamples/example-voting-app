@@ -18,12 +18,13 @@ jobs:
 
     - name: Install Sysdig CLI Scanner
       run: |
-        curl -sLo /tmp/install-sysdig https://download.sysdig.com/stable/install-agent && \
-        chmod +x /tmp/install-sysdig && \
+        curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/linux/amd64/sysdig-cli-scanner" && \
+        chmod +x ./sysdig-cli-scanner && \
         sudo /tmp/install-sysdig --cli
 
     - name: Run Sysdig CLI Scanner
       env:
         SYSDIG_SECURE_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
       run: |
-        sudo /usr/local/bin/sysdig-cli-scanner scan <image_name>
+        SECURE_API_TOKEN=SYSDIG_SECURE_TOKEN ./sysdig-cli-scanner --iac --apiurl https://eu1.app.sysdig.com ./
+        
