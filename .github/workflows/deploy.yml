@@ -1,0 +1,39 @@
+name: Deploy to EKS
+
+on:
+  push:
+    branches:
+      - main  # Puedes cambiarlo por la rama que prefieras
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1 # ${{ secrets.AWS_REGION }}
+
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push image to ECR
+      run: |
+        IMAGE_TAG=$(echo $GITHUB_SHA | cut -c1-7)
+        REPOSITORY_URI=<your-ecr-repo-uri>
+        docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+        docker push $REPOSITORY_URI:$IMAGE_TAG
+      env:
+        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+
+    - name: Update Kubernetes Deployment
+      run: |
+        aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+        kubectl set image deployment/<your-deployment-name> <your-container-name>=<your-ecr-repo-uri>:$(echo $GITHUB_SHA | cut -c1-7)
