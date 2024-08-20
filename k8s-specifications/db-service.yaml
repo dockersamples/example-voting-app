@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-options: "Sync-Wait"
   labels:
     app: db
-  name: db-svc
+  name: db
 spec:
   type: ClusterIP
   ports:
