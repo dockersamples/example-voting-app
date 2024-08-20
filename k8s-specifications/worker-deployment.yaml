@@ -8,7 +8,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
     argocd.argoproj.io/sync-options: "Sync-Wait"
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: worker
