@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-options: "Sync-Wait"
   labels:
     app: redis
-  name: redis
+  name: redis-svc
 spec:
   type: ClusterIP
   ports:
