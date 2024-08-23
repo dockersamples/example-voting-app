@@ -39,7 +39,7 @@ async.retry(
     if (err) {
       return console.error("Giving up");
     }
-    console.error(`Connected to ${dbHost}`);
+    console.log(`Connected to ${dbHost}`);
     getVotes(client);
   }
 );
