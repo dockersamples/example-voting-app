@@ -33,10 +33,10 @@ jobs:
     secrets:
 
       # Only needed if with:dockerhub-enable is true below
-      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+#      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
 
       # Only needed if with:dockerhub-enable is true below
-      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+#      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
     with:
       
@@ -44,15 +44,14 @@ jobs:
       ### ENABLE ONE OR BOTH REGISTRIES
       ### tell docker where to push.
       ### NOTE if Docker Hub is set to true, you must set secrets above and also add account/repo/tags below
-      dockerhub-enable: true
+      dockerhub-enable: false
       ghcr-enable: true
 
       ### REQUIRED 
       ### A list of the account/repo names for docker build. List should match what's enabled above
       ### defaults to:
-      image-names: |
-        ghcr.io/dockersamples/example-voting-app-result
-        dockersamples/examplevotingapp_result
+#      image-names: |
+#        ghcr.io/jbartus/example-voting-app-result
       
       ### REQUIRED set rules for tagging images, based on special action syntax:
       ### https://github.com/docker/metadata-action#tags-input
