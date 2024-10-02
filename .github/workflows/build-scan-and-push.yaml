@@ -1,0 +1,64 @@
+env:
+    SYSDIG_SECURE_ENDPOINT: "https://us2.app.sysdig.com"
+    REGISTRY_HOST: "quay.io"
+    IMAGE_NAME: "mytestimage"
+    IMAGE_TAG: "my-tag"
+    DOCKERFILE_CONTEXT: "k8s-specifications/"
+name: Container build, scan and push
+on: [push, pull_request]
+
+jobs:
+  build-scan-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build and save
+      uses: docker/build-push-action@v3
+      with:
+        context: ${{ env.DOCKERFILE_CONTEXT }}
+        tags: ${{ env.REGISTRY_HOST }}/${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        load: true
+    - name: Setup cache
+      uses: actions/cache@v3
+      with:
+        path: cache
+        key: ${{ runner.os }}-cache-${{ hashFiles('**/sysdig-cli-scanner', '**/latest_version.txt', '**/db/main.db.meta.json', '**/scanner-cache/inlineScannerCache.db') }}
+        restore-keys: ${{ runner.os }}-cache-
+    - name: Download sysdig-cli-scanner if needed
+      run:  |
+        curl -sLO https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt
+        mkdir -p ${GITHUB_WORKSPACE}/cache/db/
+        if [ ! -f ${GITHUB_WORKSPACE}/cache/latest_version.txt ] || [ $(cat ./latest_version.txt) != $(cat ${GITHUB_WORKSPACE}/cache/latest_version.txt) ]; then
+          cp ./latest_version.txt ${GITHUB_WORKSPACE}/cache/latest_version.txt
+          curl -sL -o ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(cat ${GITHUB_WORKSPACE}/cache/latest_version.txt)/linux/amd64/sysdig-cli-scanner"
+          chmod +x ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner
+        else
+          echo "sysdig-cli-scanner latest version already downloaded"
+        fi
+    - name: Scan the image using sysdig-cli-scanner
+      env:
+        SECURE_API_TOKEN: ${{ secrets.SECURE_API_TOKEN }}
+      run: |
+        ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner \
+          --apiurl ${SYSDIG_SECURE_ENDPOINT} \
+          docker://${REGISTRY_HOST}/${{ secrets.REGISTRY_USER }}/${IMAGE_NAME}:${IMAGE_TAG} \
+          --console-log \
+          --dbpath=${GITHUB_WORKSPACE}/cache/db/ \
+          --cachepath=${GITHUB_WORKSPACE}/cache/scanner-cache/
+    -  name: Login to the registry
+       uses: docker/login-action@v2
+       with:
+        registry: ${{ env.REGISTRY_HOST }}
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - name: Push
+      uses: docker/build-push-action@v3
+      with:
+        context: ${{ env.DOCKERFILE_CONTEXT }}
+        push: true
+        tags: ${{ env.REGISTRY_HOST }}/${{ secrets.REGISTRY_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
