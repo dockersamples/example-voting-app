@@ -4,8 +4,11 @@ metadata:
   labels:
     app: worker
   name: worker
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: "Sync-Wait"
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: worker
