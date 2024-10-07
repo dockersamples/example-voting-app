@@ -1,0 +1,47 @@
+env:
+  SYSDIG_SECURE_ENDPOINT: "https://app.us4.sysdig.com/secure"
+
+name: IaC Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  scan-iac:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup cache
+      uses: actions/cache@v3
+      with:
+        path: cache
+        key: ${{ runner.os }}-cache-${{ hashFiles('**/sysdig-cli-scanner', '**/latest_version.txt', '**/db/main.db.meta.json', '**/scanner-cache/inlineScannerCache.db') }}
+        restore-keys: ${{ runner.os }}-cache-
+
+    - name: Download sysdig-cli-scanner if needed
+      run:  |
+        curl -sLO https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt
+        mkdir -p ${GITHUB_WORKSPACE}/cache/db/
+        if [ ! -f ${GITHUB_WORKSPACE}/cache/latest_version.txt ] || [ $(cat ./latest_version.txt) != $(cat ${GITHUB_WORKSPACE}/cache/latest_version.txt) ]; then
+          cp ./latest_version.txt ${GITHUB_WORKSPACE}/cache/latest_version.txt
+          curl -sL -o ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(cat ${GITHUB_WORKSPACE}/cache/latest_version.txt)/linux/amd64/sysdig-cli-scanner"
+          chmod +x ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner
+        else
+          echo "sysdig-cli-scanner latest version already downloaded"
+        fi
+
+    - name: Scan IaC with Sysdig CLI
+      env:
+        SECURE_API_TOKEN: ${{ secrets.SYSDIG_API_TOKEN }}
+      run: |
+        ${GITHUB_WORKSPACE}/cache/sysdig-cli-scanner \
+          --apiurl ${SYSDIG_SECURE_ENDPOINT} --iac -r -f H \
+          ./k8s-specifications
