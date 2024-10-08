@@ -18,5 +18,7 @@ spec:
       - image: dockersamples/examplevotingapp_result
         name: result
         ports:
+        securityContext:
+          readOnlyRootFilesystem: true
         - containerPort: 80
           name: result
