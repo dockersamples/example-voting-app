@@ -1,0 +1,53 @@
+---
+#################################################
+################## Deployments ##################
+#################################################
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: result
+  template:
+    metadata:
+      labels:
+        app: result
+    spec:
+      containers:
+        - name: result
+          image: "{{ .Values.image.repositoryResult }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.localPort.result }}
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.localPort.result }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: result
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: result
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.ExportPort.result }}
+      targetPort: {{ .Values.localPort.result }}
+  selector:
+    app: result

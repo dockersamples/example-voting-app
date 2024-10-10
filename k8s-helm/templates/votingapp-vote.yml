@@ -1,0 +1,53 @@
+---
+#################################################
+################## Deployments ##################
+#################################################
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: vote
+  template:
+    metadata:
+      labels:
+        app: vote
+    spec:
+      containers:
+        - name: vote
+          image: "{{ .Values.image.repositoryVote }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.localPort.vote }}
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.localPort.vote }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: vote
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.ExportPort.vote }}
+      targetPort: {{ .Values.localPort.vote }}
+  selector:
+    app: vote

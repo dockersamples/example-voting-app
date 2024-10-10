@@ -45,6 +45,19 @@ To remove them, run:
 ```shell
 kubectl delete -f k8s-specifications/
 ```
+#### Deploying the Voting App Using Helm on Kubernetes
+
+The k8s-helm folder contains all the Helm charts for the Voting App's services.
+
+Run the following command to deploy the Voting App using the Helm charts:
+```shell
+helm install vote-helm k8s-helm/ -n <namespace>
+```
+To remove the deployment, run:
+
+```shell
+helm uninstall vote-helm -n <namespace>
+```
 
 ## Architecture
 
