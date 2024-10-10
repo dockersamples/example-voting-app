@@ -13,4 +13,4 @@ COPY . .
 # create POST data files with ab friendly formats
 RUN python make-data.py
 
-CMD /seed/generate-votes.sh
+CMD ["/seed/generate-votes.sh"]
