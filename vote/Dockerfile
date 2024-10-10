@@ -1,4 +1,4 @@
-# Define a base stage that uses the official python runtime base image
+# base defines a base stage that uses the official python runtime base image
 FROM python:3.11-slim AS base
 
 # Add curl for healthcheck
@@ -13,14 +13,13 @@ WORKDIR /usr/local/app
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Define a stage specifically for development, where it'll watch for
-# filesystem changes
+# dev defines a stage for development, where it'll watch for filesystem changes
 FROM base AS dev
 RUN pip install watchdog
 ENV FLASK_ENV=development
 CMD ["python", "app.py"]
 
-# Define the final stage that will bundle the application for production
+# final defines the stage that will bundle the application for production
 FROM base AS final
 
 # Copy our code from the current folder to the working directory inside the container
