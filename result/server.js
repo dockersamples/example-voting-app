@@ -17,8 +17,12 @@ io.on('connection', function (socket) {
   });
 });
 
+const dbHost = process.env.POSTGRES_HOST || 'db';
 var pool = new Pool({
-  connectionString: 'postgres://postgres:postgres@db/postgres'
+  connectionString: `postgres://postgres:postgres@${dbHost}/postgres`,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 async.retry(
@@ -26,7 +30,7 @@ async.retry(
   function(callback) {
     pool.connect(function(err, client, done) {
       if (err) {
-        console.error("Waiting for db");
+        console.error(`Waiting for ${dbHost}`);
       }
       callback(err, client);
     });
@@ -35,7 +39,7 @@ async.retry(
     if (err) {
       return console.error("Giving up");
     }
-    console.log("Connected to db");
+    console.log(`Connected to ${dbHost}`);
     getVotes(client);
   }
 );
