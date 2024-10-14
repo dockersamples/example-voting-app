@@ -15,7 +15,7 @@ spec:
         app: vote
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_vote
+      - image: jfrogbdt.jfrog.io/demo-docker/demovote:10
         name: vote
         ports:
         - containerPort: 80
