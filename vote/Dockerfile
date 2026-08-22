@@ -9,6 +9,11 @@ RUN apt-get update && \
 # Set the application directory
 WORKDIR /usr/local/app
 
+# Upgrade pip, setuptools, and wheel to patched versions
+# (fixes CVE-2026-23949 in jaraco.context and CVE-2026-24049 in wheel,
+# both bundled with setuptools rather than pulled from requirements.txt)
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
 # Install our requirements.txt
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt

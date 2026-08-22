@@ -1,0 +1,46 @@
+name: Build and Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  vote-service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./vote
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: echo "No test suite in this sample app — build/install verified"
+
+  result-service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./result
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: echo "No test suite in this sample app — build/install verified"
+
+  worker-service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./worker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '7.0.x'
+      - run: dotnet restore
+      - run: dotnet build --configuration Release
+      - run: echo "No test suite in this sample app — build verified"
