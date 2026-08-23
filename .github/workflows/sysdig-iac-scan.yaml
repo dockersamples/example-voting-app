@@ -1,0 +1,38 @@
+name: Sysdig IaC Scan
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '**/*.tf'
+      - '**/*.yaml'
+      - '**/*.yml'
+      - '.github/workflows/sysdig-iac-scan.yaml'
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.tf'
+      - '**/*.yaml'
+      - '**/*.yml'
+      - '.github/workflows/sysdig-iac-scan.yaml'
+
+jobs:
+  iac-scan:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sysdig IaC Scan
+        uses: sysdiglabs/scan-action@v6
+        with:
+          iac-scan: true
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://app.us4.sysdig.com
+          stop-on-failed-policy-eval: false
+          stop-on-processing-error: true

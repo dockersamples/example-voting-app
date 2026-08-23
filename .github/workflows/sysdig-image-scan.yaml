@@ -1,0 +1,65 @@
+name: Sysdig Image Scan
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'vote/**'
+      - 'worker/**'
+      - 'result/**'
+      - '.github/workflows/sysdig-image-scan.yaml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'vote/**'
+      - 'worker/**'
+      - 'result/**'
+      - '.github/workflows/sysdig-image-scan.yaml'
+
+jobs:
+  image-scan:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build vote image
+        run: docker build -t examplevotingapp_vote:ci ./vote
+
+      - name: Build worker image
+        run: docker build -t examplevotingapp_worker:ci ./worker
+
+      - name: Build result image
+        run: docker build -t examplevotingapp_result:ci ./result
+
+      - name: Scan vote image
+        uses: sysdiglabs/scan-action@v6
+        with:
+          image-tag: examplevotingapp_vote:ci
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://app.us4.sysdig.com
+          stop-on-failed-policy-eval: false
+          stop-on-processing-error: true
+
+      - name: Scan worker image
+        uses: sysdiglabs/scan-action@v6
+        with:
+          image-tag: examplevotingapp_worker:ci
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://app.us4.sysdig.com
+          stop-on-failed-policy-eval: false
+          stop-on-processing-error: true
+
+      - name: Scan result image
+        uses: sysdiglabs/scan-action@v6
+        with:
+          image-tag: examplevotingapp_result:ci
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://app.us4.sysdig.com
+          stop-on-failed-policy-eval: false
+          stop-on-processing-error: true
