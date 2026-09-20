@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, make_response, g
 from redis import Redis
+import ssl
 import os
 import socket
 import random
@@ -18,7 +19,27 @@ app.logger.setLevel(logging.INFO)
 
 def get_redis():
     if not hasattr(g, 'redis'):
-        g.redis = Redis(host="redis", db=0, socket_timeout=5)
+        redis_host = os.getenv('REDIS_HOST', 'redis')
+        redis_port = int(os.getenv('REDIS_PORT', 6379))
+	# Read username and password from environment variables
+        redis_username = os.getenv('REDIS_USERNAME', 'default')
+        redis_password = os.getenv('REDIS_PASSWORD', None)
+        use_ssl = os.getenv('REDIS_SSL', 'false').lower() in ('true', '1', 't')
+
+        ssl_cert_reqs = None
+        if use_ssl:
+            # ElastiCache in-transit encryption requires TLS
+            ssl_cert_reqs = ssl.CERT_REQUIRED
+
+        g.redis = Redis(
+            host=redis_host,
+            port=redis_port,
+            password=redis_password,
+            ssl=use_ssl,
+            ssl_cert_reqs=ssl_cert_reqs,
+            db=0,
+            socket_timeout=5
+        )
     return g.redis
 
 @app.route("/", methods=['POST','GET'])

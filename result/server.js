@@ -1,6 +1,5 @@
 var express = require('express'),
     async = require('async'),
-    { Pool } = require('pg'),
     cookieParser = require('cookie-parser'),
     app = express(),
     server = require('http').Server(app),
@@ -17,8 +16,26 @@ io.on('connection', function (socket) {
   });
 });
 
-var pool = new Pool({
-  connectionString: 'postgres://postgres:postgres@db/postgres'
+const { Pool } = require('pg');
+
+const dbHost = process.env.POSTGRES_HOST || 'db';
+const dbPort = parseInt(process.env.POSTGRES_PORT || '5432', 10);
+const dbUser = process.env.POSTGRES_USER || 'postgres';
+const dbPassword = process.env.POSTGRES_PASSWORD || 'postgres';
+const dbName = process.env.POSTGRES_DB || 'postgres';
+const useSSL = process.env.POSTGRES_SSL === 'true' || process.env.POSTGRES_SSL === '1';
+
+const pool = new Pool({
+  host: dbHost,
+  port: dbPort,
+  user: dbUser,
+  password: dbPassword,
+  database: dbName,
+  ssl: useSSL ? {
+    rejectUnauthorized: false,
+    require: true
+  } : false,
+  connectionTimeoutMillis: 5000 // Fails fast instead of hanging on timeouts
 });
 
 async.retry(
@@ -26,7 +43,9 @@ async.retry(
   function(callback) {
     pool.connect(function(err, client, done) {
       if (err) {
-        console.error("Waiting for db");
+	console.error("Waiting for db. Error details:", err.message, err.code || '', err.stack);
+	if (done) done(); // Release client back to pool on failure
+        return callback(err);
       }
       callback(err, client);
     });

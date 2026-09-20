@@ -1,7 +1,6 @@
 using System;
 using System.Data.Common;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Newtonsoft.Json;
@@ -16,46 +15,35 @@ namespace Worker
         {
             try
             {
-                var pgsql = OpenDbConnection("Server=db;Username=postgres;Password=postgres;");
-                var redisConn = OpenRedisConnection("redis");
+                var pgsql = OpenDbConnection();
+                var redisConn = OpenRedisConnection();
                 var redis = redisConn.GetDatabase();
 
-                // Keep alive is not implemented in Npgsql yet. This workaround was recommended:
-                // https://github.com/npgsql/npgsql/issues/1214#issuecomment-235828359
-                var keepAliveCommand = pgsql.CreateCommand();
-                keepAliveCommand.CommandText = "SELECT 1";
-
+                // Keep definition of command and sleep alive
                 var definition = new { vote = "", voter_id = "" };
+
                 while (true)
                 {
-                    // Slow down to prevent CPU spike, only query each 100ms
-                    Thread.Sleep(100);
-
-                    // Reconnect redis if down
-                    if (redisConn == null || !redisConn.IsConnected) {
-                        Console.WriteLine("Reconnecting Redis");
-                        redisConn = OpenRedisConnection("redis");
-                        redis = redisConn.GetDatabase();
+                    // Slow down if not connected to database or redis
+                    if (pgsql.State != System.Data.ConnectionState.Open)
+                    {
+                        Console.Error.WriteLine("Reconnecting to DB");
+                        pgsql = OpenDbConnection();
                     }
-                    string json = redis.ListLeftPopAsync("votes").Result;
+
+                    string json = redis.ListRightPopLeftPush("votes", "processing");
                     if (json != null)
                     {
                         var vote = JsonConvert.DeserializeAnonymousType(json, definition);
                         Console.WriteLine($"Processing vote for '{vote.vote}' by '{vote.voter_id}'");
-                        // Reconnect DB if down
-                        if (!pgsql.State.Equals(System.Data.ConnectionState.Open))
-                        {
-                            Console.WriteLine("Reconnecting DB");
-                            pgsql = OpenDbConnection("Server=db;Username=postgres;Password=postgres;");
-                        }
-                        else
-                        { // Normal +1 vote requested
-                            UpdateVote(pgsql, vote.voter_id, vote.vote);
-                        }
+                        
+                        // Execute update or insert
+                        UpdateVote(pgsql, vote.voter_id, vote.vote);
+                        redis.ListRemove("processing", json);
                     }
                     else
                     {
-                        keepAliveCommand.ExecuteNonQuery();
+                        Thread.Sleep(100);
                     }
                 }
             }
@@ -66,69 +54,132 @@ namespace Worker
             }
         }
 
-        private static NpgsqlConnection OpenDbConnection(string connectionString)
+        private static NpgsqlConnection OpenDbConnection()
         {
-            NpgsqlConnection connection;
+            NpgsqlConnection connection = null;
 
-            while (true)
+            while (connection == null)
             {
                 try
                 {
-                    connection = new NpgsqlConnection(connectionString);
+                    var host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? "db";
+                    var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out var p) ? p : 5432;
+                    var user = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "postgres";
+                    var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? "postgres";
+                    var database = Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "postgres";
+                    
+                    var sslEnv = Environment.GetEnvironmentVariable("POSTGRES_SSL");
+                    bool useSsl = sslEnv == "true" || sslEnv == "1" || (host != "db" && !string.IsNullOrEmpty(host));
+
+                    var builder = new NpgsqlConnectionStringBuilder
+                    {
+                        Host = host,
+                        Port = port,
+                        Username = user,
+                        Password = password,
+                        Database = database,
+                        SslMode = useSsl ? SslMode.Require : SslMode.Disable,
+                        TrustServerCertificate = true, // Required for AWS RDS self-signed root CAs
+                        Timeout = 15
+                    };
+
+                    connection = new NpgsqlConnection(builder.ConnectionString);
                     connection.Open();
-                    break;
+
+                    var command = connection.CreateCommand();
+                    command.CommandText = @"CREATE TABLE IF NOT EXISTS votes (
+                                                id VARCHAR(255) NOT NULL UNIQUE,
+                                                vote VARCHAR(255) NOT NULL
+                                            )";
+                    command.ExecuteNonQuery();
                 }
                 catch (SocketException)
                 {
-                    Console.Error.WriteLine("Waiting for db");
+                    Console.Error.WriteLine("Waiting for DB connection (SocketException)...");
                     Thread.Sleep(1000);
                 }
-                catch (DbException)
+                catch (DbException ex)
                 {
-                    Console.Error.WriteLine("Waiting for db");
+                    Console.Error.WriteLine($"Waiting for DB connection (DbException): {ex.Message}");
                     Thread.Sleep(1000);
                 }
             }
 
-            Console.Error.WriteLine("Connected to db");
-
-            var command = connection.CreateCommand();
-            command.CommandText = @"CREATE TABLE IF NOT EXISTS votes (
-                                        id VARCHAR(255) NOT NULL UNIQUE,
-                                        vote VARCHAR(255) NOT NULL
-                                    )";
-            command.ExecuteNonQuery();
-
+            Console.WriteLine("Connected to PostgreSQL");
             return connection;
         }
 
-        private static ConnectionMultiplexer OpenRedisConnection(string hostname)
+        private static ConnectionMultiplexer OpenRedisConnection()
         {
-            // Use IP address to workaround https://github.com/StackExchange/StackExchange.Redis/issues/410
-            var ipAddress = GetIp(hostname);
-            Console.WriteLine($"Found redis at {ipAddress}");
+            ConnectionMultiplexer connection = null;
 
-            while (true)
+            while (connection == null)
             {
                 try
                 {
-                    Console.Error.WriteLine("Connecting to redis");
-                    return ConnectionMultiplexer.Connect(ipAddress);
+                    var host = Environment.GetEnvironmentVariable("REDIS_HOST") ?? "redis";
+                    var port = int.TryParse(Environment.GetEnvironmentVariable("REDIS_PORT"), out var p) ? p : 6379;
+                    var user = Environment.GetEnvironmentVariable("REDIS_USERNAME") ?? Environment.GetEnvironmentVariable("VALKEY_USER");
+                    var password = Environment.GetEnvironmentVariable("REDIS_PASSWORD") ?? Environment.GetEnvironmentVariable("VALKEY_PASSWORD");
+                   
+
+		// Diagnostic logging
+       		    Console.WriteLine("----- REDIS/VALKEY CREDENTIAL DIAGNOSTICS -----");
+	            Console.WriteLine($"Host: {host}:{port}");
+	            Console.WriteLine($"Raw User: '{(user ?? "NULL")}' (Length: {user?.Length ?? 0})");
+        	    Console.WriteLine($"Raw Password: '{(password ?? "NULL")}' (Length: {password?.Length ?? 0})");
+	            Console.WriteLine("------------------------------------------------");
+
+         	    user = user?.Trim();
+            	    password = password?.Trim();
+
+	            var sslEnv = Environment.GetEnvironmentVariable("REDIS_SSL");
+        	    bool useSsl = sslEnv == "true" || sslEnv == "1" || (host != "redis" && !string.IsNullOrEmpty(host));
+
+	            if (string.IsNullOrEmpty(password))
+	            {
+        	        throw new InvalidOperationException("REDIS_PASSWORD is null or empty.");
+	            }
+ 
+                    var config = new ConfigurationOptions
+                    {
+                        EndPoints = { { host, port } },
+			Password = password,
+        	        Ssl = useSsl,
+			SslHost = host, // Required: forces TLS SNI header to match the cluster DNS name
+	                AbortOnConnectFail = true, // Fail fast so the catch block handles bad auth/timeout
+                        ConnectTimeout = 10000,
+                        SyncTimeout = 10000
+                    };
+
+// If the user is empty or "default", StackExchange.Redis expects User to be null
+	            if (!string.IsNullOrEmpty(user) && user != "default")
+            	    {
+                	config.User = user;
+            	    }
+            	    else
+	            {
+                	config.User = null;
+               	    }
+                    // AWS ElastiCache Serverless / Valkey TLS certs
+                    if (useSsl)
+                    {
+                        config.CertificateValidation += (sender, certificate, chain, errors) => true;
+                    }
+
+                    connection = ConnectionMultiplexer.Connect(config);
                 }
-                catch (RedisConnectionException)
+                catch (Exception ex)
                 {
-                    Console.Error.WriteLine("Waiting for redis");
+		    Console.Error.WriteLine($"Waiting for Redis/Valkey: {ex.Message}");
+	            connection = null;
                     Thread.Sleep(1000);
                 }
             }
-        }
 
-        private static string GetIp(string hostname)
-            => Dns.GetHostEntryAsync(hostname)
-                .Result
-                .AddressList
-                .First(a => a.AddressFamily == AddressFamily.InterNetwork)
-                .ToString();
+            Console.WriteLine("Connected to Redis/Valkey");
+            return connection;
+        }
 
         private static void UpdateVote(NpgsqlConnection connection, string voterId, string vote)
         {
@@ -136,8 +187,8 @@ namespace Worker
             try
             {
                 command.CommandText = "INSERT INTO votes (id, vote) VALUES (@id, @vote)";
-                command.Parameters.AddWithValue("@id", voterId);
-                command.Parameters.AddWithValue("@vote", vote);
+                AddNamedParameter(command, "id", voterId);
+                AddNamedParameter(command, "vote", vote);
                 command.ExecuteNonQuery();
             }
             catch (DbException)
@@ -145,10 +196,15 @@ namespace Worker
                 command.CommandText = "UPDATE votes SET vote = @vote WHERE id = @id";
                 command.ExecuteNonQuery();
             }
-            finally
-            {
-                command.Dispose();
-            }
+        }
+
+        private static void AddNamedParameter(DbCommand command, string name, string value)
+        {
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = name;
+            parameter.Value = value;
+            command.Parameters.Add(parameter);
         }
     }
 }
+

@@ -1,0 +1,148 @@
+name: Infrastructure & ECS Deployment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+env:
+  AWS_REGION: eu-north-1
+  AWS_ROLE_ARN: arn:aws:iam::597936860210:role/github-oidc-pipeline-role1
+  ECS_CLUSTER: aca-voting-app-cluster
+  APP_NAME: aca-voting-app
+
+jobs:
+  voting-terraform-ci:
+    name: 1. Infrastructure CI/CD
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.15.8"
+
+      - name: Configure AWS Credentials via GitHub OIDC Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME || env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        run: terraform plan -no-color -input=false
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        run: terraform apply -auto-approve -input=false
+
+  build-and-push:
+    name: 2. Build and Push Docker Images
+    needs: voting-terraform-ci
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    outputs:
+      ecr_registry: ${{ steps.login-ecr.outputs.registry }}
+      image_tag: ${{ steps.prep.outputs.tag }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate Image Tag
+        id: prep
+        run: echo "tag=${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
+
+      - name: Configure AWS Credentials via GitHub OIDC Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME || env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Vote Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.prep.outputs.tag }}
+        run: |
+          REPO_URI="$ECR_REGISTRY/${APP_NAME}-vote"
+          echo "Building $REPO_URI:$IMAGE_TAG..."
+          docker build -t $REPO_URI:$IMAGE_TAG -t $REPO_URI:latest ./vote
+          docker push $REPO_URI:$IMAGE_TAG
+          docker push $REPO_URI:latest
+
+      - name: Build and Push Result Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.prep.outputs.tag }}
+        run: |
+          REPO_URI="$ECR_REGISTRY/${APP_NAME}-result"
+          echo "Building $REPO_URI:$IMAGE_TAG..."
+          docker build -t $REPO_URI:$IMAGE_TAG -t $REPO_URI:latest ./result
+          docker push $REPO_URI:$IMAGE_TAG
+          docker push $REPO_URI:latest
+
+      - name: Build and Push Worker Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.prep.outputs.tag }}
+        run: |
+          REPO_URI="$ECR_REGISTRY/${APP_NAME}-worker"
+          echo "Building $REPO_URI:$IMAGE_TAG..."
+          docker build -t $REPO_URI:$IMAGE_TAG -t $REPO_URI:latest ./worker
+          docker push $REPO_URI:$IMAGE_TAG
+          docker push $REPO_URI:latest
+
+  deploy-to-ecs:
+    name: 3. Deploy to ECS Services
+    needs: [voting-terraform-ci, build-and-push]
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials via GitHub OIDC Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME || env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Force New ECS Deployment for Services
+        run: |
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service vote --force-new-deployment
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service result --force-new-deployment
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service worker --force-new-deployment
+
+      - name: Wait for Services to Stabilize
+        run: |
+          aws ecs wait services-stable --cluster ${{ env.ECS_CLUSTER }} --services vote
+          aws ecs wait services-stable --cluster ${{ env.ECS_CLUSTER }} --services result
+          aws ecs wait services-stable --cluster ${{ env.ECS_CLUSTER }} --services worker

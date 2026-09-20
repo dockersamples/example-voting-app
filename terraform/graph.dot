@@ -1,0 +1,63 @@
+digraph G {
+  compound = "true"
+  newrank = "true"
+  subgraph "root" {
+    "[root] data.aws_route53_zone.primary (expand)" [label = "data.aws_route53_zone.primary", shape = "box"]
+    "[root] data.aws_ssm_parameter.vpc_id (expand)" [label = "data.aws_ssm_parameter.vpc_id", shape = "box"]
+    "[root] data.aws_subnets.private (expand)" [label = "data.aws_subnets.private", shape = "box"]
+    "[root] data.aws_subnets.public (expand)" [label = "data.aws_subnets.public", shape = "box"]
+    "[root] data.aws_vpc.shared (expand)" [label = "data.aws_vpc.shared", shape = "box"]
+    "[root] data.terraform_remote_state.common (expand)" [label = "data.terraform_remote_state.common", shape = "box"]
+    
+    "[root] module.alb" [label = "module.alb", shape = "component"]
+    "[root] module.aurora" [label = "module.aurora", shape = "component"]
+    "[root] module.ecr_result" [label = "module.ecr_result", shape = "component"]
+    "[root] module.ecr_vote" [label = "module.ecr_vote", shape = "component"]
+    "[root] module.ecr_worker" [label = "module.ecr_worker", shape = "component"]
+    "[root] module.ecs" [label = "module.ecs", shape = "component"]
+
+    "[root] aws_elasticache_replication_group.valkey (expand)" [label = "aws_elasticache_replication_group.valkey", shape = "box"]
+    "[root] aws_elasticache_subnet_group.valkey (expand)" [label = "aws_elasticache_subnet_group.valkey", shape = "box"]
+    "[root] aws_security_group.vote_task (expand)" [label = "aws_security_group.vote_task", shape = "box"]
+    "[root] aws_security_group.result_task (expand)" [label = "aws_security_group.result_task", shape = "box"]
+    "[root] aws_security_group.worker_task (expand)" [label = "aws_security_group.worker_task", shape = "box"]
+    "[root] aws_security_group.valkey (expand)" [label = "aws_security_group.valkey", shape = "box"]
+    "[root] aws_secretsmanager_secret.valkey (expand)" [label = "aws_secretsmanager_secret.valkey", shape = "box"]
+    "[root] aws_secretsmanager_secret.postgres (expand)" [label = "aws_secretsmanager_secret.postgres", shape = "box"]
+    "[root] aws_ecs_task_definition.vote (expand)" [label = "aws_ecs_task_definition.vote", shape = "box"]
+    "[root] aws_ecs_task_definition.result (expand)" [label = "aws_ecs_task_definition.result", shape = "box"]
+    "[root] aws_ecs_task_definition.worker (expand)" [label = "aws_ecs_task_definition.worker", shape = "box"]
+    "[root] aws_ecs_service.vote (expand)" [label = "aws_ecs_service.vote", shape = "box"]
+    "[root] aws_ecs_service.result (expand)" [label = "aws_ecs_service.result", shape = "box"]
+    "[root] aws_ecs_service.worker (expand)" [label = "aws_ecs_service.worker", shape = "box"]
+    "[root] aws_route53_record.vote (expand)" [label = "aws_route53_record.vote", shape = "box"]
+    "[root] aws_route53_record.result (expand)" [label = "aws_route53_record.result", shape = "box"]
+
+    # Edges
+    "[root] data.aws_vpc.shared (expand)" -> "[root] data.aws_ssm_parameter.vpc_id (expand)"
+    "[root] data.aws_subnets.public (expand)" -> "[root] data.aws_vpc.shared (expand)"
+    "[root] data.aws_subnets.private (expand)" -> "[root] data.aws_vpc.shared (expand)"
+
+    "[root] aws_security_group.vote_task (expand)" -> "[root] module.alb"
+    "[root] aws_security_group.result_task (expand)" -> "[root] module.alb"
+    "[root] aws_security_group.valkey (expand)" -> "[root] aws_security_group.vote_task (expand)"
+    "[root] aws_security_group.valkey (expand)" -> "[root] aws_security_group.worker_task (expand)"
+
+    "[root] module.aurora" -> "[root] aws_security_group.result_task (expand)"
+    "[root] module.aurora" -> "[root] aws_security_group.worker_task (expand)"
+    "[root] aws_elasticache_replication_group.valkey (expand)" -> "[root] aws_security_group.valkey (expand)"
+    "[root] aws_elasticache_replication_group.valkey (expand)" -> "[root] aws_elasticache_subnet_group.valkey (expand)"
+
+    "[root] aws_ecs_service.vote (expand)" -> "[root] aws_ecs_task_definition.vote (expand)"
+    "[root] aws_ecs_service.vote (expand)" -> "[root] aws_security_group.vote_task (expand)"
+    "[root] aws_ecs_service.result (expand)" -> "[root] aws_ecs_task_definition.result (expand)"
+    "[root] aws_ecs_service.result (expand)" -> "[root] aws_security_group.result_task (expand)"
+    "[root] aws_ecs_service.worker (expand)" -> "[root] aws_ecs_task_definition.worker (expand)"
+    "[root] aws_ecs_service.worker (expand)" -> "[root] aws_security_group.worker_task (expand)"
+
+    "[root] aws_route53_record.vote (expand)" -> "[root] module.alb"
+    "[root] aws_route53_record.vote (expand)" -> "[root] data.aws_route53_zone.primary (expand)"
+    "[root] aws_route53_record.result (expand)" -> "[root] module.alb"
+    "[root] aws_route53_record.result (expand)" -> "[root] data.aws_route53_zone.primary (expand)"
+  }
+}

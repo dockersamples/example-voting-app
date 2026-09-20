@@ -1,0 +1,27 @@
+aws_region            = "eu-north-1"
+app_name              = "aca-voting-app"
+environment           = "production"
+
+common_state_bucket   = "tfstate-597936860210-eu-north-1-an"
+common_state_key      = "aca-terraform-common/terraform.tfstate"
+common_state_region   = "eu-north-1"
+
+domain_name           = "sergey.c-loud.am"
+vote_subdomain        = "vote"
+result_subdomain      = "result"
+
+vote_image_tag        = "latest"
+result_image_tag      = "latest"
+worker_image_tag      = "latest"
+
+container_cpu         = 256
+container_memory      = 512
+
+vote_desired_count    = 1
+result_desired_count  = 1
+worker_desired_count  = 1
+
+redis_password        = "redispassword"
+postgres_db           = "postgres"
+postgres_user         = "postgres"
+postgres_password     = "postgres"
