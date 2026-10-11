@@ -127,3 +127,31 @@ button.b{
   width:50%;
   height:100%;
 }
+
+/* Candidate button colours */
+#choice button.a {
+  background-color: #1aaaf8;
+}
+
+#choice button.b {
+  background-color: #00cbca;
+}
+
+#choice button.c {
+  background-color: #e4260d;
+}
+
+#choice button.a:hover,
+#choice button.a:focus {
+  background-color: #1488c6;
+}
+
+#choice button.b:hover,
+#choice button.b:focus {
+  background-color: #00a2a1;
+}
+
+#choice button.c:hover,
+#choice button.c:focus {
+  background-color: #b51d0a;
+}
