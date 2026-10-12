@@ -23,4 +23,3 @@ jobs:
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: https://app.us4.sysdig.com
           stop-on-processing-error: true
-          minimum-severity: critical
