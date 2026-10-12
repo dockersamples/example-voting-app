@@ -1,0 +1,28 @@
+﻿name: Sysdig Security Scan
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan-vote:
+    name: Build and Scan Vote
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Vote image
+        run: docker build -t sysdig-assessment-vote:${{ github.sha }} ./vote
+
+      - name: Scan Vote with Sysdig Secure
+        uses: sysdiglabs/scan-action@v6
+        with:
+          image-tag: sysdig-assessment-vote:${{ github.sha }}
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://app.us4.sysdig.com
+          stop-on-processing-error: true
+          stop-on-failed-policy-eval: false
