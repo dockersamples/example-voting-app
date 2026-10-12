@@ -1,0 +1,26 @@
+name: Sysdig IaC Security Scan
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan-terraform:
+    name: Scan Terraform Configuration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Scan Terraform with Sysdig Secure
+        uses: sysdiglabs/scan-action@v6
+        with:
+          mode: iac
+          iac-scan-path: ./security/terraform
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://app.us4.sysdig.com
+          stop-on-processing-error: true
+          minimum-severity: critical
