@@ -1,4 +1,4 @@
-﻿name: Sysdig Security Scan
+name: Sysdig Security Scan
 
 on:
   workflow_dispatch:
@@ -7,21 +7,29 @@ permissions:
   contents: read
 
 jobs:
-  scan-vote:
-    name: Build and Scan Vote
+  security-scan:
+    name: Scan ${{ matrix.service }}
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - vote
+          - result
+          - worker
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Vote image
-        run: docker build -t sysdig-assessment-vote:${{ github.sha }} ./vote
+      - name: Build container image
+        run: docker build --pull -t sysdig-assessment-${{ matrix.service }}:${{ github.sha }} ./${{ matrix.service }}
 
-      - name: Scan Vote with Sysdig Secure
+      - name: Scan image with Sysdig Secure
         uses: sysdiglabs/scan-action@v6
         with:
-          image-tag: sysdig-assessment-vote:${{ github.sha }}
+          image-tag: sysdig-assessment-${{ matrix.service }}:${{ github.sha }}
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: https://app.us4.sysdig.com
           stop-on-processing-error: true
