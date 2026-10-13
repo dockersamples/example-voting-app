@@ -18,5 +18,5 @@ spec:
       - image: dockersamples/examplevotingapp_vote
         name: vote
         ports:
-        - containerPort: 80
+        - containerPort: 8080
           name: vote

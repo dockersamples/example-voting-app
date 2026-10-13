@@ -13,7 +13,7 @@ services:
 
   vote:
     build: ../vote/
-    ports: ["80"]
+    ports: ["8080"]
     depends_on:
       - redis
       - db
@@ -23,7 +23,7 @@ services:
 
   result:
     build: .
-    ports: ["80"]
+    ports: ["8081"]
     depends_on:
       - redis
       - db

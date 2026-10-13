@@ -24,7 +24,7 @@ services:
   vote:
     image: dockersamples/examplevotingapp_vote
     ports:
-      - 8080:80
+      - 8080:8080
     networks:
       - frontend
     deploy:
@@ -33,7 +33,7 @@ services:
   result:
     image: dockersamples/examplevotingapp_result
     ports:
-      - 8081:80
+      - 8081:8081
     networks:
       - backend
 

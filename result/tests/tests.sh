@@ -1,13 +1,13 @@
 #!/bin/sh
 
-while ! timeout 1 bash -c "echo > /dev/tcp/vote/80"; do
+while ! timeout 1 bash -c "echo > /dev/tcp/vote/8080"; do
     sleep 1
 done
 
-curl -sS -X POST --data "vote=b" http://vote > /dev/null
+curl -sS -X POST --data "vote=b" http://vote:8080 > /dev/null
 sleep 10
 
-if phantomjs render.js http://result | grep -q '1 vote'; then
+if phantomjs render.js http://result:8081 | grep -q '1 vote'; then
   echo -e "\\e[42m------------"
   echo -e "\\e[92mTests passed"
   echo -e "\\e[42m------------"
