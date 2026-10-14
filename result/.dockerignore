@@ -1,1 +1,9 @@
-node_modules/
+﻿.git
+.env
+.env.*
+!.env.example
+node_modules
+npm-debug.log*
+coverage
+.nyc_output
+*.log
