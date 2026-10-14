@@ -8,6 +8,7 @@ import logging
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
+option_c = os.getenv('OPTION_C', "Birds")
 hostname = socket.gethostname()
 
 app = Flask(__name__)
@@ -29,17 +30,39 @@ def hello():
 
     vote = None
 
+
     if request.method == 'POST':
+        vote = request.form.get('vote')
+
+        if vote not in ('a', 'b', 'c'):
+            return 'Invalid voting option.', 400
+
+
         redis = get_redis()
-        vote = request.form['vote']
+
+        # Reserve this browser's voter ID only if it has not voted before.
+        reservation_key = 'voted:' + voter_id
+        reserved = redis.set(reservation_key, vote, nx=True)
+
+        if not reserved:
+            return 'A vote has already been submitted from this browser.', 409
+
         app.logger.info('Received vote for %s', vote)
         data = json.dumps({'voter_id': voter_id, 'vote': vote})
-        redis.rpush('votes', data)
+
+        try:
+            redis.rpush('votes', data)
+        except Exception:
+            # Release the reservation if queueing fails.
+            redis.delete(reservation_key)
+            raise
+
 
     resp = make_response(render_template(
         'index.html',
         option_a=option_a,
         option_b=option_b,
+        option_c=option_c,
         hostname=hostname,
         vote=vote,
     ))

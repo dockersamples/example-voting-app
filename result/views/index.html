@@ -2,7 +2,7 @@
 <html ng-app="catsvsdogs">
   <head>
     <meta charset="utf-8">
-    <title>Cats vs Dogs -- Result</title>
+    <title>Votes Cast -- Result</title>
     <base href="/index.html">
     <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
     <meta name="keywords" content="docker-compose, docker, stack">
@@ -11,24 +11,35 @@
   </head>
   <body ng-controller="statsCtrl" >
      <div id="background-stats">
-       <div id="background-stats-1">
-       </div><!--
-      --><div id="background-stats-2">
-      </div>
+      <div id="background-stats-1"></div>
+      <div id="background-stats-2"></div>
+      <div id="background-stats-3"></div>
+    </div>
     </div>
     <div id="content-container">
       <div id="content-container-center">
-        <div id="choice">
-          <div class="choice cats">
-            <div class="label">Cats</div>
-            <div class="stat">{{aPercent | number:1}}%</div>
-          </div>
-          <div class="divider"></div>
-          <div class="choice dogs">
-            <div class="label">Dogs</div>
-            <div class="stat">{{bPercent | number:1}}%</div>
-          </div>
-        </div>
+
+<div id="choice">
+  <div class="choice a">
+    <div class="label">NDC / Peter Obi</div>
+    <div class="stat">{{aPercent | number:1}}%</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="choice b">
+    <div class="label">ADC / Atiku</div>
+    <div class="stat">{{bPercent | number:1}}%</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="choice c">
+    <div class="label">APC / Tinubu</div>
+    <div class="stat">{{cPercent | number:1}}%</div>
+  </div>
+</div>
+
       </div>
     </div>
     <div id="result">
