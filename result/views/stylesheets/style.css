@@ -26,18 +26,6 @@ body{
   background-color: #c0c9ce;
 }
 
-#background-stats-1{
-  background-color: #2196f3;
-}
-
-#background-stats-2{
-  background-color: #ff9800;
-}
-
-#background-stats-3{
-  background-color: #e4260d;
-}
-
 #content-container{
   z-index:2;
   position:relative;
@@ -116,7 +104,6 @@ body{
   color: #e4260d;
 }
 
-
 #background-stats {
   position: fixed;
   inset: 0;
@@ -128,12 +115,24 @@ body{
 }
 
 #background-stats div {
-  display: block;
-  flex: 1;
-  width: auto;
+  flex: 0 0 auto;
   height: 100%;
   margin: 0;
+  transition: width 600ms ease-in-out;
 }
+
+#background-stats-1 {
+  background-color: #2196f3;
+}
+
+#background-stats-2 {
+  background-color: #ff9800;
+}
+
+#background-stats-3 {
+  background-color: #e4260d;
+}
+
 
 @media (max-width: 650px) {
   #content-container {

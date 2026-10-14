@@ -14,18 +14,25 @@
 <body ng-controller="statsCtrl">
 
   <!-- Background sections -->
+  
   <div id="background-stats">
-    <div id="background-stats-1"></div>
-    <div id="background-stats-2"></div>
-    <div id="background-stats-3"></div>
+    <div id="background-stats-1"
+       ng-style="{width: aPercent + '%'}"></div>
+
+    <div id="background-stats-2"
+       ng-style="{width: bPercent + '%'}"></div>
+
+    <div id="background-stats-3"
+       ng-style="{width: cPercent + '%'}"></div>
   </div>
+
 
   <!-- Main voting panel -->
   <div id="content-container">
     <div id="content-container-center">
 
       <div id="choice">
-        
+
         <div class="choice a">
           <div class="label">NDC / PETER OBI</div>
           <div class="stat">{{aPercent | number:1}}%</div>
