@@ -74,7 +74,7 @@ jobs:
           ignore-unfixed: true
           exit-code: '1'
           format: table
-          trivy-args: --skip-files "**/pip/_vendor/bom.cdx.json"
+          skip-files: "**/pip/_vendor/bom.cdx.json"
 
       - name: Scan result image with Trivy
         if: always() && steps.build-images.outcome == 'success'
