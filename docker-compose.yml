@@ -51,8 +51,9 @@ services:
     networks:
       - back-tier
 
-  redis:
-    image: redis:alpine
+ 
+    redis:
+    image: redis:alpine@sha256:<digest-you-got>
     volumes:
       - "./healthchecks:/healthchecks"
     healthcheck:
@@ -61,8 +62,9 @@ services:
     networks:
       - back-tier
 
-  db:
-    image: postgres:15-alpine
+  
+    db:
+    image: postgres:15-alpine@sha256:<postgres-digest>
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
