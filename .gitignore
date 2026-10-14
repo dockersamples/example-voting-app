@@ -5,3 +5,12 @@ obj/
 .vs/
 node_modules/
 /vote/requirements.txt.backup
+
+# Terraform local files and sensitive state
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+crash.*.log
