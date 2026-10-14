@@ -4,20 +4,20 @@
 
 services:
   vote:
-    build: 
+    build:
       context: ./vote
       target: dev
     depends_on:
       redis:
         condition: service_healthy
-    healthcheck: 
+    healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 15s
       timeout: 5s
       retries: 3
       start_period: 10s
     volumes:
-     - ./vote:/usr/local/app
+      - ./vote:/usr/local/app
     ports:
       - "8080:80"
     networks:
@@ -30,7 +30,7 @@ services:
     entrypoint: nodemon --inspect=0.0.0.0 server.js
     depends_on:
       db:
-        condition: service_healthy 
+        condition: service_healthy
     volumes:
       - ./result:/usr/local/app
     ports:
@@ -45,15 +45,14 @@ services:
       context: ./worker
     depends_on:
       redis:
-        condition: service_healthy 
+        condition: service_healthy
       db:
-        condition: service_healthy 
+        condition: service_healthy
     networks:
       - back-tier
 
- 
-    redis:
-    image: redis:alpine@sha256:<digest-you-got>
+  redis:
+    image: redis:alpine@sha256:REPLACE_WITH_REDIS_DIGEST
     volumes:
       - "./healthchecks:/healthchecks"
     healthcheck:
@@ -62,9 +61,8 @@ services:
     networks:
       - back-tier
 
-  
-    db:
-    image: postgres:15-alpine@sha256:<postgres-digest>
+  db:
+    image: postgres:15-alpine@sha256:REPLACE_WITH_POSTGRES_DIGEST
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
@@ -85,7 +83,7 @@ services:
     profiles: ["seed"]
     depends_on:
       vote:
-        condition: service_healthy 
+        condition: service_healthy
     networks:
       - front-tier
     restart: "no"
