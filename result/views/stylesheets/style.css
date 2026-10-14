@@ -15,7 +15,7 @@ body{
 }
 
 .divider{
-  height: 150px;
+  height: 120px;
   width:2px;
   background-color: #C0C9CE;
   position: relative;
@@ -29,7 +29,11 @@ body{
 }
 
 #background-stats-2{
-  background-color: #00cbca;
+  background-color: #ff9800;
+}
+
+#background-stats-3{
+  background-color: #e4260d;
 }
 
 #content-container{
@@ -64,8 +68,8 @@ body{
   vertical-align:middle;
   font-size:40px;
   font-weight: 600;
-  width: 450px;
-  height: 200px;
+  width: 650px;
+  height: 240px;
 }
 #choice a{
   text-decoration:none;
@@ -76,27 +80,32 @@ body{
 }
 
 #choice .choice{
-  width: 49%;
+  width: 33.333%;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  text-align: left;
-  padding-left: 50px;
+  text-align: center;
+  padding: 0 10px;
+  float: left;
+  font-size: 22px;
 }
 
 #choice .choice .label{
   text-transform: uppercase;
 }
 
-#choice .choice.dogs{
-  color: #00cbca;
-  float: right;
+#choice .choice.a{
+  color: #2196f3;
 }
 
-#choice .choice.cats{
-  color: #2196f3;
-  float: left;
+#choice .choice.b{
+  color: #ff9800;
 }
+
+#choice .choice.c{
+  color: #e4260d;
+}
+
 #background-stats{
   z-index:1;
   height:100%;

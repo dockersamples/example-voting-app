@@ -1,0 +1,45 @@
+
+name: Validate Voting App
+
+on:
+  push:
+    branches:
+      - main
+      - feature/three-voting-options
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate and Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Check Python syntax
+        run: python -m py_compile vote/app.py
+
+      - name: Check patch formatting
+        run: git diff --check origin/main...HEAD
+
+      - name: Build Vote image
+        run: docker build -t voting-app-vote:ci ./vote
+
+      - name: Build Result image
+        run: docker build -t voting-app-result:ci ./result
+
+      - name: Build Worker image
+        run: docker build -t voting-app-worker:ci ./worker

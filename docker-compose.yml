@@ -7,6 +7,10 @@ services:
     build: 
       context: ./vote
       target: dev
+    environment:
+      OPTION_A: "NDC / Peter Obi"
+      OPTION_B: "ADC / Atiku"
+      OPTION_C: "APC / Tinubu"
     depends_on:
       redis:
         condition: service_healthy
