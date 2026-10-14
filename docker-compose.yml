@@ -27,7 +27,6 @@ services:
   result:
     build: ./result
     # use nodemon rather than node for local dev
-    entrypoint: nodemon --inspect=0.0.0.0 server.js
     depends_on:
       db:
         condition: service_healthy 
