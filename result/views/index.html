@@ -1,54 +1,65 @@
+
 <!DOCTYPE html>
 <html ng-app="catsvsdogs">
-  <head>
-    <meta charset="utf-8">
-    <title>Votes Cast -- Result</title>
-    <base href="/index.html">
-    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
-    <meta name="keywords" content="docker-compose, docker, stack">
-    <meta name="author" content="Docker">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body ng-controller="statsCtrl" >
-     <div id="background-stats">
-      <div id="background-stats-1"></div>
-      <div id="background-stats-2"></div>
-      <div id="background-stats-3"></div>
-    </div>
-    </div>
-    <div id="content-container">
-      <div id="content-container-center">
+<head>
+  <meta charset="utf-8">
+  <title>Votes Cast -- Result</title>
+  <base href="/index.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="docker-compose, docker, stack">
+  <meta name="author" content="Docker">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
 
-<div id="choice">
-  <div class="choice a">
-    <div class="label">NDC / Peter Obi</div>
-    <div class="stat">{{aPercent | number:1}}%</div>
+<body ng-controller="statsCtrl">
+
+  <!-- Background sections -->
+  <div id="background-stats">
+    <div id="background-stats-1"></div>
+    <div id="background-stats-2"></div>
+    <div id="background-stats-3"></div>
   </div>
 
-  <div class="divider"></div>
+  <!-- Main voting panel -->
+  <div id="content-container">
+    <div id="content-container-center">
 
-  <div class="choice b">
-    <div class="label">ADC / Atiku</div>
-    <div class="stat">{{bPercent | number:1}}%</div>
-  </div>
+      <div id="choice">
 
-  <div class="divider"></div>
+        <div class="choice a">
+          <div class="label">NDC / PETER OBI</div>
+          <div class="stat">{{aPercent | number:1}}%</div>
+        </div>
 
-  <div class="choice c">
-    <div class="label">APC / Tinubu</div>
-    <div class="stat">{{cPercent | number:1}}%</div>
-  </div>
-</div>
+        <div class="divider"></div>
+
+        <div class="choice b">
+          <div class="label">ADC / ATIKU</div>
+          <div class="stat">{{bPercent | number:1}}%</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="choice c">
+          <div class="label">APC / TINUBU</div>
+          <div class="stat">{{cPercent | number:1}}%</div>
+        </div>
 
       </div>
+
     </div>
-    <div id="result">
-      <span ng-if="total == 0">No votes yet</span>
-      <span ng-if="total == 1">{{total}} vote</span>
-      <span ng-if="total >= 2">{{total}} votes</span>
-    </div>
-    <script src="socket.io.js"></script>
-    <script src="angular.min.js"></script>
-    <script src="app.js"></script>
-  </body>
+  </div>
+
+  <!-- Vote count -->
+  <div id="result">
+    <span ng-if="total == 0">No votes yet</span>
+    <span ng-if="total == 1">{{total}} vote</span>
+    <span ng-if="total >= 2">{{total}} votes</span>
+  </div>
+
+  <script src="socket.io.js"></script>
+  <script src="angular.min.js"></script>
+  <script src="app.js"></script>
+
+</body>
 </html>
