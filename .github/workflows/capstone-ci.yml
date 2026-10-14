@@ -65,7 +65,7 @@ jobs:
 
       - name: Scan vote image with Trivy
         if: always() && steps.build-images.outcome == 'success'
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
           image-ref: voting-app-vote:ci
           scan-type: image
@@ -78,7 +78,7 @@ jobs:
 
       - name: Scan result image with Trivy
         if: always() && steps.build-images.outcome == 'success'
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
           image-ref: voting-app-result:ci
           scan-type: image
@@ -90,7 +90,7 @@ jobs:
 
       - name: Scan worker image with Trivy
         if: always() && steps.build-images.outcome == 'success'
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
           image-ref: voting-app-worker:ci
           scan-type: image
