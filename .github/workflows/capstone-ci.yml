@@ -101,28 +101,31 @@ jobs:
           format: table
 
   publish:
-    name: Publish images to GHCR
+    name: Publish images to Amazon ECR
     needs: validate-build-scan
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
-      packages: write
+      id-token: write
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::185529490184:role/github-actions-assets-liabilities-ecr
+          aws-region: eu-west-1
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish vote image
         uses: docker/build-push-action@v6
@@ -131,7 +134,9 @@ jobs:
           file: ./vote/Dockerfile
           target: final
           push: true
-          tags: ghcr.io/dalauren12345/voting-app-vote:${{ github.sha }}
+          tags: |
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-vote:${{ github.sha }}
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-vote:latest
 
       - name: Publish result image
         uses: docker/build-push-action@v6
@@ -139,7 +144,9 @@ jobs:
           context: ./result
           file: ./result/Dockerfile
           push: true
-          tags: ghcr.io/dalauren12345/voting-app-result:${{ github.sha }}
+          tags: |
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-result:${{ github.sha }}
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-result:latest
 
       - name: Publish worker image
         uses: docker/build-push-action@v6
@@ -147,4 +154,6 @@ jobs:
           context: ./worker
           file: ./worker/Dockerfile
           push: true
-          tags: ghcr.io/dalauren12345/voting-app-worker:${{ github.sha }}
+          tags: |
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-worker:${{ github.sha }}
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-worker:latest

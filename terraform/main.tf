@@ -120,3 +120,75 @@ output "cluster_name" {
 output "cluster_endpoint" {
   value = aws_eks_cluster.voting.endpoint
 }
+
+# GitHub Actions OIDC provider
+resource "aws_iam_openid_connect_provider" "github" {
+  url = "https://token.actions.githubusercontent.com"
+
+  client_id_list = ["sts.amazonaws.com"]
+
+  thumbprint_list = [
+    "6938fd4d98bab03faadb97b34396831e3780aea1"
+  ]
+}
+
+# Trust only this repository's main branch
+resource "aws_iam_role" "github_actions_ecr" {
+  name = "github-actions-assets-liabilities-ecr"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Federated = aws_iam_openid_connect_provider.github.arn
+      }
+      Action = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+          "token.actions.githubusercontent.com:sub" = "repo:dalauren12345/example-voting-app:ref:refs/heads/main"
+        }
+      }
+    }]
+  })
+}
+
+# Allow image publishing only to the three application repositories
+resource "aws_iam_role_policy" "github_actions_ecr" {
+  name = "publish-assets-liabilities-images"
+  role = aws_iam_role.github_actions_ecr.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:PutImage",
+          "ecr:BatchGetImage"
+        ]
+        Resource = [
+          "arn:aws:ecr:eu-west-1:185529490184:repository/assets-liabilities-vote",
+          "arn:aws:ecr:eu-west-1:185529490184:repository/assets-liabilities-result",
+          "arn:aws:ecr:eu-west-1:185529490184:repository/assets-liabilities-worker"
+        ]
+      }
+    ]
+  })
+}
+
+output "github_actions_role_arn" {
+  value = aws_iam_role.github_actions_ecr.arn
+}
