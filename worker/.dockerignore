@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+TestResults/
