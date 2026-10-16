@@ -1,0 +1,17 @@
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+TestResults/
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.tmp

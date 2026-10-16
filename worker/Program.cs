@@ -16,7 +16,8 @@ namespace Worker
         {
             try
             {
-                var pgsql = OpenDbConnection("Server=db;Username=postgres;Password=postgres;");
+                var pgsql = OpenDbConnection(
+                        $"Server=db;Username=postgres;Password={Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")};");
                 var redisConn = OpenRedisConnection("redis");
                 var redis = redisConn.GetDatabase();
 
@@ -46,7 +47,8 @@ namespace Worker
                         if (!pgsql.State.Equals(System.Data.ConnectionState.Open))
                         {
                             Console.WriteLine("Reconnecting DB");
-                            pgsql = OpenDbConnection("Server=db;Username=postgres;Password=postgres;");
+                            pgsql = OpenDbConnection(
+                                $"Server=db;Username=postgres;Password={Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")};");
                         }
                         else
                         { // Normal +1 vote requested
@@ -130,25 +132,25 @@ namespace Worker
                 .First(a => a.AddressFamily == AddressFamily.InterNetwork)
                 .ToString();
 
+
         private static void UpdateVote(NpgsqlConnection connection, string voterId, string vote)
         {
-            var command = connection.CreateCommand();
-            try
+            using (var command = connection.CreateCommand())
             {
-                command.CommandText = "INSERT INTO votes (id, vote) VALUES (@id, @vote)";
-                command.Parameters.AddWithValue("@id", voterId);
-                command.Parameters.AddWithValue("@vote", vote);
-                command.ExecuteNonQuery();
+                try
+                {
+                    command.CommandText = "INSERT INTO votes (id, vote) VALUES (@id, @vote)";
+                    command.Parameters.AddWithValue("@id", voterId);
+                    command.Parameters.AddWithValue("@vote", vote);
+                    command.ExecuteNonQuery();
+
+                    Console.WriteLine($"Vote accepted for voter '{voterId}'");
+                }
+                catch (PostgresException ex) when (ex.SqlState == "23505")
+                {
+                    Console.WriteLine($"Duplicate vote rejected for voter '{voterId}'");
+                }
             }
-            catch (DbException)
-            {
-                command.CommandText = "UPDATE votes SET vote = @vote WHERE id = @id";
-                command.ExecuteNonQuery();
-            }
-            finally
-            {
-                command.Dispose();
-            }
-        }
-    }
+}
+}
 }
