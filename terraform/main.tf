@@ -6,11 +6,16 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
   }
 }
 
 provider "aws" {
-  region = "eu-west-1"
+  region  = "eu-west-1"
+  profile = "terraform-process"
 }
 
 data "aws_vpc" "default" {
@@ -101,9 +106,9 @@ resource "aws_eks_node_group" "voting" {
   instance_types = ["t3.small"]
 
   scaling_config {
-    desired_size = 1
+    desired_size = 2
     min_size     = 1
-    max_size     = 1
+    max_size     = 2
   }
 
   depends_on = [
@@ -191,4 +196,59 @@ resource "aws_iam_role_policy" "github_actions_ecr" {
 
 output "github_actions_role_arn" {
   value = aws_iam_role.github_actions_ecr.arn
+}
+
+# OIDC provider for the EKS cluster (used by workload IAM roles)
+data "tls_certificate" "eks_oidc" {
+  url = aws_eks_cluster.voting.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "eks" {
+  url = aws_eks_cluster.voting.identity[0].oidc[0].issuer
+
+  client_id_list = ["sts.amazonaws.com"]
+
+  thumbprint_list = [
+    data.tls_certificate.eks_oidc.certificates[0].sha1_fingerprint
+  ]
+}
+
+# IAM role for the Amazon EBS CSI driver
+resource "aws_iam_role" "ebs_csi_driver" {
+  name = "assets-liabilities-ebs-csi-driver-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Federated = aws_iam_openid_connect_provider.eks.arn
+      }
+      Action = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "${replace(aws_eks_cluster.voting.identity[0].oidc[0].issuer, "https://", "")}:aud" = "sts.amazonaws.com"
+          "${replace(aws_eks_cluster.voting.identity[0].oidc[0].issuer, "https://", "")}:sub" = "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+        }
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_csi_driver" {
+  role       = aws_iam_role.ebs_csi_driver.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+}
+
+# Amazon EBS CSI driver add-on for persistent Kubernetes storage
+resource "aws_eks_addon" "ebs_csi_driver" {
+  cluster_name             = aws_eks_cluster.voting.name
+  addon_name               = "aws-ebs-csi-driver"
+  addon_version            = "v1.67.0-eksbuild.1"
+  service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
+
+  depends_on = [
+    aws_iam_role_policy_attachment.ebs_csi_driver,
+    aws_eks_node_group.voting
+  ]
 }
