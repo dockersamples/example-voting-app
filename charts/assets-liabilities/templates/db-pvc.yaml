@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-data
+  labels:
+    app: db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ebs-gp3-retain
+  resources:
+    requests:
+      storage: 5Gi

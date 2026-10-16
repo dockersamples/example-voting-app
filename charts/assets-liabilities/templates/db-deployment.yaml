@@ -29,9 +29,12 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.db.existingSecret }}
                   key: POSTGRES_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: db-data
               mountPath: /var/lib/postgresql/data
       volumes:
         - name: db-data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: db-data
