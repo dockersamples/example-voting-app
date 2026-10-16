@@ -10,3 +10,4 @@ node_modules/
 *.tfstate.*
 crash.log
 crash.*.log
+.local/

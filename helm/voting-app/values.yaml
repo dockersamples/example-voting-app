@@ -1,0 +1,14 @@
+images:
+  vote: voting-app-vote:local
+  result: voting-app-result:local
+  worker: voting-app-worker:local
+
+postgres:
+  username: postgres
+  database: postgres
+  storage: 1Gi
+
+replicas:
+  vote: 1
+  result: 1
+  worker: 1
