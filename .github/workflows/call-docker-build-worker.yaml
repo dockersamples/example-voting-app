@@ -58,8 +58,9 @@ jobs:
       ### https://github.com/docker/metadata-action#tags-input
       ### defaults to:
       tag-rules: |
-        type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+        type=ref,event=branch
         type=ref,event=pr
+        type=ref,event=tag
       
       ### path to where docker should copy files into image
       ### defaults to root of repository (.)
