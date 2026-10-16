@@ -12,3 +12,8 @@ venv/
 .mypy_cache/
 .coverage
 htmlcov/
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.tmp

@@ -10,3 +10,8 @@ obj/
 *.cache
 *.log
 TestResults/
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.tmp
