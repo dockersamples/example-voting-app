@@ -120,6 +120,13 @@ The current NodePort services use port `31000` for voting and `31001` for result
 4. Open the results page and confirm the vote is reflected.
 5. Check the GitHub Actions workflow and verify that the application images exist in ECR.
 
+## Database Credentials
+
+- The PostgreSQL password is stored in the Kubernetes Secret `db-credentials` under the key `POSTGRES_PASSWORD`.
+- The database Deployment and worker Deployment reference this Secret. The worker receives the password through the `POSTGRES_PASSWORD` environment variable.
+- Never commit Secret values, passwords, or local credential files to Git.
+- For a new environment, create the Kubernetes Secret securely before deploying the application.
+
 ## Security and Limitations
 
 - Do not commit AWS credentials, tokens, or other secrets.
