@@ -157,3 +157,55 @@ jobs:
           tags: |
             185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-worker:${{ github.sha }}
             185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-worker:latest
+
+  deploy:
+    name: Deploy to Amazon EKS
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::185529490184:role/github-actions-assets-liabilities-ecr
+          aws-region: eu-west-1
+
+      - name: Configure kubectl for EKS
+        run: |
+          aws eks update-kubeconfig \
+            --name assets-liabilities-voting \
+            --region eu-west-1
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.36.4'
+
+      - name: Deploy versioned images
+        run: |
+          set -e
+
+          REGISTRY=185529490184.dkr.ecr.eu-west-1.amazonaws.com
+
+          kubectl set image deployment/vote \
+            vote=$REGISTRY/assets-liabilities-vote:${GITHUB_SHA} \
+            -n default
+
+          kubectl set image deployment/result \
+            result=$REGISTRY/assets-liabilities-result:${GITHUB_SHA} \
+            -n default
+
+          kubectl set image deployment/worker \
+            worker=$REGISTRY/assets-liabilities-worker:${GITHUB_SHA} \
+            -n default
+
+      - name: Verify deployment rollouts
+        run: |
+          kubectl rollout status deployment/vote -n default --timeout=180s
+          kubectl rollout status deployment/result -n default --timeout=180s
+          kubectl rollout status deployment/worker -n default --timeout=180s
