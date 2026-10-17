@@ -1,1 +1,15 @@
+.git
+.gitignore
+.env
+.env.*
+!.env.example
 node_modules/
+npm-debug.log*
+*.log
+coverage/
+.nyc_output/
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.tmp
