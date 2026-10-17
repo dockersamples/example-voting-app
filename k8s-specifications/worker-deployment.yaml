@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: worker
   labels:
     app: worker
-  name: worker
 spec:
   replicas: 1
   selector:
@@ -15,5 +15,19 @@ spec:
         app: worker
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_worker
-        name: worker
+      - name: worker
+        # Build locally: docker build -t aca-voting-app-worker:latest ./worker
+        image: aca-voting-app-worker:latest
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: voting-app-config
+        - secretRef:
+            name: voting-app-secrets
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi

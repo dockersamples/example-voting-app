@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: db
   labels:
     app: db
-  name: db
 spec:
   replicas: 1
   selector:
@@ -15,19 +15,34 @@ spec:
         app: db
     spec:
       containers:
-      - image: postgres:15-alpine
-        name: postgres
-        env:
-        - name: POSTGRES_USER
-          value: postgres
-        - name: POSTGRES_PASSWORD
-          value: postgres
+      - name: postgres
+        image: postgres:15-alpine
         ports:
         - containerPort: 5432
           name: postgres
+        envFrom:
+        - secretRef:
+            name: voting-app-secrets
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          exec:
+            command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+          initialDelaySeconds: 5
+          periodSeconds: 5
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: db-data
       volumes:
       - name: db-data
-        emptyDir: {} 
+        emptyDir: {}

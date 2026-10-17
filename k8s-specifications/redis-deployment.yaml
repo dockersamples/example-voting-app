@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: redis
   labels:
     app: redis
-  name: redis
 spec:
   replicas: 1
   selector:
@@ -15,14 +15,38 @@ spec:
         app: redis
     spec:
       containers:
-      - image: redis:alpine
-        name: redis
+      - name: redis
+        image: redis:alpine
+        command: ["sh", "-c", "exec redis-server --requirepass \"$REDIS_PASSWORD\""]
         ports:
         - containerPort: 6379
           name: redis
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: voting-app-secrets
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        livenessProbe:
+          exec:
+            command: ["sh", "-c", "REDISCLI_AUTH=\"$REDIS_PASSWORD\" redis-cli ping"]
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command: ["sh", "-c", "REDISCLI_AUTH=\"$REDIS_PASSWORD\" redis-cli ping"]
+          initialDelaySeconds: 5
+          periodSeconds: 5
         volumeMounts:
         - mountPath: /data
           name: redis-data
       volumes:
       - name: redis-data
-        emptyDir: {} 
+        emptyDir: {}
