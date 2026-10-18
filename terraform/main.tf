@@ -177,6 +177,13 @@ resource "aws_iam_role_policy" "github_actions_ecr" {
       {
         Effect = "Allow"
         Action = [
+          "eks:DescribeCluster"
+        ]
+        Resource = "arn:aws:eks:eu-west-1:185529490184:cluster/assets-liabilities-voting"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "ecr:BatchCheckLayerAvailability",
           "ecr:InitiateLayerUpload",
           "ecr:UploadLayerPart",

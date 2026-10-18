@@ -91,6 +91,22 @@ GitHub Actions authenticates to AWS using OIDC. The IAM role is restricted to th
 
 Image publishing and updating the running EKS deployments are separate operations in this project.
 
+The application deployment job updates the existing vote, result, and worker
+Deployments with commit-SHA image tags using `kubectl set image`. The Helm chart
+is linted and rendered by application CI; Helm is not currently used to manage
+the live EKS release. Chart default image tags are defaults, not the tags used
+by the current CI deployment job.
+
+The separate `Infrastructure Validation` workflow checks Terraform formatting
+and configuration validity and checks the YAML syntax of the Kubernetes
+manifests. These checks do not apply Terraform or deploy resources.
+
+The `github-actions-deployer` Role and RoleBinding are tracked in
+`k8s-specifications/github-actions-deployer-rbac.yaml`. The IAM role's mapping
+in the cluster's `aws-auth` ConfigMap is a separate cluster bootstrap setting;
+do not replace that ConfigMap wholesale when maintaining the mapping.
+
+
 ## Kubernetes Deployment
 
 The Kubernetes manifests are in `k8s-specifications/`.
