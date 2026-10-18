@@ -2,11 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: db
+  labels:
+    app: db
 spec:
   type: ClusterIP
   selector:
     app: db
   ports:
-    - name: postgres
+    - name: db-service
       port: {{ .Values.db.service.port }}
       targetPort: 5432

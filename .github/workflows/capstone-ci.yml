@@ -9,6 +9,7 @@ on:
       - 'result/**'
       - 'worker/**'
       - 'docker-compose.yml'
+      - 'charts/**'
       - '.github/workflows/**'
   pull_request:
     branches:
@@ -18,6 +19,7 @@ on:
       - 'result/**'
       - 'worker/**'
       - 'docker-compose.yml'
+      - 'charts/**'
       - '.github/workflows/**'
 
 permissions:
@@ -32,6 +34,13 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.17.3
+
+      - name: Validate Helm chart
+        run: helm lint ./charts/assets-liabilities
       - name: Validate Compose configuration
         run: docker compose config --quiet
 
@@ -169,6 +178,9 @@ jobs:
       id-token: write
 
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -187,25 +199,20 @@ jobs:
           version: 'v1.36.4'
 
       - name: Deploy versioned images
+        env:
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          set -e
-
+          set -euo pipefail
           REGISTRY=185529490184.dkr.ecr.eu-west-1.amazonaws.com
 
-          kubectl set image deployment/vote \
-            vote=$REGISTRY/assets-liabilities-vote:${GITHUB_SHA} \
-            -n default
-
-          kubectl set image deployment/result \
-            result=$REGISTRY/assets-liabilities-result:${GITHUB_SHA} \
-            -n default
-
-          kubectl set image deployment/worker \
-            worker=$REGISTRY/assets-liabilities-worker:${GITHUB_SHA} \
-            -n default
+          kubectl set image \
+            deployment/vote vote="$REGISTRY/assets-liabilities-vote:$IMAGE_TAG" \
+            deployment/result result="$REGISTRY/assets-liabilities-result:$IMAGE_TAG" \
+            deployment/worker worker="$REGISTRY/assets-liabilities-worker:$IMAGE_TAG"
 
       - name: Verify deployment rollouts
         run: |
+          set -euo pipefail
           kubectl rollout status deployment/vote -n default --timeout=180s
           kubectl rollout status deployment/result -n default --timeout=180s
           kubectl rollout status deployment/worker -n default --timeout=180s

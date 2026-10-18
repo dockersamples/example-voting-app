@@ -22,6 +22,8 @@ spec:
             - name: postgres
               containerPort: 5432
           env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
             - name: POSTGRES_USER
               value: {{ .Values.db.username | quote }}
             - name: POSTGRES_PASSWORD
@@ -29,8 +31,6 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.db.existingSecret }}
                   key: POSTGRES_PASSWORD
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: db-data
               mountPath: /var/lib/postgresql/data
