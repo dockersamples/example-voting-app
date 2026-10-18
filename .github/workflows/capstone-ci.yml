@@ -40,7 +40,12 @@ jobs:
           version: v3.17.3
 
       - name: Validate Helm chart
-        run: helm lint ./charts/assets-liabilities
+        run: |
+          helm lint ./charts/assets-liabilities
+          helm template assets-liabilities ./charts/assets-liabilities \
+            --set vote.image.tag="${GITHUB_SHA}" \
+            --set result.image.tag="${GITHUB_SHA}" \
+            --set worker.image.tag="${GITHUB_SHA}" > /tmp/assets-liabilities-rendered.yaml
       - name: Validate Compose configuration
         run: docker compose config --quiet
 
