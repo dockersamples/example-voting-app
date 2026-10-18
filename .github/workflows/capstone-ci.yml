@@ -210,10 +210,14 @@ jobs:
           set -euo pipefail
           REGISTRY=185529490184.dkr.ecr.eu-west-1.amazonaws.com
 
-          kubectl set image \
-            deployment/vote vote="$REGISTRY/assets-liabilities-vote:$IMAGE_TAG" \
-            deployment/result result="$REGISTRY/assets-liabilities-result:$IMAGE_TAG" \
-            deployment/worker worker="$REGISTRY/assets-liabilities-worker:$IMAGE_TAG"
+          kubectl set image deployment/vote \
+            vote="$REGISTRY/assets-liabilities-vote:$IMAGE_TAG" -n default
+
+          kubectl set image deployment/result \
+            result="$REGISTRY/assets-liabilities-result:$IMAGE_TAG" -n default
+
+          kubectl set image deployment/worker \
+            worker="$REGISTRY/assets-liabilities-worker:$IMAGE_TAG" -n default
 
       - name: Verify deployment rollouts
         run: |
