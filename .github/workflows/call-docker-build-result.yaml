@@ -1,82 +1,70 @@
-name: Build Result
-# template source: https://github.com/dockersamples/.github/blob/main/templates/call-docker-build.yaml
+name: Call Docker Build and Push for Result Service Workflow
 
 on:
-  # we want pull requests so we can build(test) but not push to image registry
   push:
-    branches:
-      - 'main'
-    # only build when important files change
-    paths:
-      - 'result/**'
-      - '.github/workflows/call-docker-build-result.yaml'
+    branches: [ "main" ]
+    paths: 
+      - "result/**" 
+      - ".github/workflows/call-docker-build-result.yaml"
+
   pull_request:
-    branches:
-      - 'main'
-    # only build when important files change
-    paths:
-      - 'result/**'
-      - '.github/workflows/call-docker-build-result.yaml'
+    branches: [ "main" ]
+    paths: 
+      - "result/**" 
+      - ".github/workflows/call-docker-build-result.yaml"
+    
 
 jobs:
-  call-docker-build:
+  automated-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Automated Test
+        run: |
+          docker compose -f test/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from sut
+        
+  trivy-scan:
+    runs-on: ubuntu-latest
+    needs: automated-test
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    name: Result Call Docker Build
+      - name: Trivy security scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: "fs"
+          ignore-unfixed: true
+          scanners: "misconfig,vuln"
+          format: "table"
+          severity: "CRITICAL,HIGH"
+          exit-code: 1
 
-    uses: dockersamples/.github/.github/workflows/reusable-docker-build.yaml@main
+  # deploy-to-eks:
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v4
 
-    permissions:
-      contents: read
-      packages: write # needed to push docker image to ghcr.io
-      pull-requests: write # needed to create and update comments in PRs
-    
-    secrets:
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ secrets.AWS_REGION }}
 
-      # Only needed if with:dockerhub-enable is true below
-      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #     - name: Update Kubeconfig for EKS
+  #       run: |
+  #         aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
 
-      # Only needed if with:dockerhub-enable is true below
-      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     - name: Set up Helm
+  #       uses: azure/setup-helm@v3
 
-    with:
-      
-      ### REQUIRED
-      ### ENABLE ONE OR BOTH REGISTRIES
-      ### tell docker where to push.
-      ### NOTE if Docker Hub is set to true, you must set secrets above and also add account/repo/tags below
-      dockerhub-enable: true
-      ghcr-enable: true
-
-      ### REQUIRED 
-      ### A list of the account/repo names for docker build. List should match what's enabled above
-      ### defaults to:
-      image-names: |
-        ghcr.io/dockersamples/example-voting-app-result
-        dockersamples/examplevotingapp_result
-      
-      ### REQUIRED set rules for tagging images, based on special action syntax:
-      ### https://github.com/docker/metadata-action#tags-input
-      ### defaults to:
-      tag-rules: |
-        type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
-        type=raw,value=before,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
-        type=raw,value=after,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
-        type=ref,event=pr
-      
-      ### path to where docker should copy files into image
-      ### defaults to root of repository (.)
-      context: result
-      
-      ### Dockerfile alternate name. Default is Dockerfile (relative to context path)
-      # file: Containerfile
-
-      ### build stage to target, defaults to empty, which builds to last stage in Dockerfile
-      # target:
-      
-      ### platforms to build for, defaults to linux/amd64
-      ### other options: linux/amd64,linux/arm64,linux/arm/v7
-      platforms: linux/amd64,linux/arm64,linux/arm/v7
-      
-      ### Create a PR comment with image tags and labels
-      ### defaults to false
-      # comment-enable: false
+  #     - name: Deploy with Helm
+  #       run: |
+  #         helm upgrade --install voting-app ./helm \
+  #           --set vote.image.tag=${{ github.sha }} \
+  #           --set result.image.tag=${{ github.sha }} \
+  #           --set worker.image.tag=${{ github.sha }}
