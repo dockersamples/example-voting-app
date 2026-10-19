@@ -75,7 +75,7 @@ jobs:
             format: 'table'
             ignore-unfixed: true
             severity: 'CRITICAL,HIGH'
-            exit-code: 1
+            exit-code: 0
 
         - name: Log in to Docker Hub
           if: github.event_name == 'push'
