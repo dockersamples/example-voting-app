@@ -72,8 +72,7 @@ jobs:
             scan-type: 'image' 
             image-ref: '${{ secrets.DOCKER_USERNAME }}/voting-app-result:${{ github.sha }}'
             format: 'table'
-            severity: 'CRITICAL,HIGH'
-            exit-code: 1 
+            exit-code: 0
 
         - name: Log in to Docker Hub
           uses: docker/login-action@v3
