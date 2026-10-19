@@ -1,3 +1,6 @@
+infrastructure:
+  manage: true
+
 vote:
   replicaCount: 1
   image:

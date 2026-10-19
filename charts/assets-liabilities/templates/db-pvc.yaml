@@ -1,3 +1,4 @@
+{{- if .Values.infrastructure.manage }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -11,3 +12,4 @@ spec:
   resources:
     requests:
       storage: 5Gi
+{{- end }}

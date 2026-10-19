@@ -1,3 +1,4 @@
+{{- if .Values.infrastructure.manage }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -38,3 +39,4 @@ spec:
         - name: db-data
           persistentVolumeClaim:
             claimName: db-data
+{{- end }}
