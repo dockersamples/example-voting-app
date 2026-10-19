@@ -90,30 +90,30 @@ jobs:
           if: github.event_name == 'push'
           run: docker push ${{env.IMAGE}}
 
-  # deploy-to-eks:
-  #   needs: build-and-push
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v4
+  deploy-to-eks:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-  #     - name: Configure AWS Credentials
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: ${{ secrets.AWS_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-  #     - name: Update Kubeconfig for EKS
-  #       run: |
-  #         aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
+      - name: Update Kubeconfig for EKS
+        run: |
+          aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
 
-  #     - name: Set up Helm
-  #       uses: azure/setup-helm@v3
+      # - name: Set up Helm
+      #   uses: azure/setup-helm@v3
 
-  #     - name: Deploy with Helm
-  #       run: |
-  #         helm upgrade --install voting-app ./helm \
-  #           --set vote.image.tag=${{ github.sha }} \
-  #           --set result.image.tag=${{ github.sha }} \
-  #           --set worker.image.tag=${{ github.sha }}
+      # - name: Deploy with Helm
+      #   run: |
+      #     helm upgrade --install voting-app ./helm \
+      #       --set vote.image.tag=${{ github.sha }} \
+      #       --set result.image.tag=${{ github.sha }} \
+      #       --set worker.image.tag=${{ github.sha }}
