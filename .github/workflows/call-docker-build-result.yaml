@@ -31,7 +31,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Trivy security scan
+      - name: Trivy filesystem scan
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: "fs"
@@ -64,6 +64,7 @@ jobs:
           with:
             context: ./result
             load: true
+            push: false
             tags: ${{ secrets.DOCKER_USERNAME }}/voting-app-result:${{ github.sha }}
 
         - name: Trivy scan built image
@@ -72,20 +73,20 @@ jobs:
             scan-type: 'image' 
             image-ref: '${{ secrets.DOCKER_USERNAME }}/voting-app-result:${{ github.sha }}'
             format: 'table'
-            exit-code: 0
+            ignore-unfixed: true
+            severity: 'CRITICAL,HIGH'
+            exit-code: 1
 
         - name: Log in to Docker Hub
+          if: github.event_name == 'push'
           uses: docker/login-action@v3
           with:
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_TOKEN }}
-
-        - name: Push Docker Image
-          uses: docker/build-push-action@v5
-          with:
-            context: ./result
-            load: true
-            tags: ${{ secrets.DOCKER_USERNAME }}/voting-app-result:${{ github.sha }}
+ 
+        - name: Push image
+          if: github.event_name == 'push'
+          run: docker push ${{ secrets.DOCKER_USERNAME }}/voting-app-result:${{ github.sha }}'
 
   # deploy-to-eks:
   #   needs: build-and-push
