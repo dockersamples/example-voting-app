@@ -223,8 +223,7 @@ jobs:
             --set worker.image.tag="$IMAGE_TAG" \
             --set vote.service.nodePort=31000 \
             --set result.service.nodePort=31001 \
-            --set db.storageClassName=ebs-gp3-retain \
-            --set infrastructure.manage=false
+            --set db.storageClassName=ebs-gp3-retain
 
       - name: Verify deployment rollouts
         run: |
