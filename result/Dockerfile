@@ -2,8 +2,9 @@ FROM node:22-bookworm-slim@sha256:c3de60bf2f9dd0ac6370e6117950ff62d6e339527e7472
 
 # add curl for healthcheck
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends curl tini && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/
 
 WORKDIR /usr/local/app
 
