@@ -1,15 +1,14 @@
 FROM node:24-bookworm-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS base
 
-# update OS packages and add curl for healthcheck
+# add curl for healthcheck
 RUN apt-get update && \
-    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends curl tini && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/local/app
 
-# update npm and have nodemon available for local dev use (file watching)
-RUN npm install -g npm@latest nodemon
+# have nodemon available for local dev use (file watching)
+RUN npm install -g nodemon
 
 COPY package*.json ./
 
