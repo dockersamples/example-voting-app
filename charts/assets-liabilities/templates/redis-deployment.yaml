@@ -1,3 +1,4 @@
+{{- if .Values.infrastructure.manage }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,3 +28,4 @@ spec:
       volumes:
         - name: redis-data
           emptyDir: {}
+{{- end }}

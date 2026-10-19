@@ -1,3 +1,4 @@
+{{- if .Values.infrastructure.manage }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -7,7 +8,8 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: ebs-gp3-retain
+  storageClassName: {{ .Values.db.storageClassName | quote }}
   resources:
     requests:
       storage: 5Gi
+{{- end }}

@@ -1,3 +1,4 @@
+{{- if .Values.infrastructure.manage }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,3 +13,4 @@ spec:
     - name: redis-service
       port: {{ .Values.redis.service.port }}
       targetPort: 6379
+{{- end }}
