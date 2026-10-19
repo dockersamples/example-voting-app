@@ -2,7 +2,7 @@ vote:
   replicaCount: 1
   image:
     repository: 185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-vote
-    tag: latest
+    tag: "latest"
     pullPolicy: Always
   service:
     type: NodePort
@@ -14,7 +14,7 @@ result:
   replicaCount: 1
   image:
     repository: 185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-result
-    tag: latest
+    tag: "latest"
     pullPolicy: Always
   service:
     type: NodePort

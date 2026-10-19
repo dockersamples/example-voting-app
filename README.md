@@ -106,7 +106,6 @@ The `github-actions-deployer` Role and RoleBinding are tracked in
 in the cluster's `aws-auth` ConfigMap is a separate cluster bootstrap setting;
 do not replace that ConfigMap wholesale when maintaining the mapping.
 
-
 ## Kubernetes Deployment
 
 The Kubernetes manifests are in `k8s-specifications/`.
