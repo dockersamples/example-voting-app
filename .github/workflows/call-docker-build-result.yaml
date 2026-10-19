@@ -2,13 +2,13 @@ name: Call Docker Build and Push for Result Service Workflow
 
 on:
   push:
-    branches: [ "main" ]
+    branches: main
     paths: 
       - "result/**" 
       - ".github/workflows/call-docker-build-result.yaml"
 
   pull_request:
-    branches: [ "main" ]
+    branches: main
     paths: 
       - "result/**" 
       - ".github/workflows/call-docker-build-result.yaml"
