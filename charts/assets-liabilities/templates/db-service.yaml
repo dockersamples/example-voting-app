@@ -1,0 +1,16 @@
+{{- if .Values.infrastructure.manage }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    app: db
+spec:
+  type: ClusterIP
+  selector:
+    app: db
+  ports:
+    - name: db-service
+      port: {{ .Values.db.service.port }}
+      targetPort: 5432
+{{- end }}

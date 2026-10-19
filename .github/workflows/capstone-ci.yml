@@ -1,0 +1,234 @@
+name: Capstone CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'vote/**'
+      - 'result/**'
+      - 'worker/**'
+      - 'docker-compose.yml'
+      - 'charts/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'vote/**'
+      - 'result/**'
+      - 'worker/**'
+      - 'docker-compose.yml'
+      - 'charts/**'
+      - '.github/workflows/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-build-scan:
+    name: Validate, test, build and scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.17.3
+
+      - name: Validate Helm chart
+        run: |
+          helm lint ./charts/assets-liabilities
+          helm template assets-liabilities ./charts/assets-liabilities \
+            --set vote.image.tag="${GITHUB_SHA}" \
+            --set result.image.tag="${GITHUB_SHA}" \
+            --set worker.image.tag="${GITHUB_SHA}" > /tmp/assets-liabilities-rendered.yaml
+      - name: Validate Compose configuration
+        run: docker compose config --quiet
+
+      - name: Start app and smoke-test HTTP endpoints
+        run: |
+          docker compose up -d --build
+
+          for _attempt in $(seq 1 30); do
+            if curl -fsS http://localhost:8080/ >/dev/null &&
+               curl -fsS http://localhost:8081/ >/dev/null; then
+              echo "Vote and result HTTP checks passed."
+              exit 0
+            fi
+            sleep 2
+          done
+
+          docker compose ps
+          docker compose logs --no-color
+          exit 1
+
+      - name: Stop development containers
+        if: always()
+        run: docker compose down -v
+
+      - name: Build production images
+        id: build-images
+        run: |
+          docker build --target final -t voting-app-vote:ci ./vote
+          docker build -t voting-app-result:ci ./result
+          docker build -t voting-app-worker:ci ./worker
+
+      - name: Scan vote image with Trivy
+        if: always() && steps.build-images.outcome == 'success'
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: voting-app-vote:ci
+          scan-type: image
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'
+          format: table
+          skip-files: "**/pip/_vendor/bom.cdx.json"
+
+      - name: Scan result image with Trivy
+        if: always() && steps.build-images.outcome == 'success'
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: voting-app-result:ci
+          scan-type: image
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'
+          format: table
+
+      - name: Scan worker image with Trivy
+        if: always() && steps.build-images.outcome == 'success'
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: voting-app-worker:ci
+          scan-type: image
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'
+          format: table
+
+  publish:
+    name: Publish images to Amazon ECR
+    needs: validate-build-scan
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::185529490184:role/github-actions-assets-liabilities-ecr
+          aws-region: eu-west-1
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Publish vote image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./vote
+          file: ./vote/Dockerfile
+          target: final
+          push: true
+          tags: |
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-vote:${{ github.sha }}
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-vote:latest
+
+      - name: Publish result image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./result
+          file: ./result/Dockerfile
+          push: true
+          tags: |
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-result:${{ github.sha }}
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-result:latest
+
+      - name: Publish worker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./worker
+          file: ./worker/Dockerfile
+          push: true
+          tags: |
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-worker:${{ github.sha }}
+            185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-worker:latest
+
+  deploy:
+    name: Deploy to Amazon EKS
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::185529490184:role/github-actions-assets-liabilities-ecr
+          aws-region: eu-west-1
+
+      - name: Configure kubectl for EKS
+        run: |
+          aws eks update-kubeconfig \
+            --name assets-liabilities-voting \
+            --region eu-west-1
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.36.4'
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.17.3
+
+      - name: Deploy application with Helm
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          helm upgrade --install assets-liabilities ./charts/assets-liabilities \
+            --namespace default \
+            --take-ownership \
+            --wait --timeout 5m \
+            --set vote.image.tag="$IMAGE_TAG" \
+            --set result.image.tag="$IMAGE_TAG" \
+            --set worker.image.tag="$IMAGE_TAG" \
+            --set vote.service.nodePort=31000 \
+            --set result.service.nodePort=31001 \
+            --set db.storageClassName=ebs-gp3-retain
+
+      - name: Verify deployment rollouts
+        run: |
+          set -euo pipefail
+          helm status assets-liabilities -n default
+          kubectl rollout status deployment/vote -n default --timeout=180s
+          kubectl rollout status deployment/result -n default --timeout=180s
+          kubectl rollout status deployment/worker -n default --timeout=180s

@@ -1,0 +1,52 @@
+infrastructure:
+  manage: true
+
+vote:
+  replicaCount: 1
+  image:
+    repository: 185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-vote
+    tag: "latest"
+    pullPolicy: Always
+  service:
+    type: NodePort
+    port: 8080
+    targetPort: 8080
+    nodePort: 31000
+
+result:
+  replicaCount: 1
+  image:
+    repository: 185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-result
+    tag: "latest"
+    pullPolicy: Always
+  service:
+    type: NodePort
+    port: 8081
+    targetPort: 80
+    nodePort: 31001
+
+worker:
+  replicaCount: 1
+  image:
+    repository: 185529490184.dkr.ecr.eu-west-1.amazonaws.com/assets-liabilities-worker
+    tag: credential-env-v1
+    pullPolicy: Always
+
+redis:
+  replicaCount: 1
+  image:
+    repository: redis
+    tag: alpine
+  service:
+    port: 6379
+
+db:
+  replicaCount: 1
+  image:
+    repository: postgres
+    tag: 15-alpine
+  username: postgres
+  existingSecret: db-credentials
+  storageClassName: ebs-gp3-retain
+  service:
+    port: 5432

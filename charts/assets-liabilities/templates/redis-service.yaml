@@ -1,0 +1,16 @@
+{{- if .Values.infrastructure.manage }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  type: ClusterIP
+  selector:
+    app: redis
+  ports:
+    - name: redis-service
+      port: {{ .Values.redis.service.port }}
+      targetPort: 6379
+{{- end }}
