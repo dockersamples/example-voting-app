@@ -1,4 +1,4 @@
-FROM node:18-slim
+FROM node:24-bookworm-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS base
 
 # add curl for healthcheck
 RUN apt-get update && \
@@ -17,6 +17,8 @@ RUN npm ci && \
  mv /usr/local/app/node_modules /node_modules
 
 COPY . .
+
+USER node
 
 ENV PORT=80
 EXPOSE 80
