@@ -44,5 +44,6 @@ db:
     tag: 15-alpine
   username: postgres
   existingSecret: db-credentials
+  storageClassName: ebs-gp3-retain
   service:
     port: 5432

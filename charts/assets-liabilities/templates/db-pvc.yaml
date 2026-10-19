@@ -7,7 +7,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: ebs-gp3-retain
+  storageClassName: {{ .Values.db.storageClassName | quote }}
   resources:
     requests:
       storage: 5Gi
