@@ -1,151 +1,169 @@
-name: Call Docker Build and Push for Result Service Workflow
+name: Build, Test, Scan, and Deploy Result Service
 
 on:
   push:
-    branches: main
-    paths: 
-      - "result/**" 
+    branches:
+      - main
+    paths:
+      - "result/**"
+      - "helm/**"
+      - ".github/workflows/call-docker-build-result.yaml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "result/**"
+      - "helm/**"
       - ".github/workflows/call-docker-build-result.yaml"
 
-  # pull_request:
-  #   branches: main
-  #   paths: 
-  #     - "result/**" 
-  #     - ".github/workflows/call-docker-build-result.yaml"
+permissions:
+  contents: read
 
+concurrency:
+  group: voting-app-result-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   automated-test:
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Automated Test
-        run: |
-          docker compose -f result/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from sut
-        
-  trivy-scan:
-    if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
-    needs: automated-test
-    steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Trivy filesystem scan
+      - name: Run Result service tests
+        run: docker compose -f result/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from sut
+
+      - name: Clean up test containers
+        if: always()
+        run: docker compose -f result/docker-compose.test.yml down -v
+
+  validate-helm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      - name: Lint Helm chart
+        run: helm lint ./helm/voting-app
+
+      - name: Render Helm chart
+        run: |
+          helm template voting-app ./helm/voting-app \
+            --namespace voting-app > /tmp/voting-app-rendered.yaml
+          grep -F 'image: "devsmaus/voting-app-result:latest"' /tmp/voting-app-rendered.yaml
+
+  filesystem-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Scan Result source
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          scan-type: "fs"
-          scan-ref: "./result"
+          scan-type: fs
+          scan-ref: ./result
           ignore-unfixed: true
-          scanners: "misconfig,vuln,secret"
-          format: "table"
-          severity: "CRITICAL,HIGH"
-          exit-code: 1
-
+          scanners: misconfig,vuln,secret
+          format: table
+          severity: CRITICAL,HIGH
+          exit-code: "1"
 
   build-and-push:
-    if: ${{ github.event_name == 'pull_request' }}
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - automated-test
+      - validate-helm
+      - filesystem-scan
     runs-on: ubuntu-latest
-    needs: trivy-scan
-    env:
-        IMAGE: ${{ secrets.DOCKER_USERNAME }}/voting-app-result:${{ github.sha }}
     steps:
-        - name: Checkout Code
-          uses: actions/checkout@v4
-
-        - name: Log in to Docker Hub
-          uses: docker/login-action@v3
-          with:
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_TOKEN }}
-
-        - name: Set up Docker Buildx
-          uses: docker/setup-buildx-action@v3
-
-        - name: Build and Push Docker Image
-          uses: docker/build-push-action@v5
-          with:
-            context: ./result
-            load: true
-            push: false
-            tags: ${{env.IMAGE}}
-
-        - name: Trivy scan built image
-          uses: aquasecurity/trivy-action@v0.36.0
-          with:
-            scan-type: 'image' 
-            image-ref: '${{env.IMAGE}}'
-            format: 'table'
-            ignore-unfixed: true
-            severity: 'CRITICAL,HIGH'
-            exit-code: 0
-
-        - name: Log in to Docker Hub
-          if: github.event_name == 'push'
-          uses: docker/login-action@v3
-          with:
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_TOKEN }}
- 
-        - name: Push image
-          if: github.event_name == 'push'
-          run: docker push ${{env.IMAGE}}
-
-  
-  deploy-to-eks:
-    if: ${{ always() && github.event_name == 'push' }}
-    needs: build-and-push
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image for scanning
+        uses: docker/build-push-action@v6
+        with:
+          context: ./result
+          load: true
+          push: false
+          tags: voting-app-result:${{ github.sha }}
+
+      - name: Scan built image
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: image
+          image-ref: voting-app-result:${{ github.sha }}
+          format: table
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push versioned image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./result
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/voting-app-result:${{ github.sha }}
+
+  deploy-to-eks:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Update kubeconfig for EKS
+        run: aws eks update-kubeconfig --name "${{ secrets.EKS_CLUSTER_NAME }}" --region "${{ secrets.AWS_REGION }}"
 
-      - name: Update Kubeconfig for EKS
-        run: |
-          aws eks update-kubeconfig \
-            --name "${{ secrets.EKS_CLUSTER_NAME }}" \
-            --region "${{ secrets.AWS_REGION }}"
-
-      - name: Install Helm
+      - name: Set up Helm
         uses: azure/setup-helm@v4
         with:
           version: v3.14.0
 
-
-      - name: Creating helm chart
-        run: |
-         mkdir -p ./helm
-         helm create ./helm/voting-app
-         rm -rf ./helm/voting-app/templates/*
-         cp -r ./k8s-specifications/* ./helm/voting-app/templates/
-
-
-      - name: Validate Helm Chart
+      - name: Validate chart before deployment
         run: |
           helm lint ./helm/voting-app
+          helm template voting-app ./helm/voting-app \
+            --namespace voting-app \
+            --set result.image.repository="${{ secrets.DOCKER_USERNAME }}/voting-app-result" \
+            --set-string result.image.tag="${{ github.sha }}" > /tmp/voting-app-rendered.yaml
+          grep -F 'image: "${{ secrets.DOCKER_USERNAME }}/voting-app-result:${{ github.sha }}"' /tmp/voting-app-rendered.yaml
 
-      # - name: Deploy Voting App with Helm
-      #   run: |
-      #     helm upgrade --install voting-app ./helm/voting-app \
-      #       --namespace voting-app \
-      #       --create-namespace \
-      #       --set result.image.repository="${{ secrets.DOCKER_USERNAME }}/voting-app-result" \
-      #       --set-string result.image.tag="${{ github.sha }}" \
-      #       --wait \
-      #       --timeout 5m
+      - name: Deploy chart
+        run: |
+          helm upgrade --install voting-app ./helm/voting-app \
+            --namespace voting-app \
+            --create-namespace \
+            --set result.image.repository="${{ secrets.DOCKER_USERNAME }}/voting-app-result" \
+            --set-string result.image.tag="${{ github.sha }}" \
+            --wait \
+            --timeout 5m
 
-      # - name: Verify Deployment
-      #   run: |
-      #     helm status voting-app --namespace voting-app
-      #     kubectl get deployments,pods,services -n voting-app
+      - name: Verify Result rollout
+        run: |
+          kubectl rollout status deployment/result --namespace voting-app --timeout=180s
+          helm status voting-app --namespace voting-app
+          kubectl get deployments,pods,services --namespace voting-app
