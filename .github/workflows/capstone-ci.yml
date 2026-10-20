@@ -11,6 +11,7 @@ on:
       - 'docker-compose.yml'
       - 'charts/**'
       - '.github/workflows/**'
+      - 'k8s-specifications/**'
   pull_request:
     branches:
       - main
@@ -23,6 +24,7 @@ on:
       - '.github/workflows/**'
 
 permissions:
+      - 'k8s-specifications/**'
   contents: read
 
 jobs:
