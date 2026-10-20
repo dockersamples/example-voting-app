@@ -7,15 +7,16 @@ on:
       - "result/**" 
       - ".github/workflows/call-docker-build-result.yaml"
 
-  pull_request:
-    branches: main
-    paths: 
-      - "result/**" 
-      - ".github/workflows/call-docker-build-result.yaml"
+  # pull_request:
+  #   branches: main
+  #   paths: 
+  #     - "result/**" 
+  #     - ".github/workflows/call-docker-build-result.yaml"
 
 
 jobs:
   automated-test:
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -25,6 +26,7 @@ jobs:
           docker compose -f result/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from sut
         
   trivy-scan:
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     needs: automated-test
     steps:
@@ -44,11 +46,12 @@ jobs:
 
 
   build-and-push:
-      runs-on: ubuntu-latest
-      needs: trivy-scan
-      env:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    needs: trivy-scan
+    env:
         IMAGE: ${{ secrets.DOCKER_USERNAME }}/voting-app-result:${{ github.sha }}
-      steps:
+    steps:
         - name: Checkout Code
           uses: actions/checkout@v4
 
@@ -122,9 +125,10 @@ jobs:
 
       - name: Creating helm chart
         run: |
-          helm create ./helm/voting-app
-          rm -rf ./helm/voting-app/templates/*
-          cp -r ./k8s-specifications/* ./helm/voting-app/templates/
+         mkdir -p ./helm
+         helm create ./helm/voting-app
+         rm -rf ./helm/voting-app/templates/*
+         cp -r ./k8s-specifications/* ./helm/voting-app/templates/
 
 
       - name: Validate Helm Chart
