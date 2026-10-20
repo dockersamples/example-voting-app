@@ -90,9 +90,12 @@ jobs:
           if: github.event_name == 'push'
           run: docker push ${{env.IMAGE}}
 
+  
   deploy-to-eks:
+    if: github.event_name == 'push'
     needs: build-and-push
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -104,16 +107,41 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+
       - name: Update Kubeconfig for EKS
         run: |
-          aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+          aws eks update-kubeconfig \
+            --name "${{ secrets.EKS_CLUSTER_NAME }}" \
+            --region "${{ secrets.AWS_REGION }}"
 
-      # - name: Set up Helm
-      #   uses: azure/setup-helm@v3
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
 
-      # - name: Deploy with Helm
+
+      - name: Creating helm chart
+        run: |
+          helm create ./helm/voting-app
+          rm -rf ./helm/voting-app/templates/*
+          cp -r ./k8s-specifications/* ./helm/voting-app/templates/
+
+
+      - name: Validate Helm Chart
+        run: |
+          helm lint ./helm/voting-app
+
+      # - name: Deploy Voting App with Helm
       #   run: |
-      #     helm upgrade --install voting-app ./helm \
-      #       --set vote.image.tag=${{ github.sha }} \
-      #       --set result.image.tag=${{ github.sha }} \
-      #       --set worker.image.tag=${{ github.sha }}
+      #     helm upgrade --install voting-app ./helm/voting-app \
+      #       --namespace voting-app \
+      #       --create-namespace \
+      #       --set result.image.repository="${{ secrets.DOCKER_USERNAME }}/voting-app-result" \
+      #       --set-string result.image.tag="${{ github.sha }}" \
+      #       --wait \
+      #       --timeout 5m
+
+      # - name: Verify Deployment
+      #   run: |
+      #     helm status voting-app --namespace voting-app
+      #     kubectl get deployments,pods,services -n voting-app
