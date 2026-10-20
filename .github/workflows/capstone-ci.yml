@@ -22,9 +22,9 @@ on:
       - 'docker-compose.yml'
       - 'charts/**'
       - '.github/workflows/**'
+      - 'k8s-specifications/**'
 
 permissions:
-      - 'k8s-specifications/**'
   contents: read
 
 jobs:
