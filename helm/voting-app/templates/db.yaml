@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-credentials
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+type: Opaque
+stringData:
+  POSTGRES_USER: {{ .Values.db.user | quote }}
+  POSTGRES_PASSWORD: {{ .Values.db.password | quote }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/name: db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate   # never run two Postgres pods at once
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: db
+  template:
+    metadata:
+      labels:
+        {{- include "voting-app.labels" . | nindent 8 }}
+        app.kubernetes.io/name: db
+    spec:
+      containers:
+        - name: db
+          image: {{ .Values.db.image }}
+          envFrom:
+            - secretRef:
+                name: db-credentials
+          ports:
+            - containerPort: 5432
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            periodSeconds: 5
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            {{- toYaml .Values.db.resources | nindent 12 }}
+      volumes:
+        - name: data
+          emptyDir: {}   # no EBS CSI driver on this cluster; data lives as long as the pod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db   # result and worker connect to host "db"
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+spec:
+  selector:
+    app.kubernetes.io/name: db
+  ports:
+    - port: 5432
+      targetPort: 5432
