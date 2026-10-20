@@ -21,8 +21,16 @@ RUN dotnet restore -a $TARGETARCH
 COPY . .
 RUN dotnet publish -c release -o /app -a $TARGETARCH --self-contained false --no-restore
 
+# Create system group and system user with home directory
+RUN groupadd --system --gid 10001 appgroup && \
+    useradd --system --uid 10001 --gid appgroup --create-home --home-dir /home/appuser appuser
+
 # app image
 FROM mcr.microsoft.com/dotnet/runtime:7.0
 WORKDIR /app
 COPY --from=build /app .
+
+# Switch to the non-root user
+USER 10001:10001
+
 ENTRYPOINT ["dotnet", "Worker.dll"]

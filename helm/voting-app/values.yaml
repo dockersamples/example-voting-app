@@ -1,0 +1,4 @@
+result:
+  image:
+    repository: devsmaus/voting-app-result
+    tag: latest
