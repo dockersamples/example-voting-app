@@ -95,7 +95,7 @@ jobs:
 
   
   deploy-to-eks:
-    if: github.event_name == 'push'
+    if: ${{ github.event_name == 'push' }}
     needs: build-and-push
     runs-on: ubuntu-latest
 
