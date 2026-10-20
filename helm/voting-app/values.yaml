@@ -1,4 +1,4 @@
 result:
   image:
-    repository: dockersamples/examplevotingapp_result
+    repository: devsmaus/voting-app-result
     tag: latest
