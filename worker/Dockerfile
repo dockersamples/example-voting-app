@@ -1,4 +1,7 @@
-FROM --platform=${BUILDPLATFORM} mcr.microsoft.com/dotnet/sdk:7.0@sha256:d32bd65cf5843f413e81f5d917057c82da99737cb1637e905a1a4bc2e7ec6c8d AS build
+# because of dotnet, we always build on amd64, and target platforms in cli
+# dotnet doesn't support QEMU for building or running.
+# hadolint ignore=DL3029
+FROM --platform=${BUILDPLATFORM} mcr.microsoft.com/dotnet/sdk:10.0@sha256:0d99ebf1ccad15037b5c98c9fe8979d6b8dbac23812feae2277a0b277b5c5ffa AS build
 ARG TARGETPLATFORM
 ARG TARGETARCH
 ARG BUILDPLATFORM
@@ -11,9 +14,10 @@ RUN dotnet restore -a $TARGETARCH
 COPY . .
 RUN dotnet publish -c release -o /app -a $TARGETARCH --self-contained false --no-restore
 
-FROM mcr.microsoft.com/dotnet/runtime:7.0@sha256:8cd26108e7a329458e5b84342816ae39b2b38bd041cfdc0b79b8cf1c0e0d376f
-RUN useradd --system --uid 10001 --no-create-home --shell /usr/sbin/nologin app
+# app image
+FROM mcr.microsoft.com/dotnet/runtime:10.0@sha256:939555726cae4c916d212323ac3c0792996dcac2614f00e82cc40fcf059e1af3
 WORKDIR /app
 COPY --from=build /app .
-USER 10001
+# .NET 8+ images ship a non-root "app" user; APP_UID is set by the base image
+USER $APP_UID
 ENTRYPOINT ["dotnet", "Worker.dll"]

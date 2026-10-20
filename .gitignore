@@ -10,3 +10,6 @@ node_modules/
 *.tfstate.*
 crash.log
 tfplan
+
+worker/bin/
+worker/obj/
