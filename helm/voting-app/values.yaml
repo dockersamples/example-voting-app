@@ -1,0 +1,4 @@
+result:
+  image:
+    repository: dockersamples/examplevotingapp_result
+    tag: latest
