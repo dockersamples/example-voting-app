@@ -14,6 +14,8 @@ The application consists of five components:
 
 ## Architecture
 
+![Assets vs Liabilities architecture](architecture.excalidraw.png)
+
 ```text
 User's Browser
       |
