@@ -1,0 +1,204 @@
+name: CI/CD
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # 1a. End-to-end test of the full stack
+  test:
+    name: End-to-end test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Validate compose file
+        run: docker compose config --quiet
+
+      - name: Start the stack
+        run: docker compose up -d --build --wait --wait-timeout 180
+
+      - name: Cast a vote
+        run: |
+          curl -sf -X POST -d "vote=a" http://localhost:8080/ -o /dev/null
+          echo "Vote submitted"
+
+      - name: Verify the vote reached Postgres
+        run: |
+          for i in $(seq 1 30); do
+            count=$(docker compose exec -T db psql -U postgres -tAc "SELECT COUNT(*) FROM votes" 2>/dev/null || echo 0)
+            if [ "${count:-0}" -ge 1 ]; then
+              echo "PASS: $count vote(s) stored in Postgres"
+              exit 0
+            fi
+            echo "Waiting for worker... ($i/30)"
+            sleep 2
+          done
+          echo "FAIL: vote never reached Postgres"
+          exit 1
+
+      - name: Verify the result page responds
+        run: curl -sf http://localhost:8081/ -o /dev/null && echo "Result page OK"
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
+
+  # 1b. Fail the pipeline if any secret is committed to the repo
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Trivy secret scan (whole repo)
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: secret
+          format: table
+          exit-code: "1"
+
+  # 2. Build -> scan -> push, per service
+  build-scan-push:
+    name: ${{ matrix.service }}
+    needs: [test, secret-scan]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: vote
+            context: ./vote
+            target: final
+          - service: result
+            context: ./result
+            target: ""
+          - service: worker
+            context: ./worker
+            target: ""
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Set image name (GHCR needs lowercase)
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/voting-app-${{ matrix.service }}" >> "$GITHUB_ENV"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          target: ${{ matrix.target }}
+          load: true
+          push: false
+          tags: ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+
+      - name: Trivy scan (fail on fixable CRITICAL)
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: ${{ env.IMAGE }}:${{ github.sha }}
+          format: table
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image (tagged with commit SHA)
+        if: github.event_name == 'push'
+        run: |
+          docker push "$IMAGE:${{ github.sha }}"
+          echo "Pushed $IMAGE:${{ github.sha }}"
+
+  # 3. Deploy to EKS with Helm (main branch only; AWS keys live in GitHub secrets, never in git)
+  deploy:
+    name: Deploy to EKS
+    needs: build-scan-push
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AWS_REGION: eu-north-1
+      CLUSTER_NAME: voting-app
+      NAMESPACE: voting-app
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Configure AWS credentials (scoped deploy user)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Check the cluster is running
+        id: cluster
+        run: |
+          if aws eks describe-cluster --name "$CLUSTER_NAME" --region "$AWS_REGION" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Cluster '$CLUSTER_NAME' is not running - deploy skipped. Run terraform apply to enable deployments."
+          fi
+
+      - name: Connect kubectl to the cluster
+        if: steps.cluster.outputs.exists == 'true'
+        run: aws eks update-kubeconfig --name "$CLUSTER_NAME" --region "$AWS_REGION"
+
+      - name: Set up Helm
+        if: steps.cluster.outputs.exists == 'true'
+        uses: azure/setup-helm@v4
+
+      - name: Create namespace and DB secret (from GitHub secret)
+        if: steps.cluster.outputs.exists == 'true'
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          kubectl create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n "$NAMESPACE" create secret generic db-credentials \
+            --from-literal=POSTGRES_USER=postgres \
+            --from-literal=POSTGRES_PASSWORD="$DB_PASSWORD" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Helm upgrade (image tag = commit SHA)
+        if: steps.cluster.outputs.exists == 'true'
+        run: |
+          helm upgrade --install voting-app helm/voting-app \
+            --namespace "$NAMESPACE" \
+            --set image.tag=${{ github.sha }} \
+            --wait --timeout 5m --history-max 10
+          helm history voting-app -n "$NAMESPACE"
+          kubectl get pods -n "$NAMESPACE"

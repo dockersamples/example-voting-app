@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/name: vote
+spec:
+  replicas: {{ .Values.vote.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vote
+  template:
+    metadata:
+      labels:
+        {{- include "voting-app.labels" . | nindent 8 }}
+        app.kubernetes.io/name: vote
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        sysctls:
+          - name: net.ipv4.ip_unprivileged_port_start
+            value: "0"   # lets the non-root user bind port 80
+      containers:
+        - name: vote
+          image: {{ include "voting-app.image" (dict "root" . "name" "vote") }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          resources:
+            {{- toYaml .Values.vote.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.vote.service.type }}
+  selector:
+    app.kubernetes.io/name: vote
+  ports:
+    - port: {{ .Values.vote.service.port }}
+      targetPort: 80

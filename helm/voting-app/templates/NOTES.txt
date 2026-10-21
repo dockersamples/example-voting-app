@@ -1,0 +1,8 @@
+Release "{{ .Release.Name }}" (revision {{ .Release.Revision }}) is deployed.
+Image tag: {{ .Values.image.tag }}
+
+Open the apps (run each in its own terminal):
+  kubectl -n {{ .Release.Namespace }} port-forward svc/vote 8080:80
+  kubectl -n {{ .Release.Namespace }} port-forward svc/result 8081:80
+
+Then browse to http://localhost:8080 (vote) and http://localhost:8081 (result).

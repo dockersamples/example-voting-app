@@ -1,0 +1,44 @@
+# ---- Images built by CI (Phase 4). CI overrides the tag with --set image.tag=<commit SHA> ----
+image:
+  registry: ghcr.io/akpochi
+  tag: "2281e1fce2b444a89bbff415178af02b343c2eeb"
+  pullPolicy: IfNotPresent
+
+vote:
+  replicas: 2
+  service:
+    type: ClusterIP   # change to LoadBalancer for a public AWS URL
+    port: 80
+  resources:
+    requests: { cpu: 50m, memory: 64Mi }
+    limits: { memory: 256Mi }
+
+result:
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    requests: { cpu: 50m, memory: 64Mi }
+    limits: { memory: 256Mi }
+
+worker:
+  replicas: 1
+  resources:
+    requests: { cpu: 50m, memory: 64Mi }
+    limits: { memory: 256Mi }
+
+redis:
+  image: redis:alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0
+  resources:
+    requests: { cpu: 50m, memory: 32Mi }
+    limits: { memory: 128Mi }
+
+db:
+  image: postgres:15-alpine@sha256:f7d23353e1b15400d22ebe31189f4d314b87a4c129cc400c8c2d8d4ca127bf81
+  # The chart does NOT create this Secret, so no password lives in git.
+  # CI creates it from the DB_PASSWORD GitHub Actions secret (keys: POSTGRES_USER, POSTGRES_PASSWORD).
+  existingSecret: db-credentials
+  resources:
+    requests: { cpu: 100m, memory: 128Mi }
+    limits: { memory: 512Mi }
