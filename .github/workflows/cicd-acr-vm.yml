@@ -44,7 +44,7 @@ jobs:
 
         run: |
 
-          docker build -t secrets.ACRLOGINSERVER/voting-app-vote:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest ./vote
+	  docker build -t "${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:${{ github.sha }}" -t "${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest" ./vote
 
           docker push secrets.ACRLOGINSERVER/voting-app-vote:{{ github.sha }}
 
