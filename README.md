@@ -1,65 +1,105 @@
-# Example Voting App
+# Organisation Merchant: Registration/Login vs Self-Service Split
 
-A simple distributed application running across multiple Docker containers.
+This change separates organisation-merchant functionality in **Payloft.Onboarding** across two controllers:
 
-## Getting started
+- **Registration and login** is served by `OrganizationMerchantService` through `OrganisationController`.
+- **Self-service** is served by `OrgMerchantService` through the new `OrganisationSelfServiceController`.
 
-Download [Docker Desktop](https://www.docker.com/products/docker-desktop) for Mac or Windows. [Docker Compose](https://docs.docker.com/compose) will be automatically installed. On Linux, make sure you have the latest version of [Compose](https://docs.docker.com/compose/install/).
+No service code was changed. The work is limited to controller wiring and DI registration.
 
-This solution uses Python, Node.js, .NET, with Redis for messaging and Postgres for storage.
+The full background, the permission model, the flow walkthroughs and the proposed fixes for known issues are in [`ORG_MERCHANT_SPLIT_TECHNICAL.md`](./ORG_MERCHANT_SPLIT_TECHNICAL.md).
 
-Run in this directory to build and run the app:
+---
 
-```shell
-docker compose up
+## What changed
+
+```
+Gateway.Core/
+└── Services/
+    └── Organization/
+        ├── OrganizationMerchantService.cs          unchanged
+        └── OrgMerchantService.cs                   unchanged
+
+Payloft.Onboarding/
+├── Program.cs                                      edited  (+2 DI registrations)
+└── Controllers/
+    ├── OrganisationController.cs                   edited  (regrouped + merchant login endpoint)
+    └── OrganisationSelfServiceController.cs        new
 ```
 
-The `vote` app will be running at [http://localhost:8080](http://localhost:8080), and the `results` will be at [http://localhost:8081](http://localhost:8081).
+| File | Change |
+|---|---|
+| `Program.cs` | Registers `OrganizationMerchantService` and `OrgMerchantService` in DI. Neither was registered before. |
+| `OrganisationController.cs` | Moves the four merchant-registration endpoints into their own region. Adds `POST organisation-merchant-login`. Nothing else changed. |
+| `OrganisationSelfServiceController.cs` | New controller exposing the 12 public methods of `OrgMerchantService` one-to-one. |
 
-Alternately, if you want to run it on a [Docker Swarm](https://docs.docker.com/engine/swarm/), first make sure you have a swarm. If you don't, run:
+## Setup
 
-```shell
-docker swarm init
+Add these lines to `Payloft.Onboarding/Program.cs`, next to `builder.Services.AddScoped<OrganizationService>();`:
+
+```csharp
+builder.Services.AddScoped<Gateway.Core.Services.Organization.OrganizationMerchantService>();
+builder.Services.AddScoped<OrgMerchantService>();
 ```
 
-Once you have your swarm, in this directory run:
+Without the first line, `OrganisationController` cannot be constructed, and every endpoint on it fails at request time.
 
-```shell
-docker stack deploy --compose-file docker-stack.yml vote
-```
+## Endpoints
 
-## Run the app in Kubernetes
+### `api/Organisation` (registration and login)
 
-The folder k8s-specifications contains the YAML specifications of the Voting App's services.
+| Method | Route | Auth | Service call |
+|---|---|---|---|
+| GET | `merchant-registration-link` | JWT | `GenerateMerchantRegistrationLink` |
+| POST | `organisation-merchant-register-email` | Anonymous | `RegisterEmail(model)` |
+| POST | `organisation-merchant-registration/{organisationId}/{token}` | Anonymous | `RegisterEmail(model, orgId, token)` |
+| POST | `organisation-merchant-register` | JWT (see known issues) | `Register` |
+| POST | `organisation-merchant-login` **(new)** | Anonymous | `OrgMerchantLogin` |
 
-Run the following command to create the deployments and services. Note it will create these resources in your current namespace (`default` if you haven't changed it.)
+### `api/OrganisationSelfService` (self-service)
 
-```shell
-kubectl create -f k8s-specifications/
-```
+| Method | Route | Gate | Service call |
+|---|---|---|---|
+| GET | `merchants` | `org:merchants:view` | `GetMerchantsAsync` |
+| GET | `merchants/{id}` | `org:merchants:view` | `GetMerchant` |
+| GET | `merchants/{merchantId}/detail` | authenticated | `GetMerchantDetail` |
+| GET | `business` | authenticated | `GetBusiness` |
+| POST | `merchants/{merchantId}/business` | `Update Business` | `UpdateBusiness` |
+| POST | `merchants/{id}/edit-request` | `org:merchants:onboard` | `EditMerchant` |
+| GET | `edit-requests` | `org:merchants:approve` | `GetMerchantAuthorizationRequest` |
+| POST | `edit-requests/{id}/decision` | `org:merchants:approve` | `ApproveOrDeclineMerchantRequest` |
+| POST | `merchants/{id}/reset-encryption-key` | `org:security:manage` | `ResetEncryptionKeyAsync` |
+| POST | `go-live` | authenticated | `RequestForGoLiveAsync` |
+| GET | `onboarding/{onboardingId}` | authenticated | `GetOnboardingAsync` |
+| POST | `onboarding/sla` (multipart form) | `Upload Document` | `UploadSlaDoc` |
 
-The `vote` web app is then available on port 31000 on each host of the cluster, the `result` web app is available on port 31001.
+The `org:*` gates are checked against the database via `OrganizationService.HasPermissionAsync`. Merchant-scope gates use `[RequirePermission]` against the token's `Permissions` claim.
 
-To remove them, run:
+## Who calls what
 
-```shell
-kubectl delete -f k8s-specifications/
-```
+- **Org staff** log in via `POST api/Organisation/login` and use the merchant directory, edit, approval and key-reset endpoints.
+- **Merchant users** log in via `POST api/Organisation/organisation-merchant-login` and use the business, go-live, onboarding and SLA endpoints.
 
-## Architecture
+## Known issues (not fixed in this change)
 
-![Architecture diagram](architecture.excalidraw.png)
+These are documented, with root cause and proposed fixes, in the technical document.
 
-* A front-end web app in [Python](/vote) which lets you vote between two options
-* A [Redis](https://hub.docker.com/_/redis/) which collects new votes
-* A [.NET](/worker/) worker which consumes votes and stores them in…
-* A [Postgres](https://hub.docker.com/_/postgres/) database backed by a Docker volume
-* A [Node.js](/result) web app which shows the results of the voting in real time
+| # | Severity | Issue |
+|---|---|---|
+| 1 | Critical | `OrgMerchantLogin` resolves the default org for anonymous requests, so merchants in real orgs cannot log in. |
+| 2 | Critical | `MerchantController.ResetEncryptionKeyAsync` is `[AllowAnonymous]` and returns the new key and IV. |
+| 3 | Critical | `users/switch-to-org-admin` has no permission check. |
+| 4 | High | `get-organization-transaction` has `[AllowAnonymous]`, which bypasses `[RequirePermission]`. |
+| 5 | High | A merchant user can act on sibling merchants in the same org (`UpdateBusiness`, `GetOnboarding`, `UploadSlaDoc`). |
+| 6 | High | `organisation-merchant-register` requires a JWT that the user cannot have yet. |
+| 7 | Medium | Maker and checker can be the same person on merchant edit requests. |
+| 8 | Medium | "Domain-based" signup lands every user in the default org. |
+| 9 | Medium | `CreateRole` permission check is commented out; `merchant-registration-link` is ungated. |
+| 10 | Low | Duplicate permission `live:keys:rotate` (ids 28 and 1029); `Permissions.cs` is out of sync with the DB. |
 
-## Notes
+## Quick verification
 
-The voting application only accepts one vote per client browser. It does not register additional votes if a vote has already been submitted from a client.
-
-This isn't an example of a properly architected perfectly designed distributed app... it's just a simple
-example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to
-deal with them in Docker at a basic level.
+1. The app starts, and `GET api/Organisation/roles` with an org-admin token returns 200. This confirms DI resolves.
+2. An org admin calling `GET api/OrganisationSelfService/merchants` gets their org's merchants only.
+3. A merchant-user token calling the same endpoint gets 403.
+4. `POST api/Organisation/organisation-merchant-login` succeeds for a default-org merchant. It is expected to fail for a real-org merchant until issue 1 is fixed.
