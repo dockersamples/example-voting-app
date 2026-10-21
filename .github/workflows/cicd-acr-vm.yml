@@ -1,0 +1,101 @@
+name: Build to ACR and Deploy to Azure VM
+
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  # ==========================================
+  # STAGE 1: Збірка образів та публікація в ACR
+  # ==========================================
+  build-and-push:
+    name: Build & Push Images to ACR
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+
+      - name: Log in to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+
+      - name: Build and Push Vote Service
+        run: |
+          docker build -t secrets.ACRLOGINSERVER/voting-app-vote:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest ./vote
+          docker push secrets.ACRLOGINSERVER/voting-app-vote:{{ github.sha }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest
+
+
+      - name: Build and Push Result Service
+        run: |
+          docker build -t secrets.ACRLOGINSERVER/voting-app-result:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-result:latest ./result
+          docker push secrets.ACRLOGINSERVER/voting-app-result:{{ github.sha }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-result:latest
+
+
+      - name: Build and Push Worker Service
+        run: |
+          docker build -t secrets.ACRLOGINSERVER/voting-app-worker:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-worker:latest ./worker
+          docker push secrets.ACRLOGINSERVER/voting-app-worker:{{ github.sha }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-worker:latest
+
+
+  # ==========================================
+  # STAGE 2: Розгортання на віртуальну машину Azure
+  # ==========================================
+  deploy-to-vm:
+    name: Deploy with Docker Compose on Azure VM
+    runs-on: ubuntu-latest
+    needs: build-and-push
+
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+
+      - name: Copy docker-compose.yml to Azure VM via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "/home/${{ secrets.VM_USERNAME }}/voting-app-deploy"
+
+
+      - name: Deploy stack on Azure VM via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            cd /home/${{ secrets.VM_USERNAME }}/voting-app-deploy
+
+
+            # Авторизація Docker у приватному реєстрі ACR
+            echo "${{ secrets.ACR_PASSWORD }}" | sudo docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
+
+
+            # Запис адреси реєстру у файл .env для підстановки в docker-compose.yml
+            echo "ACR_LOGIN_SERVER=${{ secrets.ACR_LOGIN_SERVER }}" > .env
+
+
+            # Завантаження свіжих образів з ACR та перезапуск контейнерів без локального білду
+            sudo docker compose pull
+            sudo docker compose up -d --no-build --remove-orphans
+
+
+            # Очищення старих невикористаних образів для економії диска VM
+            sudo docker image prune -f
