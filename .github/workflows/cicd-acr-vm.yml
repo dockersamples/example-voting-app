@@ -41,14 +41,10 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build and Push Vote Service
-
         run: |
-
-	  docker build -t "${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:${{ github.sha }}" -t "${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest" ./vote
-
-          docker push secrets.ACRLOGINSERVER/voting-app-vote:{{ github.sha }}
-
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest
+          docker build -t "${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:${{ github.sha }}" -t "${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest" ./vote
+          docker push "${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:${{ github.sha }}"
+          docker push "${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest"
 
       - name: Build and Push Result Service
 
