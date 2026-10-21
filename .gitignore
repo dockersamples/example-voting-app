@@ -15,3 +15,8 @@ tfplan
 crash.log
 crash.*.log
 tfplan*
+/terraform/terraform.tfstate
+/terraform/terraform.tfstate.*
+/terraform/tfplan
+/terraform/tfplan-*
+/terraform/*.tfplan
