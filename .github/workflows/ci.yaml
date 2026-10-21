@@ -1,11 +1,10 @@
-name: CI
+name: CI/CD
 
 on:
   push:
     branches: ["**"]
   pull_request:
 
-# Cancel an older run on the same branch when you push again
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -14,14 +13,11 @@ permissions:
   contents: read
 
 jobs:
-  # ---------------------------------------------------------------
-  # 1. TEST: run the full stack and prove a vote reaches Postgres
-  # ---------------------------------------------------------------
+  # 1a. End-to-end test of the full stack
   test:
     name: End-to-end test
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Check out code
         uses: actions/checkout@v6
@@ -62,32 +58,46 @@ jobs:
         if: always()
         run: docker compose down -v
 
-  # ---------------------------------------------------------------
-  # 2. BUILD -> SCAN -> PUSH, once per service, in parallel
-  # ---------------------------------------------------------------
+  # 1b. Fail the pipeline if any secret is committed to the repo
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Trivy secret scan (whole repo)
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: secret
+          format: table
+          exit-code: "1"
+
+  # 2. Build -> scan -> push, per service
   build-scan-push:
     name: ${{ matrix.service }}
-    needs: test
+    needs: [test, secret-scan]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
       contents: read
       packages: write
-
     strategy:
       fail-fast: false
       matrix:
         include:
           - service: vote
             context: ./vote
-            target: final   # production stage (gunicorn), not the dev stage compose uses
+            target: final
           - service: result
             context: ./result
             target: ""
           - service: worker
             context: ./worker
             target: ""
-
     steps:
       - name: Check out code
         uses: actions/checkout@v6
@@ -103,8 +113,8 @@ jobs:
         with:
           context: ${{ matrix.context }}
           target: ${{ matrix.target }}
-          load: true    # keep it locally so Trivy can scan it
-          push: false   # don't publish until the scan passes
+          load: true
+          push: false
           tags: ${{ env.IMAGE }}:${{ github.sha }}
           cache-from: type=gha,scope=${{ matrix.service }}
           cache-to: type=gha,mode=max,scope=${{ matrix.service }}
@@ -131,3 +141,64 @@ jobs:
         run: |
           docker push "$IMAGE:${{ github.sha }}"
           echo "Pushed $IMAGE:${{ github.sha }}"
+
+  # 3. Deploy to EKS with Helm (main branch only; AWS keys live in GitHub secrets, never in git)
+  deploy:
+    name: Deploy to EKS
+    needs: build-scan-push
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AWS_REGION: eu-north-1
+      CLUSTER_NAME: voting-app
+      NAMESPACE: voting-app
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Configure AWS credentials (scoped deploy user)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Check the cluster is running
+        id: cluster
+        run: |
+          if aws eks describe-cluster --name "$CLUSTER_NAME" --region "$AWS_REGION" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Cluster '$CLUSTER_NAME' is not running - deploy skipped. Run terraform apply to enable deployments."
+          fi
+
+      - name: Connect kubectl to the cluster
+        if: steps.cluster.outputs.exists == 'true'
+        run: aws eks update-kubeconfig --name "$CLUSTER_NAME" --region "$AWS_REGION"
+
+      - name: Set up Helm
+        if: steps.cluster.outputs.exists == 'true'
+        uses: azure/setup-helm@v4
+
+      - name: Create namespace and DB secret (from GitHub secret)
+        if: steps.cluster.outputs.exists == 'true'
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          kubectl create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n "$NAMESPACE" create secret generic db-credentials \
+            --from-literal=POSTGRES_USER=postgres \
+            --from-literal=POSTGRES_PASSWORD="$DB_PASSWORD" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Helm upgrade (image tag = commit SHA)
+        if: steps.cluster.outputs.exists == 'true'
+        run: |
+          helm upgrade --install voting-app helm/voting-app \
+            --namespace "$NAMESPACE" \
+            --set image.tag=${{ github.sha }} \
+            --wait --timeout 5m --history-max 10
+          helm history voting-app -n "$NAMESPACE"
+          kubectl get pods -n "$NAMESPACE"

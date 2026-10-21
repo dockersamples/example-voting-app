@@ -22,5 +22,11 @@ spec:
         - name: worker
           image: {{ include "voting-app.image" (dict "root" . "name" "worker") }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.db.existingSecret }}
+                  key: POSTGRES_PASSWORD
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}

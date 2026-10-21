@@ -1,4 +1,4 @@
-# ---- Images built by CI (Phase 4), all tagged with the same commit SHA ----
+# ---- Images built by CI (Phase 4). CI overrides the tag with --set image.tag=<commit SHA> ----
 image:
   registry: ghcr.io/akpochi
   tag: "2281e1fce2b444a89bbff415178af02b343c2eeb"
@@ -28,7 +28,6 @@ worker:
     requests: { cpu: 50m, memory: 64Mi }
     limits: { memory: 256Mi }
 
-# ---- Third-party images, pinned by digest (same as Phase 2 compose) ----
 redis:
   image: redis:alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0
   resources:
@@ -37,9 +36,9 @@ redis:
 
 db:
   image: postgres:15-alpine@sha256:f7d23353e1b15400d22ebe31189f4d314b87a4c129cc400c8c2d8d4ca127bf81
-  # Must match the connection strings hard-coded in result/server.js and worker/Program.cs
-  user: postgres
-  password: postgres
+  # The chart does NOT create this Secret, so no password lives in git.
+  # CI creates it from the DB_PASSWORD GitHub Actions secret (keys: POSTGRES_USER, POSTGRES_PASSWORD).
+  existingSecret: db-credentials
   resources:
     requests: { cpu: 100m, memory: 128Mi }
     limits: { memory: 512Mi }

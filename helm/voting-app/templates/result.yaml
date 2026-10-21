@@ -25,6 +25,12 @@ spec:
         - name: result
           image: {{ include "voting-app.image" (dict "root" . "name" "result") }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.db.existingSecret }}
+                  key: POSTGRES_PASSWORD
           ports:
             - containerPort: 80
           readinessProbe:
