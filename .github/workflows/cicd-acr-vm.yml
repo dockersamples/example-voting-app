@@ -26,20 +26,20 @@ jobs:
 
       - name: Build and Push Vote Service
         run: |
-          docker build -t secrets.ACRLOGINSERVER/voting-app-vote:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest ./vote
-          docker push secrets.ACRLOGINSERVER/voting-app-vote:{{ github.sha }}
+          docker build -t secrets.ACR_LOGIN_SERVER/voting-app-vote:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest ./vote
+          docker push secrets.ACR_LOGIN_SERVER/voting-app-vote:{{ github.sha }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-vote:latest
 
       - name: Build and Push Result Service
         run: |
-          docker build -t secrets.ACRLOGINSERVER/voting-app-result:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-result:latest ./result
-          docker push secrets.ACRLOGINSERVER/voting-app-result:{{ github.sha }}
+          docker build -t secrets.ACR_LOGIN_SERVER/voting-app-result:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-result:latest ./result
+          docker push secrets.ACR_LOGIN_SERVER/voting-app-result:{{ github.sha }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-result:latest
 
       - name: Build and Push Worker Service
         run: |
-          docker build -t secrets.ACRLOGINSERVER/voting-app-worker:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-worker:latest ./worker
-          docker push secrets.ACRLOGINSERVER/voting-app-worker:{{ github.sha }}
+          docker build -t secrets.ACR_LOGIN_SERVER/voting-app-worker:{{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-worker:latest ./worker
+          docker push secrets.ACR_LOGIN_SERVER/voting-app-worker:{{ github.sha }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/voting-app-worker:latest
 
   # ==========================================
