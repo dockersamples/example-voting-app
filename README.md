@@ -153,3 +153,39 @@ The current NodePort services use port `31000` for voting and `31001` for result
 ## Project Outcome
 
 This project demonstrates containerization, CI automation, image publishing, infrastructure as code, Kubernetes deployment, and end-to-end application testing on AWS.
+
+## Helm Rollback
+
+Helm tracks revisions of a release and supports returning to a previous
+revision if a deployment introduces a problem.
+
+Inspect the release history:
+
+```bash
+helm history assets-liabilities -n default
+```
+
+Inspect the current release:
+
+```bash
+helm status assets-liabilities -n default
+```
+
+To roll back to a known-good revision, first identify the appropriate
+revision in the history, then run:
+
+```bash
+helm rollback assets-liabilities REVISION -n default
+```
+
+Replace `REVISION` with the actual revision number from the history.
+Verify the result with:
+
+```bash
+helm status assets-liabilities -n default
+kubectl get deployments -n default
+```
+
+**Safety note:** Perform a rollback only after reviewing the revision history
+and confirming the target revision is appropriate. Do not intentionally
+deploy a broken release to the live environment for demonstration purposes.
