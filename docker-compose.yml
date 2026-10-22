@@ -26,6 +26,12 @@ services:
 
   result:
     build: ./result
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: postgres
+      PGUSER: postgres
+      PGPASSWORD: postgres
     # use nodemon rather than node for local dev
     depends_on:
       db:
