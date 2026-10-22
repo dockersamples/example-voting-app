@@ -21,3 +21,17 @@ spec:
           ports:
             - name: result
               containerPort: 80
+          env:
+            - name: PGHOST
+              value: "db"
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: "postgres"
+            - name: PGUSER
+              value: {{ .Values.db.username | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.db.existingSecret }}
+                  key: POSTGRES_PASSWORD
