@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/name: result
+spec:
+  replicas: {{ .Values.result.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: result
+  template:
+    metadata:
+      labels:
+        {{- include "voting-app.labels" . | nindent 8 }}
+        app.kubernetes.io/name: result
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        sysctls:
+          - name: net.ipv4.ip_unprivileged_port_start
+            value: "0"
+      containers:
+        - name: result
+          image: {{ include "voting-app.image" (dict "root" . "name" "result") }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.db.existingSecret }}
+                  key: POSTGRES_PASSWORD
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.result.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: result
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.result.service.type }}
+  selector:
+    app.kubernetes.io/name: result
+  ports:
+    - port: {{ .Values.result.service.port }}
+      targetPort: 80
