@@ -1,3 +1,3 @@
-Flask
-Redis
-gunicorn
+Flask==3.1.3
+redis==8.1.0
+gunicorn==26.2.0

@@ -1,0 +1,15 @@
+{{- if .Values.infrastructure.manage }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-data
+  labels:
+    app: db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.db.storageClassName | quote }}
+  resources:
+    requests:
+      storage: 5Gi
+{{- end }}

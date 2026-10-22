@@ -1,0 +1,76 @@
+name: Infrastructure Validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'terraform/**'
+      - 'k8s-specifications/**'
+      - '.github/workflows/infrastructure-validation.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'terraform/**'
+      - 'k8s-specifications/**'
+      - '.github/workflows/infrastructure-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: Format and validate Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: Check Terraform formatting
+        run: terraform -chdir=terraform fmt -check
+
+      - name: Initialize providers without a backend
+        run: terraform -chdir=terraform init -backend=false -input=false
+
+      - name: Validate Terraform configuration
+        run: terraform -chdir=terraform validate
+
+  kubernetes-manifests:
+    name: Check Kubernetes YAML syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate Kubernetes YAML syntax and document headers
+        run: |
+          python -m pip install --disable-pip-version-check PyYAML
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          files = sorted(Path("k8s-specifications").glob("*.yaml"))
+          if not files:
+              raise SystemExit("No Kubernetes YAML manifests found.")
+
+          for path in files:
+              with path.open() as stream:
+                  documents = list(yaml.safe_load_all(stream))
+              if not documents or any(not isinstance(doc, dict) for doc in documents):
+                  raise SystemExit(f"{path}: empty or invalid YAML document")
+              for doc in documents:
+                  if not doc.get("apiVersion") or not doc.get("kind"):
+                      raise SystemExit(f"{path}: document needs apiVersion and kind")
+              print(f"PASS: {path}")
+
+          print(f"Validated {len(files)} Kubernetes YAML files.")
+          PY

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result
+  labels:
+    app: result
+spec:
+  replicas: {{ .Values.result.replicaCount }}
+  selector:
+    matchLabels:
+      app: result
+  template:
+    metadata:
+      labels:
+        app: result
+    spec:
+      containers:
+        - name: result
+          image: "{{ .Values.result.image.repository }}:{{ .Values.result.image.tag }}"
+          imagePullPolicy: {{ .Values.result.image.pullPolicy | default "Always" }}
+          ports:
+            - name: result
+              containerPort: 80
+          env:
+            - name: PGHOST
+              value: "db"
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: "postgres"
+            - name: PGUSER
+              value: {{ .Values.db.username | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.db.existingSecret }}
+                  key: POSTGRES_PASSWORD
