@@ -26,6 +26,11 @@ jobs:
 
       - name: Build vote image
         run: docker build -t example-voting-app-vote:test ./vote
+      
+      - name: Verify Python packages in vote image
+        run: |
+          docker run --rm --entrypoint python example-voting-app-vote:test \
+            -m pip show wheel jaraco.context
 
       - name: Build result image
         run: docker build -t example-voting-app-result:test ./result
