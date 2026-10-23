@@ -12,7 +12,10 @@ RUN groupadd --system appgroup && \
 WORKDIR /usr/local/app
 
 COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir --upgrade \
+    wheel \
+    jaraco.context && \
+    python -m pip install --no-cache-dir -r requirements.txt
 
 FROM base AS dev
 RUN pip install watchdog
