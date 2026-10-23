@@ -34,7 +34,7 @@ jobs:
         run: docker build -t example-voting-app-worker:test ./worker
 
       - name: Run Trivy vulnerability scan on vote image
-        uses: aquasecurity/trivy-action@0.28.1
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: example-voting-app-vote:test
           format: table
@@ -44,7 +44,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Run Trivy vulnerability scan on result image
-        uses: aquasecurity/trivy-action@0.28.1
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: example-voting-app-result:test
           format: table
@@ -54,7 +54,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Run Trivy vulnerability scan on worker image
-        uses: aquasecurity/trivy-action@0.28.1
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: example-voting-app-worker:test
           format: table
