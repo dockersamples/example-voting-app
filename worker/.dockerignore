@@ -1,0 +1,9 @@
+.git
+.gitignore
+bin/
+obj/
+*.user
+*.suo
+.env
+.env.*
+!.env.example
