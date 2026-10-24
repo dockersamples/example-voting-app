@@ -11,9 +11,9 @@ COPY package*.json ./
 
 RUN npm ci && \
     npm cache clean --force && \
-    mv /usr/local/app/node_modules /node_modules
-
-RUN npm install -g npm@12.2.1
+    mv /usr/local/app/node_modules /node_modules && \
+    rm -rf /usr/local/lib/node_modules/npm \
+           /usr/local/lib/node_modules/corepack
 
 COPY --chown=node:node . .
 
