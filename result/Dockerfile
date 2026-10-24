@@ -13,6 +13,8 @@ RUN npm ci && \
     npm cache clean --force && \
     mv /usr/local/app/node_modules /node_modules
 
+RUN npm install -g npm@12.2.1
+
 COPY --chown=node:node . .
 
 ENV PORT=4000
