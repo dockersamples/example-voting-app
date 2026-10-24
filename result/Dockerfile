@@ -7,8 +7,6 @@ RUN apt-get update && \
 
 WORKDIR /usr/local/app
 
-RUN npm install -g nodemon
-
 COPY package*.json ./
 
 RUN npm ci && \
