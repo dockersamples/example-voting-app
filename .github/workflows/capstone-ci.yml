@@ -1,0 +1,69 @@
+name: Capstone CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - feature/container-hardening
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    name: Test and build application images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate Docker Compose configuration
+        run: docker compose config --quiet
+
+      - name: Build vote image
+        run: docker build -t example-voting-app-vote:test ./vote
+      
+      - name: Verify Python packages in vote image
+        run: |
+          docker run --rm --entrypoint python example-voting-app-vote:test \
+            -m pip show wheel jaraco.context
+
+      - name: Build result image
+        run: docker build -t example-voting-app-result:test ./result
+
+      - name: Build worker image
+        run: docker build -t example-voting-app-worker:test ./worker
+
+      - name: Run Trivy vulnerability scan on vote image
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          image-ref: example-voting-app-vote:test
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+
+      - name: Run Trivy vulnerability scan on result image
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          image-ref: example-voting-app-result:test
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+
+      - name: Run Trivy vulnerability scan on worker image
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          image-ref: example-voting-app-worker:test
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
