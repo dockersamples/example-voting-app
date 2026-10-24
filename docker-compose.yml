@@ -60,12 +60,6 @@ services:
       timeout: 3s
       retries: 3
 
-volumes:
-  db-data:
-
-networks:
-  front-tier:
-  back-tier:
   # this service runs once to seed the database with votes
   # it won't run unless you specify the "seed" profile
   # docker compose --profile seed up -d
