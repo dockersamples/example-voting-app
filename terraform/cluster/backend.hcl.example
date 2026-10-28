@@ -1,0 +1,5 @@
+bucket       = "arn:aws:s3:::tfstate-720443382637-us-east-1"
+key          = "cluster/terraform.tfstate"
+region       = "us-east-1"
+encrypt      = true
+use_lockfile = true

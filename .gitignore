@@ -4,3 +4,10 @@ bin/
 obj/
 .vs/
 node_modules/
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+backend.hcl
+.env

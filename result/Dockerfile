@@ -18,8 +18,11 @@ RUN npm ci && \
 
 COPY . .
 
-ENV PORT=80
-EXPOSE 80
+ENV PORT=8080
+EXPOSE 8080
+
+# run as the built-in non-root "node" user (UID 1000)
+USER 1000
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["node", "server.js"]

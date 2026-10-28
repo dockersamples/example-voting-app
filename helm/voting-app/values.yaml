@@ -1,0 +1,38 @@
+image:
+  registry: ""                 # set by pipeline: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
+  tag: "latest"                # pipeline overrides with the commit SHA
+  pullPolicy: IfNotPresent
+
+vote:
+  replicas: 2
+  optionA: Cats
+  optionB: Dogs
+  resources:
+    requests: {cpu: 50m, memory: 64Mi}
+    limits: {cpu: 300m, memory: 256Mi}
+
+result:
+  replicas: 1
+  resources:
+    requests: {cpu: 50m, memory: 64Mi}
+    limits: {cpu: 300m, memory: 256Mi}
+
+worker:
+  replicas: 1
+  resources:
+    requests: {cpu: 50m, memory: 64Mi}
+    limits: {cpu: 300m, memory: 256Mi}
+
+redis:
+  image: redis:7-alpine
+  resources:
+    requests: {cpu: 25m, memory: 32Mi}
+    limits: {cpu: 200m, memory: 128Mi}
+
+db:
+  image: postgres:17-alpine
+  user: postgres
+  password: ""                 # REQUIRED at deploy time: --set-string db.password=...
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 512Mi}

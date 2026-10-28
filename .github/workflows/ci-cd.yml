@@ -1,0 +1,226 @@
+name: ci-cd
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["docs/**", "**.md"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-cd-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ---------------------------------------------------------------- lint + tests
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Hadolint (vote)
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: vote/Dockerfile
+          failure-threshold: error
+
+      - name: Hadolint (result)
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: result/Dockerfile
+          failure-threshold: error
+
+      - name: Hadolint (worker)
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: worker/Dockerfile
+          failure-threshold: error
+
+      - name: Validate compose file
+        run: docker compose config --quiet
+
+      - uses: azure/setup-helm@v4
+
+      - name: Helm lint
+        run: >
+          helm lint helm/voting-app
+          --set image.registry=example.invalid
+          --set-string db.password=lint-only
+
+      - name: Python syntax check (vote)
+        run: python -m compileall -q vote
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Node syntax check (result)
+        run: node --check result/server.js
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ vars.DOTNET_VERSION || '8.0.x' }}
+
+      - name: Build worker
+        run: dotnet build worker -c Release
+
+  # ------------------------------------------------------------------- security
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Dependencies + hard-coded secrets. Fails on fixable HIGH/CRITICAL.
+      - name: Trivy filesystem scan (vulnerabilities and secrets)
+        uses: aquasecurity/trivy-action@v0.36.0 # verify the latest tag and pin to a SHA
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          skip-dirs: terraform,helm,k8s-specifications
+          exit-code: "1"
+
+      # IaC and Helm misconfigurations. Report-only until findings are triaged.
+      - name: Trivy IaC and Helm scan (report only)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          skip-dirs: k8s-specifications
+          exit-code: "0"
+
+  # ------------------------------------------------------ build, scan, push images
+  build-scan-push:
+    needs: [lint-test, security-scan]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # needed to request the OIDC token
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [vote, result, worker]
+    env:
+      IMAGE: voting-app/${{ matrix.service }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build image (kept local for scanning)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.service }}
+          load: true
+          tags: ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+
+      - name: Trivy image scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: ${{ env.IMAGE }}:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+
+      - name: Configure AWS credentials (OIDC)
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Log in to ECR
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Tag and push (commit SHA)
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+        run: |
+          docker tag "${IMAGE}:${GITHUB_SHA}" "${REGISTRY}/${IMAGE}:${GITHUB_SHA}"
+          docker push "${REGISTRY}/${IMAGE}:${GITHUB_SHA}"
+
+  # ------------------------------------------------------------------- deploy
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build-scan-push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      EKS_CLUSTER_NAME: ${{ vars.EKS_CLUSTER_NAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Check the cluster exists
+        id: cluster
+        run: |
+          if aws eks describe-cluster --name "$EKS_CLUSTER_NAME" --query cluster.status --output text; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Cluster $EKS_CLUSTER_NAME not found (destroyed to save cost?). Images were pushed; deploy skipped."
+          fi
+
+      - uses: azure/setup-helm@v4
+        if: steps.cluster.outputs.exists == 'true'
+
+      - uses: azure/setup-kubectl@v4
+        if: steps.cluster.outputs.exists == 'true'
+
+      - name: Configure kubectl
+        if: steps.cluster.outputs.exists == 'true'
+        run: aws eks update-kubeconfig --name "$EKS_CLUSTER_NAME" --region "$AWS_REGION"
+
+      - name: Helm upgrade (auto-rollback on failure)
+        if: steps.cluster.outputs.exists == 'true'
+        run: |
+          helm upgrade --install voting helm/voting-app \
+            --namespace voting --create-namespace \
+            --set image.registry="$ECR_REGISTRY" \
+            --set image.tag="$GITHUB_SHA" \
+            --set-string db.password="$DB_PASSWORD" \
+            --history-max 10 \
+            --atomic --wait --timeout 5m
+
+      - name: Post-deploy smoke test
+        if: steps.cluster.outputs.exists == 'true'
+        run: |
+          kubectl -n voting port-forward svc/vote 8080:80 >/tmp/pf-vote.log 2>&1 &
+          kubectl -n voting port-forward svc/result 8081:80 >/tmp/pf-result.log 2>&1 &
+          sleep 5
+          for i in $(seq 1 20); do
+            curl -fsS -o /dev/null http://localhost:8080/ && break
+            sleep 3
+          done
+          curl -fsS http://localhost:8080/ | grep -qi "cats"
+          curl -fsS -o /dev/null http://localhost:8081/
+          echo "Smoke test passed"
+
+      - name: Diagnostics on failure
+        if: failure() && steps.cluster.outputs.exists == 'true'
+        run: |
+          kubectl -n voting get pods -o wide || true
+          kubectl -n voting describe pods | tail -n 80 || true
+          helm -n voting history voting || true

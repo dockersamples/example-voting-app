@@ -1,0 +1,42 @@
+name: rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: "Helm revision to roll back to (leave blank for the previous one)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      EKS_CLUSTER_NAME: ${{ vars.EKS_CLUSTER_NAME }}
+      REV: ${{ inputs.revision }}
+    steps:
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - uses: azure/setup-helm@v4
+      - uses: azure/setup-kubectl@v4
+
+      - name: Configure kubectl
+        run: aws eks update-kubeconfig --name "$EKS_CLUSTER_NAME" --region "$AWS_REGION"
+
+      - name: History before
+        run: helm -n voting history voting
+
+      - name: Roll back
+        run: helm -n voting rollback voting ${REV:+"$REV"} --wait --timeout 5m
+
+      - name: History after
+        run: helm -n voting history voting

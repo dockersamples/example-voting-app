@@ -1,0 +1,13 @@
+.git
+.gitignore
+.env
+.env.*
+node_modules
+**/__pycache__
+*.pyc
+bin/
+obj/
+Dockerfile
+.dockerignore
+*.md
+tests/
