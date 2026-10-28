@@ -1,0 +1,28 @@
+namespace: default
+
+vote:
+  replicas: 1
+  image: example-voting-app-vote
+  tag: latest
+  servicePort: 8080
+
+result:
+  replicas: 1
+  image: example-voting-app-result
+  tag: latest
+  servicePort: 8081
+
+worker:
+  replicas: 1
+  image: example-voting-app-worker
+  tag: latest
+
+postgres:
+  image: postgres
+  tag: "15-alpine"
+  database: postgres
+  username: postgres
+
+redis:
+  image: redis
+  tag: "alpine"

@@ -4,3 +4,22 @@ bin/
 obj/
 .vs/
 node_modules/
+
+# Local secrets and environment configuration
+.env
+.env.*
+!.env.example
+secrets/
+k8s-specifications/db-secret.yaml
+
+# Local database backups and exported images
+db-backup.sql
+vote-image.tar
+
+# Terraform local files and state
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/terraform.tfvars
+terraform/*.tfplan
+crash.log
