@@ -474,5 +474,7 @@ Redis password in source code
 
 Check answers
 
-My biggest takeaway: The most important concepts in this diagram are microservices, asynchronous messaging, message queues, eventual consistency, fault tolerance, and idempotency. These concepts are useful not only for Azure certification but also for real-world cloud architecture and system design.
+My biggest takeaway: The most important concepts in this diagram are microservices, asynchronous messaging, message queues, eventual consistency, fault tolerance, and idempotency. These concepts are useful not only for Azure certification but also for real-world cloud architecture and system design. 
+
+Good explanation
 
