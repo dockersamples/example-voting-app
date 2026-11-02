@@ -1,24 +1,21 @@
-# Using official python runtime base image
-FROM python:3.9-slim
+FROM python:3.12-slim
 
-# add curl for healthcheck
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set the application directory
 WORKDIR /app
 
-# Install our requirements.txt
 COPY requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy our code from the current folder to /app inside the container
 COPY . .
 
-# Make port 80 available for links and/or publish
-EXPOSE 80
+# Shared directory so all gunicorn workers report into one /metrics endpoint.
+ENV PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+RUN mkdir -p /tmp/prometheus \
+    && useradd --uid 10001 --no-create-home app \
+    && chown -R app /tmp/prometheus
 
-# Define our command to be run when launching the container
-CMD ["gunicorn", "app:app", "-b", "0.0.0.0:80", "--log-file", "-", "--access-logfile", "-", "--workers", "4", "--keep-alive", "0"]
+USER app
+EXPOSE 8080
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
+  CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8080/healthz', timeout=2)" || exit 1
+# Clear stale metric files from a previous run before starting gunicorn.
+CMD ["sh", "-c", "rm -rf /tmp/prometheus/* && exec gunicorn app:app -c gunicorn.conf.py"]
