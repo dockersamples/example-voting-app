@@ -1,0 +1,63 @@
+# Unit tests for the SLO alerts:  promtool test rules observability/prometheus/tests/slo_test.yml
+# Proves the alerts page on a real outage and stay quiet on normal noise.
+rule_files:
+  - ../rules/slo.yml
+
+evaluation_interval: 1m
+
+tests:
+  # 10% errors for an hour: far above 14.4x burn -> must page.
+  - interval: 1m
+    input_series:
+      - series: 'vote_http_requests_total{status="200"}'
+        values: '0+90x70'
+      - series: 'vote_http_requests_total{status="503"}'
+        values: '0+10x70'
+    alert_rule_test:
+      - eval_time: 65m
+        alertname: VoteAvailabilityFastBurn
+        exp_alerts:
+          - exp_labels: {severity: page, slo: vote-availability}
+            exp_annotations:
+              summary: "Vote error budget burning fast (>14.4x)"
+              description: "10% of vote requests are failing. At this rate the 28-day budget is gone in under 2 days."
+              runbook_url: "docs/runbooks/vote-high-error-rate.md"
+
+  # 0.1% errors: within budget -> must NOT page.
+  - interval: 1m
+    input_series:
+      - series: 'vote_http_requests_total{status="200"}'
+        values: '0+999x70'
+      - series: 'vote_http_requests_total{status="503"}'
+        values: '0+1x70'
+    alert_rule_test:
+      - eval_time: 65m
+        alertname: VoteAvailabilityFastBurn
+        exp_alerts: []
+
+  # Short blip (5 min of 100% errors, then healthy): 1h window keeps it
+  # below 14.4x once the 5m window recovers -> no page after recovery.
+  - interval: 1m
+    input_series:
+      - series: 'vote_http_requests_total{status="200"}'
+        values: '0+100x60 6000+0x4 6000+100x20'
+      - series: 'vote_http_requests_total{status="503"}'
+        values: '0+0x60 0+100x4 400+0x20'
+    alert_rule_test:
+      - eval_time: 80m
+        alertname: VoteAvailabilityFastBurn
+        exp_alerts: []
+
+  # Backlog above 100 for 2+ minutes -> page (what the spike test triggered).
+  - interval: 1m
+    input_series:
+      - series: 'redis_key_size{key="votes"}'
+        values: '0 50 500 5000 20000 20000'
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: VoteBacklogGrowing
+        exp_alerts:
+          - exp_labels: {severity: page, slo: vote-freshness, key: votes}
+            exp_annotations:
+              summary: "20000 votes waiting in Redis: the worker is down or falling behind"
+              runbook_url: "docs/runbooks/vote-backlog.md"

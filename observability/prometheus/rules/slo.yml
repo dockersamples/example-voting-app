@@ -1,0 +1,110 @@
+# SLOs for the vote front end. See docs/SLOs.md for the reasoning.
+#
+#   Availability: 99.5% of user requests succeed (non-5xx), 28-day window
+#   Latency:      99% of user requests complete in < 300 ms, 28-day window
+#   Freshness:    vote backlog in Redis stays under 100 (worker keeps up)
+#
+# Alerting follows the multi-window, multi-burn-rate approach from the
+# Google SRE Workbook, ch. 5: page on fast burn, ticket on slow burn.
+
+groups:
+  - name: vote-sli-recording
+    rules:
+      # ---- availability: error ratio over several windows ----
+      - record: vote:error_ratio:rate5m
+        expr: |
+          sum(rate(vote_http_requests_total{status=~"5.."}[5m]))
+          / clamp_min(sum(rate(vote_http_requests_total[5m])), 1e-9)
+      - record: vote:error_ratio:rate30m
+        expr: |
+          sum(rate(vote_http_requests_total{status=~"5.."}[30m]))
+          / clamp_min(sum(rate(vote_http_requests_total[30m])), 1e-9)
+      - record: vote:error_ratio:rate1h
+        expr: |
+          sum(rate(vote_http_requests_total{status=~"5.."}[1h]))
+          / clamp_min(sum(rate(vote_http_requests_total[1h])), 1e-9)
+      - record: vote:error_ratio:rate6h
+        expr: |
+          sum(rate(vote_http_requests_total{status=~"5.."}[6h]))
+          / clamp_min(sum(rate(vote_http_requests_total[6h])), 1e-9)
+
+      # ---- latency: share of requests slower than 300 ms ----
+      - record: vote:slow_ratio:rate5m
+        expr: |
+          1 - (
+            sum(rate(vote_http_request_duration_seconds_bucket{le="0.3"}[5m]))
+            / clamp_min(sum(rate(vote_http_request_duration_seconds_count[5m])), 1e-9)
+          )
+      - record: vote:slow_ratio:rate1h
+        expr: |
+          1 - (
+            sum(rate(vote_http_request_duration_seconds_bucket{le="0.3"}[1h]))
+            / clamp_min(sum(rate(vote_http_request_duration_seconds_count[1h])), 1e-9)
+          )
+
+      # ---- latency percentiles for dashboards ----
+      - record: vote:latency_seconds:p95
+        expr: histogram_quantile(0.95, sum by (le) (rate(vote_http_request_duration_seconds_bucket[1m])))
+      - record: vote:latency_seconds:p99
+        expr: histogram_quantile(0.99, sum by (le) (rate(vote_http_request_duration_seconds_bucket[1m])))
+
+  - name: vote-slo-alerts
+    rules:
+      # 14.4x burn = 2% of a 28-day budget in 1 hour -> wake someone up.
+      - alert: VoteAvailabilityFastBurn
+        expr: |
+          vote:error_ratio:rate1h > (14.4 * 0.005)
+          and
+          vote:error_ratio:rate5m > (14.4 * 0.005)
+        for: 1m
+        labels:
+          severity: page
+          slo: vote-availability
+        annotations:
+          summary: "Vote error budget burning fast (>14.4x)"
+          description: "{{ $value | humanizePercentage }} of vote requests are failing. At this rate the 28-day budget is gone in under 2 days."
+          runbook_url: "docs/runbooks/vote-high-error-rate.md"
+
+      # 6x burn sustained = 5% of budget in 6 hours -> ticket, fix in hours.
+      - alert: VoteAvailabilitySlowBurn
+        expr: |
+          vote:error_ratio:rate6h > (6 * 0.005)
+          and
+          vote:error_ratio:rate30m > (6 * 0.005)
+        for: 15m
+        labels:
+          severity: ticket
+          slo: vote-availability
+        annotations:
+          summary: "Vote error budget burning steadily (>6x)"
+          runbook_url: "docs/runbooks/vote-high-error-rate.md"
+
+      - alert: VoteLatencyFastBurn
+        expr: |
+          vote:slow_ratio:rate1h > (14.4 * 0.01)
+          and
+          vote:slow_ratio:rate5m > (14.4 * 0.01)
+        for: 2m
+        labels:
+          severity: page
+          slo: vote-latency
+        annotations:
+          summary: "Vote latency SLO burning fast: too many requests over 300 ms"
+
+      - alert: VoteBacklogGrowing
+        expr: redis_key_size{key="votes"} > 100
+        for: 2m
+        labels:
+          severity: page
+          slo: vote-freshness
+        annotations:
+          summary: "{{ $value }} votes waiting in Redis: the worker is down or falling behind"
+          runbook_url: "docs/runbooks/vote-backlog.md"
+
+      - alert: VoteTargetDown
+        expr: up{job="vote"} == 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "Prometheus cannot scrape the vote service"

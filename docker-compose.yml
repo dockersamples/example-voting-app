@@ -1,95 +1,119 @@
-# version is now using "compose spec"
-# v2 and v3 are now combined!
-# docker-compose v1.27+ required
-
+# Voting app + observability stack.
+#   docker compose up -d --build        app + Prometheus + Grafana
+#   make load / make chaos-redis         see Makefile
 services:
   vote:
     build: ./vote
-    # use python rather than gunicorn for local dev
-    command: python app.py
     depends_on:
       redis:
         condition: service_healthy
-    healthcheck: 
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 15s
-      timeout: 5s
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/healthz', timeout=2)"]
+      interval: 10s
+      timeout: 3s
       retries: 3
       start_period: 10s
-    volumes:
-     - ./vote:/app
     ports:
-      - "5000:80"
-    networks:
-      - front-tier
-      - back-tier
+      - "5000:8080"
+    networks: [front-tier, back-tier]
+    restart: unless-stopped
 
   result:
     build: ./result
-    # use nodemon rather than node for local dev
-    entrypoint: nodemon server.js
     depends_on:
       db:
-        condition: service_healthy 
-    volumes:
-      - ./result:/app
+        condition: service_healthy
     ports:
       - "5001:80"
-      - "5858:5858"
-    networks:
-      - front-tier
-      - back-tier
+    networks: [front-tier, back-tier]
+    restart: unless-stopped
 
   worker:
-    build:
-      context: ./worker
+    build: ./worker
     depends_on:
       redis:
-        condition: service_healthy 
+        condition: service_healthy
       db:
-        condition: service_healthy 
-    networks:
-      - back-tier
+        condition: service_healthy
+    networks: [back-tier]
+    restart: unless-stopped
 
   redis:
-    image: redis:alpine
+    image: redis:7.4-alpine
+    # Append-only file, fsync every second: a crash loses at most ~1 s of
+    # queued votes instead of everything since the last RDB snapshot.
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
     volumes:
+      - "redis-data:/data"
       - "./healthchecks:/healthchecks"
     healthcheck:
       test: /healthchecks/redis.sh
-      interval: "5s"
-    networks:
-      - back-tier
+      interval: 5s
+    networks: [back-tier]
 
   db:
-    image: postgres:15-alpine
+    image: postgres:16-alpine
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - "db-data:/var/lib/postgresql/data"
       - "./healthchecks:/healthchecks"
     healthcheck:
       test: /healthchecks/postgres.sh
-      interval: "5s"
-    networks:
-      - back-tier
+      interval: 5s
+      retries: 10
+      start_period: 30s   # first boot runs initdb, which can take a while
+    networks: [back-tier]
 
-  # this service runs once to seed the database with votes
-  # it won't run unless you specify the "seed" profile
-  # docker compose --profile seed up -d
-  seed:
-    build: ./seed-data
-    profiles: ["seed"]
-    depends_on:
-      vote:
-        condition: service_healthy 
-    networks:
-      - front-tier
-    restart: "no"
+  # ---------- observability ----------
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.66.0
+    environment:
+      REDIS_ADDR: redis://redis:6379
+      # Export the length of the "votes" list: the worker backlog (freshness SLI).
+      REDIS_EXPORTER_CHECK_SINGLE_KEYS: db0=votes
+    networks: [back-tier]
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+      - --web.enable-lifecycle
+    volumes:
+      - ./observability/prometheus:/etc/prometheus:ro
+    ports:
+      - "9090:9090"
+    networks: [back-tier]
+
+  grafana:
+    image: grafana/grafana:11.3.0
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/vote-slo.json
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3000:3000"
+    networks: [back-tier]
+
+  # ---------- load testing (run on demand) ----------
+  k6:
+    image: grafana/k6:0.54.0
+    profiles: ["loadtest"]
+    volumes:
+      - ./loadtest:/scripts:ro
+      - ./results:/results
+    environment:
+      BASE_URL: http://vote:8080
+    networks: [front-tier]
 
 volumes:
   db-data:
+  redis-data:
 
 networks:
   front-tier:

@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 5s       # short for demos/game days; use 15-30s in production
+  evaluation_interval: 5s
+
+rule_files:
+  - /etc/prometheus/rules/*.yml
+
+scrape_configs:
+  - job_name: vote
+    static_configs:
+      - targets: ["vote:8080"]
+  - job_name: redis
+    static_configs:
+      - targets: ["redis-exporter:9121"]
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]

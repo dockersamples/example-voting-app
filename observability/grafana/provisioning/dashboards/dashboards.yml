@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: voting-app
+    folder: Voting App
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards
