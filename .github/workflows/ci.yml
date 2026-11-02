@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: Unit tests + rule tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r vote/requirements.txt pytest pyyaml
+      - name: Vote service tests
+        run: cd vote && python -m pytest -q tests
+      - name: Validate Prometheus rules + k8s copy in sync
+        run: make check-rules
+      - name: Unit-test SLO alerts
+        run: make test-rules
+
+  manifests:
+    name: Validate Kubernetes manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install kubeconform
+        run: |
+          curl -sSL https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz | tar xz
+          sudo mv kubeconform /usr/local/bin/
+      - name: Schema-check rendered manifests
+        run: |
+          kubectl kustomize k8s/base | kubeconform -strict -summary -
+          kubectl kustomize --load-restrictor LoadRestrictionsNone k8s/monitoring \
+            | kubeconform -strict -summary \
+                -schema-location default \
+                -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' -
+
+  compose-load-test:
+    name: Docker Compose + k6 smoke (SLO gate)
+    runs-on: ubuntu-latest
+    needs: unit
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start stack
+        run: docker compose up -d --build --wait
+      - name: k6 smoke test (fails if SLO thresholds fail)
+        run: make smoke
+      - name: Chaos - Postgres outage must lose zero votes
+        run: |
+          make chaos-db
+          grep -q '\*\*Accepted but lost\*\* | \*\*0\*\*' results/chaos-db.md
+      - name: Dump logs on failure
+        if: failure()
+        run: docker compose logs --tail=200
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k6-results
+          path: results/
+
+  kind-e2e:
+    name: Deploy to Kubernetes (kind) + smoke
+    runs-on: ubuntu-latest
+    needs: [unit, manifests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: helm/kind-action@v1
+        with:
+          cluster_name: voting-app
+          config: k8s/kind.yaml
+      - name: Build and load images
+        run: |
+          for s in vote worker result; do
+            docker build -t voting-app/$s:dev ./$s
+            kind load docker-image voting-app/$s:dev --name voting-app
+          done
+      - name: Deploy
+        run: |
+          kubectl apply -k k8s/base
+          kubectl -n voting-app rollout status statefulset/redis statefulset/db --timeout=180s
+          kubectl -n voting-app rollout status deploy/vote deploy/worker deploy/result --timeout=180s
+      - name: Smoke test through the NodePort
+        run: |
+          curl -fsS http://localhost:31000/readyz
+          for i in $(seq 1 20); do curl -fsS -o /dev/null -X POST -d vote=a http://localhost:31000/; done
+          sleep 5
+          COUNT=$(kubectl -n voting-app exec statefulset/db -- psql -U postgres -tAc "select count(*) from votes")
+          echo "votes stored: $COUNT"
+          test "$COUNT" -ge 1
+      - name: Readiness drops (not liveness) when Redis is down
+        run: |
+          kubectl -n voting-app scale statefulset/redis --replicas=0
+          sleep 20
+          kubectl -n voting-app get pods -l app=vote
+          # pods must be NotReady but not restarting
+          test "$(kubectl -n voting-app get pods -l app=vote -o jsonpath='{.items[*].status.containerStatuses[*].ready}' | grep -c true || true)" = "0"
+          test "$(kubectl -n voting-app get pods -l app=vote -o jsonpath='{.items[*].status.containerStatuses[*].restartCount}' | tr ' ' '\n' | sort -n | tail -1)" = "0"
+          kubectl -n voting-app scale statefulset/redis --replicas=1
+          kubectl -n voting-app rollout status statefulset/redis --timeout=120s
+          kubectl -n voting-app wait --for=condition=ready pod -l app=vote --timeout=60s
+      - name: Debug on failure
+        if: failure()
+        run: |
+          kubectl -n voting-app get all
+          kubectl -n voting-app describe pods | tail -100
