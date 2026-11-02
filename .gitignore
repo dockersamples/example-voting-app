@@ -1,6 +1,10 @@
+results/*
+!results/.gitkeep
+__pycache__/
 *.pyc
-project.lock.json
+.pytest_cache/
 bin/
 obj/
+project.lock.json
 .vs/
 node_modules/
