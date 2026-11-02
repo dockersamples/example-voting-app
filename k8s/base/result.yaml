@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: result}
+  template:
+    metadata:
+      labels: {app: result}
+    spec:
+      containers:
+        - name: result
+          image: voting-app/result
+          ports:
+            - {name: http, containerPort: 80}
+          readinessProbe:
+            httpGet: {path: /, port: http}
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket: {port: http}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 50m, memory: 64Mi}
+            limits: {memory: 256Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: result
+  labels: {app: result}
+spec:
+  type: NodePort
+  selector: {app: result}
+  ports:
+    - {name: http, port: 80, targetPort: http, nodePort: 31001}

@@ -1,0 +1,27 @@
+# Requires the Prometheus Operator CRDs (e.g. kube-prometheus-stack).
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: vote
+  namespace: voting-app
+  labels: {release: kube-prometheus-stack}
+spec:
+  selector:
+    matchLabels: {app: vote}
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: redis
+  namespace: voting-app
+  labels: {release: kube-prometheus-stack}
+spec:
+  selector:
+    matchLabels: {app: redis}
+  endpoints:
+    - port: metrics
+      interval: 15s

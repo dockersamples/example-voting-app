@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - servicemonitors.yaml
+  - prometheusrule.yaml
+configMapGenerator:
+  # Grafana sidecar (kube-prometheus-stack) auto-imports ConfigMaps with this label.
+  - name: vote-slo-dashboard
+    namespace: voting-app
+    files:
+      - vote-slo.json=../../observability/grafana/dashboards/vote-slo.json
+    options:
+      labels: {grafana_dashboard: "1"}
+      disableNameSuffixHash: true

@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: voting-app
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: voting-app
+    includeSelectors: false
+resources:
+  - namespace.yaml
+  - secret.yaml
+  - redis.yaml
+  - db.yaml
+  - vote.yaml
+  - worker.yaml
+  - result.yaml
+# Images are built by CI. Override tags/registry here or in an overlay.
+images:
+  - name: voting-app/vote
+    newTag: dev
+  - name: voting-app/worker
+    newTag: dev
+  - name: voting-app/result
+    newTag: dev

@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}   # zero-downtime deploys
+  selector:
+    matchLabels: {app: vote}
+  template:
+    metadata:
+      labels: {app: vote}
+    spec:
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile: {type: RuntimeDefault}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels: {app: vote}
+      containers:
+        - name: vote
+          image: voting-app/vote
+          ports:
+            - {name: http, containerPort: 8080}
+          env:
+            - {name: REDIS_HOST, value: redis}
+            - {name: GUNICORN_WORKERS, value: "2"}
+          # Liveness never checks Redis: a Redis outage should stop traffic
+          # (readiness), not restart every vote pod.
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: {path: /readyz, port: http}
+            periodSeconds: 5
+            failureThreshold: 2
+          lifecycle:
+            # Give the Service time to remove this pod before gunicorn stops.
+            preStop:
+              exec: {command: ["sleep", "5"]}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {memory: 256Mi}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {drop: ["ALL"]}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote
+  labels: {app: vote}
+spec:
+  type: NodePort
+  selector: {app: vote}
+  ports:
+    - {name: http, port: 80, targetPort: http, nodePort: 31000}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: vote
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: {app: vote}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: vote
+spec:
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: vote}
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target: {type: Utilization, averageUtilization: 70}
