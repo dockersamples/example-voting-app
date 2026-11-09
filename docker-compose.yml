@@ -1,4 +1,3 @@
-  yaml
   services:
   vote:
     image: ${ACR_LOGIN_SERVER}/voting-app-vote:latest
@@ -69,4 +68,5 @@ volumes:
 networks:
   front-tier:
   back-tier:
+
 
