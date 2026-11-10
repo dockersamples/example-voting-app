@@ -46,6 +46,19 @@ To remove them, run:
 kubectl delete -f k8s-specifications/
 ```
 
+## Configuration
+
+The services find each other by the host names `redis` and `db`, which is what Docker Compose, Swarm and the Kubernetes specifications provide. To run them somewhere else (for example each one on its own server), set these environment variables. All of them are optional and the defaults below match the Compose setup, so nothing changes if you do not set them.
+
+| Service | Variable | Default |
+|---------|----------|---------|
+| vote | `REDIS_HOST` | `redis` |
+| worker | `REDIS_HOST` | `redis` |
+| worker, result | `POSTGRES_HOST` | `db` |
+| worker, result | `POSTGRES_USER` | `postgres` |
+| worker, result | `POSTGRES_PASSWORD` | `postgres` |
+| worker, result | `POSTGRES_DB` | `postgres` |
+
 ## Architecture
 
 ![Architecture diagram](architecture.excalidraw.png)
