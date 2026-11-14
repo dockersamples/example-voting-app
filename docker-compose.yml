@@ -1,4 +1,4 @@
-  services:
+services:
   vote:
     image: ${ACR_LOGIN_SERVER}/voting-app-vote:latest
     ports:
@@ -9,7 +9,6 @@
     depends_on:
       redis:
         condition: service_healthy
-
 
   result:
     image: ${ACR_LOGIN_SERVER}/voting-app-result:latest
@@ -22,7 +21,6 @@
       db:
         condition: service_healthy
 
-
   worker:
     image: ${ACR_LOGIN_SERVER}/voting-app-worker:latest
     networks:
@@ -33,7 +31,6 @@
       db:
         condition: service_healthy
 
-
   redis:
     image: redis:alpine
     networks:
@@ -43,7 +40,6 @@
       interval: 5s
       timeout: 3s
       retries: 3
-
 
   db:
     image: postgres:15-alpine
@@ -58,15 +54,12 @@
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 3s
-      retries: 3
-
+      retries: 5
 
 volumes:
   db-data:
 
-
 networks:
   front-tier:
   back-tier:
-
 
